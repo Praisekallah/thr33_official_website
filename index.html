@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Thr33 — Shop the Collection</title>
+<meta name="description" content="THREE. Official store. Ships within Nigeria." />
+<link rel="icon" type="image/png" href="assets/logo-monogram.png"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Top ticker / serial strip -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>SERIES 03 &nbsp;•&nbsp; SHIPPING NATIONWIDE WITHIN NIGERIA &nbsp;•&nbsp; PAY BY CARD, TRANSFER OR USSD &nbsp;•&nbsp; SERIES 03 &nbsp;•&nbsp; SHIPPING NATIONWIDE WITHIN NIGERIA &nbsp;•&nbsp; PAY BY CARD, TRANSFER OR USSD &nbsp;•&nbsp; </span>
+    <span aria-hidden="true">SERIES 03 &nbsp;•&nbsp; SHIPPING NATIONWIDE WITHIN NIGERIA &nbsp;•&nbsp; PAY BY CARD, TRANSFER OR USSD &nbsp;•&nbsp; SERIES 03 &nbsp;•&nbsp; SHIPPING NATIONWIDE WITHIN NIGERIA &nbsp;•&nbsp; PAY BY CARD, TRANSFER OR USSD &nbsp;•&nbsp; </span>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="#" class="brand-mark" aria-label="THREE home">
+      <img src="assets/logo-monogram.png" alt="" class="brand-mono" />
+    </a>
+    <nav class="main-nav">
+      <a href="#shop">Shop</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="cart-btn" id="cartToggle" aria-haspopup="dialog" aria-controls="cartDrawer">
+      <span class="cart-label">Bag</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-guilloche" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">No. 001 &nbsp;—&nbsp; Legal Tender for Good Taste</p>
+    <h1 class="hero-title">Wear the<br/>currency of <span class="ital">Thr33</span></h1>
+    <p class="hero-sub">A small run of pieces, printed like they mean something. Every order ships within Nigeria — pay by card, bank transfer, or USSD.</p>
+    <a href="#shop" class="btn btn-primary">View the Collection</a>
+  </div>
+  <div class="hero-rule" aria-hidden="true"></div>
+</section>
+
+<!-- Shop -->
+<section id="shop" class="shop">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The Collection</h2>
+      <p class="section-note">Hover a pic to flip it.</p>
+    </div>
+    <div class="product-grid" id="productGrid"><!-- injected by script.js --></div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" class="about">
+  <div class="wrap about-inner">
+    <div class="about-text">
+      <p class="eyebrow">The House of Thr33</p>
+      <h2>Made to last every trend. Priced to actually wear.</h2>
+      <p>Every piece is produced in small batches — once a product sells out, it doesn't come back. Each garment carries a serial on the tag, same as the note it's inspired by.</p>
+    </div>
+    <div class="about-figure" aria-hidden="true">
+      <img src="assets/Hollow logo.png" alt="" />
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq">
+  <div class="wrap">
+    <h2>Fine Print</h2>
+    <details open>
+      <summary>Where do you deliver?</summary>
+      <p>Anywhere within Nigeria. Lagos and Abuja typically arrive in 2–4 working days; other states 4–7 working days.</p>
+    </details>
+    <details>
+      <summary>How do I pay?</summary>
+      <p>Card, bank transfer, or USSD — all handled securely through Paystack at checkout. No account needed.</p>
+    </details>
+    <details>
+      <summary>Can I return or exchange?</summary>
+      <p>Reach out within 48 hours of delivery if there's a sizing or quality issue and we'll sort a swap.</p>
+    </details>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <img src="assets/logo-monogram.png" alt="Thr33" class="footer-mono" />
+    <p>&copy; <span id="year"></span> Thr33. All rights reserved.</p>
+    <a href="mailto:hello@example.com">thr33enterprise@gmail.com</a>
+  </div>
+</footer>
+
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="Shopping bag">
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <button id="cartClose" aria-label="Close bag">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"><!-- injected --></div>
+  <div class="cart-summary">
+    <div class="cart-total-row">
+      <span>Subtotal</span>
+      <span id="cartSubtotal">&#8358;0</span>
+    </div>
+    <button class="btn btn-primary btn-full" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="checkoutOverlay">
+  <div class="modal" role="dialog" aria-label="Checkout">
+    <button class="modal-close" id="checkoutClose" aria-label="Close checkout">&times;</button>
+    <h3>Delivery Details</h3>
+    <p class="modal-sub">We need this to get your order to you.</p>
+    <form id="checkoutForm">
+      <label>Full name
+        <input type="text" name="fullName" required autocomplete="name" />
+      </label>
+      <label>Phone number
+        <input type="tel" name="phone" required autocomplete="tel" placeholder="080..." />
+      </label>
+      <label>Email
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+      <label>Delivery address
+        <textarea name="address" rows="2" required autocomplete="street-address" placeholder="House/street, area/landmark"></textarea>
+      </label>
+      <div class="form-row">
+        <label>City
+          <input type="text" name="city" required />
+        </label>
+        <label>State
+          <select name="state" required>
+            <option value="">Select</option>
+            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option>
+            <option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option>
+            <option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option>
+            <option>Ekiti</option><option>Enugu</option><option>FCT (Abuja)</option><option>Gombe</option>
+            <option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option>
+            <option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+            <option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option>
+            <option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option>
+            <option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option>
+          </select>
+        </label>
+      </div>
+      <label>Notes for delivery (optional)
+        <input type="text" name="notes" placeholder="Gate code, best time to reach you, etc." />
+      </label>
+
+      <div class="checkout-total">
+        <span>Total to pay</span>
+        <strong id="checkoutTotal">&#8358;0</strong>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" id="payBtn">Pay with Paystack</button>
+      <p class="secure-note">🔒 Payment is processed securely by Paystack. Thr33 never sees your card details.</p>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="products.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
