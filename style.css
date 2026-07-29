@@ -255,6 +255,13 @@ img { max-width: 100%; display: block; }
   gap: 32px;
 }
 
+@media (max-width: 560px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
 .product-card {
   position: relative;
 }
