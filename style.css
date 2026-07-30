@@ -249,17 +249,58 @@ img { max-width: 100%; display: block; }
   color: rgba(23,23,15,0.55);
 }
 
+.filter-bar {
+  margin-bottom: 32px;
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.filter-pill {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.filter-pill:hover:not(.disabled) {
+  border-color: var(--ink);
+}
+.filter-pill.active {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+.filter-pill.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.filter-pill .soon {
+  font-size: 9px;
+  opacity: 0.8;
+}
+
+.grid-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 16px;
+  color: rgba(23,23,15,0.55);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 32px;
-}
-
-@media (max-width: 560px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
 }
 
 .product-card {
@@ -300,27 +341,33 @@ img { max-width: 100%; display: block; }
 }
 
 .product-info {
+  margin-top: 14px;
+}
+.product-info-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 14px;
+  align-items: baseline;
   gap: 12px;
 }
 .product-name {
   font-family: 'Fraunces', serif;
   font-size: 1.05rem;
   font-weight: 600;
-  margin: 0 0 4px;
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .product-desc {
   font-size: 0.85rem;
   color: rgba(23,23,15,0.6);
-  margin: 0;
+  margin: 6px 0 0;
+  width: 100%;
 }
 .product-price {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .product-sizes {
@@ -545,4 +592,8 @@ img { max-width: 100%; display: block; }
   .wrap { padding: 0 20px; }
   .form-row { grid-template-columns: 1fr; }
   .hero { padding: 64px 0 48px; }
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
 }
