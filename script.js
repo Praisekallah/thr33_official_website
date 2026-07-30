@@ -28,7 +28,6 @@ function addToCart(productId, size) {
   }
   saveCart();
   showToast(`${product.name} (${size}) added to bag`);
-  openCart();
 }
 
 function removeFromCart(index) {
@@ -46,10 +45,63 @@ function cartSubtotal() {
   return cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 }
 
+// ---------------- Filters ----------------
+let activeCategory = "all";
+let activeCollection = "all";
+
+function productHasStock(catId, collId) {
+  return PRODUCTS.some(p =>
+    (catId === "all" || p.category === catId) &&
+    (collId === "all" || p.collection === collId)
+  );
+}
+
+function renderFilters() {
+  const bar = document.getElementById("filterBar");
+
+  const catRow = CATEGORIES.map(c => {
+    const disabled = c.id !== "all" && !productHasStock(c.id, "all");
+    return `<button type="button" class="filter-pill ${activeCategory === c.id ? 'active' : ''} ${disabled ? 'disabled' : ''}"
+              data-type="category" data-id="${c.id}">${c.label}${disabled ? ' <span class="soon">soon</span>' : ''}</button>`;
+  }).join("");
+
+  const collRow = COLLECTIONS.map(c => {
+    const disabled = c.id !== "all" && !productHasStock("all", c.id);
+    return `<button type="button" class="filter-pill ${activeCollection === c.id ? 'active' : ''} ${disabled ? 'disabled' : ''}"
+              data-type="collection" data-id="${c.id}">${c.label}${disabled ? ' <span class="soon">soon</span>' : ''}</button>`;
+  }).join("");
+
+  bar.innerHTML = `
+    <div class="filter-row">${catRow}</div>
+    <div class="filter-row">${collRow}</div>
+  `;
+
+  bar.querySelectorAll(".filter-pill").forEach(btn => {
+    if (btn.classList.contains("disabled")) return;
+    btn.addEventListener("click", () => {
+      if (btn.dataset.type === "category") activeCategory = btn.dataset.id;
+      if (btn.dataset.type === "collection") activeCollection = btn.dataset.id;
+      renderFilters();
+      renderProducts();
+    });
+  });
+}
+
 // ---------------- Render: product grid ----------------
 function renderProducts() {
   const grid = document.getElementById("productGrid");
-  grid.innerHTML = PRODUCTS.map(p => `
+
+  const filtered = PRODUCTS.filter(p =>
+    (activeCategory === "all" || p.category === activeCategory) &&
+    (activeCollection === "all" || p.collection === activeCollection)
+  );
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<p class="grid-empty">Nothing here yet — check back soon.</p>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => `
     <div class="product-card" data-id="${p.id}">
       <div class="product-flip">
         <span class="product-tag">${p.sku}</span>
@@ -57,11 +109,11 @@ function renderProducts() {
         <img src="${p.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
       </div>
       <div class="product-info">
-        <div>
+        <div class="product-info-top">
           <p class="product-name">${p.name}</p>
-          <p class="product-desc">${p.description}</p>
+          <span class="product-price">${naira(p.price)}</span>
         </div>
-        <span class="product-price">${naira(p.price)}</span>
+        <p class="product-desc">${p.description}</p>
       </div>
       <div class="product-sizes" data-role="sizes">
         ${p.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
@@ -231,5 +283,6 @@ function showToast(msg) {
 
 // ---------------- Init ----------------
 document.getElementById("year").textContent = new Date().getFullYear();
+renderFilters();
 renderProducts();
 renderCart();
