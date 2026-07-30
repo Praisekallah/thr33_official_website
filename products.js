@@ -8,7 +8,28 @@
   - price: in Naira, as a plain number (no commas).
   - sizes: shown as buttons on the product card.
   - sku: shows on the receipt/checkout, purely cosmetic.
+  - category: one of the CATEGORIES ids below (controls the "type" filter).
+  - collection: one of the COLLECTIONS ids below (controls the "collection" filter).
+
+  To add a new type or collection (e.g. "Hoodies" or "Summer Drop"), just add
+  it to the matching list below — it'll show up in the nav automatically,
+  and will say "coming soon" until a product uses that id.
 */
+
+const CATEGORIES = [
+  { id: "all", label: "All" },
+  { id: "tee", label: "Tees" },
+  { id: "long-sleeve", label: "Long Sleeve" },
+  { id: "shorts", label: "Shorts" },
+  { id: "hoodie", label: "Hoodies" }
+];
+
+const COLLECTIONS = [
+  { id: "all", label: "All" },
+  { id: "core", label: "Core" },
+  { id: "rose-from-the-concrete", label: "Rose From the Concrete" },
+  { id: "sports", label: "Sports Collection" }
+];
 
 const PRODUCTS = [
   {
@@ -16,6 +37,8 @@ const PRODUCTS = [
     name: "Basic Thr33 Tee — Black",
     sku: "TH-BASIC-BLK",
     price: 20000,
+    category: "tee",
+    collection: "core",
     sizes: ["S", "M", "L", "XL"],
     front: "assets/tee-black-front.png",
     back: "assets/tee-black-back.png",
@@ -26,6 +49,8 @@ const PRODUCTS = [
     name: "Basic Thr33 Tee — White",
     sku: "TH-BASIC-WHT",
     price: 20000,
+    category: "tee",
+    collection: "core",
     sizes: ["S", "M", "L", "XL"],
     front: "assets/tee-white-front.png",
     back: "assets/tee-white-back.png",
@@ -36,6 +61,8 @@ const PRODUCTS = [
     name: "Basic Female Crop Tee — White",
     sku: "TH-CROP-WHT",
     price: 15000,
+    category: "tee",
+    collection: "core",
     sizes: ["S", "M", "L"],
     front: "assets/crop-white-front.png",
     back: "assets/crop-white-back.png",
@@ -46,6 +73,8 @@ const PRODUCTS = [
     name: "Thr33 Denim Jorts",
     sku: "TH-JORTS-BLK",
     price: 20000,
+    category: "shorts",
+    collection: "core",
     sizes: ["28", "30", "32", "34", "36"],
     front: "assets/jorts-front.png",
     back: "assets/jorts-back.png",
@@ -56,6 +85,8 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
     sku: "TH-ROSE-LS-BLK",
     price: 45000,
+    category: "long-sleeve",
+    collection: "rose-from-the-concrete",
     sizes: ["S", "M", "L"],
     front: "assets/rose-female-ls-front.png",
     back: "assets/rose-female-ls-back.png",
@@ -66,6 +97,8 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Unisex",
     sku: "TH-ROSE-UNI-BLK",
     price: 45000,
+    category: "tee",
+    collection: "rose-from-the-concrete",
     sizes: ["S", "M", "L", "XL"],
     front: "assets/rose-unisex-front.png",
     back: "assets/rose-unisex-back.png",
