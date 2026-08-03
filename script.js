@@ -6,7 +6,7 @@
 // ---- CONFIG: replace with your own Paystack public key ----
 // Get this from https://dashboard.paystack.com/#/settings/developer
 // It's safe to expose the PUBLIC key in front-end code — never the secret key.
-const PAYSTACK_PUBLIC_KEY = "pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY";
+const PAYSTACK_PUBLIC_KEY = "pk_live_efdfb8f1cbb80b64b7907f7222fcb4801a0909f2";
 
 const naira = (n) => "₦" + n.toLocaleString("en-NG");
 
