@@ -250,17 +250,36 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
       ]
     },
     callback: function (response) {
-      // NOTE: this fires on the client as soon as Paystack reports success.
-      // For real orders, send response.reference to a small server/serverless
-      // function that calls Paystack's Verify Transaction API before you
-      // treat the order as paid and ship it. See README.md.
-      cart = [];
-      saveCart();
-      payBtn.disabled = false;
-      payBtn.textContent = "Pay with Paystack";
-      closeCheckout();
-      form.reset();
-      showToast(`Payment received — ref ${response.reference}. We'll email your receipt.`);
+      // Paystack reports success client-side here. Before trusting it,
+      // confirm with our own server (/api/verify-payment), which checks
+      // the reference against Paystack's records using the secret key.
+      payBtn.textContent = "Confirming payment…";
+
+      fetch("/api/verify-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference: response.reference })
+      })
+        .then(res => res.json())
+        .then(result => {
+          payBtn.disabled = false;
+          payBtn.textContent = "Pay with Paystack";
+
+          if (result.verified) {
+            cart = [];
+            saveCart();
+            closeCheckout();
+            form.reset();
+            showToast(`Payment confirmed — ref ${response.reference}. We'll email your receipt.`);
+          } else {
+            showToast("We couldn't confirm this payment. Please contact us with your reference: " + response.reference);
+          }
+        })
+        .catch(() => {
+          payBtn.disabled = false;
+          payBtn.textContent = "Pay with Paystack";
+          showToast("Payment went through, but we couldn't confirm it automatically. Please contact us with your reference: " + response.reference);
+        });
     },
     onClose: function () {
       payBtn.disabled = false;
