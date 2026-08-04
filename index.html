@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Thr33 — Shop the Collection</title>
+<title>THREE — Shop the Collection</title>
 <meta name="description" content="THREE. Official store. Ships within Nigeria." />
-<link rel="icon" type="image/png" href="assets/logo-monogram.png"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +26,8 @@
 <header class="site-header">
   <div class="wrap header-inner">
     <a href="#" class="brand-mark" aria-label="THREE home">
-      <img src="assets/logo-monogram.png" alt="" class="brand-mono" />
+      <img src="assets/logo-monogram.jpeg" alt="" class="brand-mono" />
+      <img src="assets/logo-wordmark.png" alt="THREE" class="brand-word" />
     </a>
     <nav class="main-nav">
       <a href="#shop">Shop</a>
@@ -46,7 +46,7 @@
   <div class="hero-guilloche" aria-hidden="true"></div>
   <div class="wrap hero-inner">
     <p class="eyebrow">No. 001 &nbsp;—&nbsp; Legal Tender for Good Taste</p>
-    <h1 class="hero-title">Wear the<br/>currency of <span class="ital">Thr33</span></h1>
+    <h1 class="hero-title">Wear the<br/>currency of <span class="ital">THREE</span></h1>
     <p class="hero-sub">A small run of pieces, printed like they mean something. Every order ships within Nigeria — pay by card, bank transfer, or USSD.</p>
     <a href="#shop" class="btn btn-primary">View the Collection</a>
   </div>
@@ -58,7 +58,7 @@
   <div class="wrap">
     <div class="section-head">
       <h2>The Collection</h2>
-      <p class="section-note">Hover a pic to flip it.</p>
+      <p class="section-note">Hover a note to flip it.</p>
     </div>
     <div class="filter-bar" id="filterBar"><!-- injected by script.js --></div>
     <div class="product-grid" id="productGrid"><!-- injected by script.js --></div>
@@ -69,12 +69,12 @@
 <section id="about" class="about">
   <div class="wrap about-inner">
     <div class="about-text">
-      <p class="eyebrow">The House of Thr33</p>
-      <h2>Made to last every trend. Priced to actually wear.</h2>
-      <p>Every piece is produced in small batches — once a product sells out, it doesn't come back. Each garment carries a serial on the tag, same as the note it's inspired by.</p>
+      <p class="eyebrow">The House of THREE</p>
+      <h2>Printed to last. Priced to actually wear.</h2>
+      <p>Every piece is produced in small batches — once a print sells out, it doesn't come back. Each garment carries a serial on the tag, same as the note it's inspired by.</p>
     </div>
     <div class="about-figure" aria-hidden="true">
-      <img src="assets/Hollow logo.png" alt="" />
+      <img src="assets/logo-monogram.jpeg" alt="" />
     </div>
   </div>
 </section>
@@ -100,9 +100,9 @@
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <img src="assets/logo-monogram.png" alt="Thr33" class="footer-mono" />
-    <p>&copy; <span id="year"></span> Thr33. All rights reserved.</p>
-    <a href="mailto:hello@example.com">thr33enterprise@gmail.com</a>
+    <img src="assets/logo-monogram.jpeg" alt="THREE" class="footer-mono" />
+    <p>&copy; <span id="year"></span> THREE. All rights reserved.</p>
+    <a href="mailto:hello@example.com">hello@example.com</a>
   </div>
 </footer>
 
@@ -165,13 +165,17 @@
         <input type="text" name="notes" placeholder="Gate code, best time to reach you, etc." />
       </label>
 
+      <div class="checkout-summary-lines">
+        <div class="summary-line"><span>Subtotal</span><span id="checkoutSubtotal">&#8358;0</span></div>
+        <div class="summary-line"><span>Shipping</span><span id="checkoutShipping">Select a state</span></div>
+      </div>
       <div class="checkout-total">
         <span>Total to pay</span>
         <strong id="checkoutTotal">&#8358;0</strong>
       </div>
 
       <button type="submit" class="btn btn-primary btn-full" id="payBtn">Pay with Paystack</button>
-      <p class="secure-note">🔒 Payment is processed securely by Paystack. Thr33 never sees your card details.</p>
+      <p class="secure-note">🔒 Payment is processed securely by Paystack. THREE never sees your card details.</p>
     </form>
   </div>
 </div>
