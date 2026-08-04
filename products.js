@@ -3,17 +3,19 @@
   --------
   This is the only file you need to touch to update what's for sale.
 
-  - front / back: paths to your product photos. Drop new images into the
-    /assets folder and point to them here (e.g. "assets/hoodie-front.jpg").
+  - colors: each product has a list of color variants. Every color needs
+    a name, a hex swatch color, and front/back photo paths. If a product
+    only comes in one color, just list one entry — no swatch row will
+    show on the card. The moment you add a second color entry with real
+    photos, a swatch selector automatically appears on that product card.
   - price: in Naira, as a plain number (no commas).
   - sizes: shown as buttons on the product card.
   - sku: shows on the receipt/checkout, purely cosmetic.
-  - category: one of the CATEGORIES ids below (controls the "type" filter).
-  - collection: one of the COLLECTIONS ids below (controls the "collection" filter).
+  - category: one of the CATEGORIES ids below (controls the nav filter).
 
-  To add a new type or collection (e.g. "Hoodies" or "Summer Drop"), just add
-  it to the matching list below — it'll show up in the nav automatically,
-  and will say "coming soon" until a product uses that id.
+  To add a new type (e.g. "Hoodies"), just add it to CATEGORIES — it'll
+  show up in the nav automatically and say "coming soon" until a product
+  uses that id.
 */
 
 const CATEGORIES = [
@@ -24,13 +26,6 @@ const CATEGORIES = [
   { id: "hoodie", label: "Hoodies" }
 ];
 
-const COLLECTIONS = [
-  { id: "all", label: "All" },
-  { id: "core", label: "Core" },
-  { id: "rose-from-the-concrete", label: "Rose From the Concrete" },
-  { id: "sports", label: "Sports Collection" }
-];
-
 const PRODUCTS = [
   {
     id: "tee-black",
@@ -38,10 +33,10 @@ const PRODUCTS = [
     sku: "TH-BASIC-BLK",
     price: 20000,
     category: "tee",
-    collection: "core",
     sizes: ["S", "M", "L", "XL"],
-    front: "assets/tee-black-front.png",
-    back: "assets/tee-black-back.png",
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/tee-black-front.png", back: "assets/tee-black-back.png" }
+    ],
     description: "Unisex heavyweight tee in black with the Thr33 monogram print."
   },
   {
@@ -50,23 +45,25 @@ const PRODUCTS = [
     sku: "TH-BASIC-WHT",
     price: 20000,
     category: "tee",
-    collection: "core",
     sizes: ["S", "M", "L", "XL"],
-    front: "assets/tee-white-front.png",
-    back: "assets/tee-white-back.png",
+    colors: [
+      { name: "White", hex: "#f5f3ec", front: "assets/tee-white-front.png", back: "assets/tee-white-back.png" }
+    ],
     description: "Unisex heavyweight tee in white with the Thr33 monogram print."
   },
   {
     id: "crop-tee-white",
-    name: "Basic Female Crop Tee — White",
+    name: "Basic Female Crop Tee",
     sku: "TH-CROP-WHT",
     price: 15000,
     category: "tee",
-    collection: "core",
     sizes: ["S", "M", "L"],
-    front: "assets/crop-white-front.png",
-    back: "assets/crop-white-back.png",
-    description: "Cropped fit, front & back print. Also available in black — ask on order."
+    colors: [
+      { name: "White", hex: "#f5f3ec", front: "assets/crop-white-front.png", back: "assets/crop-white-back.png" }
+      // To add black: send the black crop-tee front & back photos, then add:
+      // { name: "Black", hex: "#17170f", front: "assets/crop-black-front.png", back: "assets/crop-black-back.png" }
+    ],
+    description: "Cropped fit, front & back print."
   },
   {
     id: "jorts-black",
@@ -74,10 +71,10 @@ const PRODUCTS = [
     sku: "TH-JORTS-BLK",
     price: 20000,
     category: "shorts",
-    collection: "core",
     sizes: ["28", "30", "32", "34", "36"],
-    front: "assets/jorts-front.png",
-    back: "assets/jorts-back.png",
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/jorts-front.png", back: "assets/jorts-back.png" }
+    ],
     description: "Washed black denim jorts with the embroidered TB monogram pocket."
   },
   {
@@ -86,11 +83,13 @@ const PRODUCTS = [
     sku: "TH-ROSE-LS-BLK",
     price: 45000,
     category: "long-sleeve",
-    collection: "rose-from-the-concrete",
     sizes: ["S", "M", "L"],
-    front: "assets/rose-female-ls-front.png",
-    back: "assets/rose-female-ls-back.png",
-    description: "Cropped long-sleeve with the rose back print. Also in white, sky blue and brown — ask on order."
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/rose-female-ls-front.png", back: "assets/rose-female-ls-back.png" }
+      // To add white / sky blue / brown: send those front & back photos, then add
+      // entries here the same way as the Black one above.
+    ],
+    description: "Cropped long-sleeve with the rose back print."
   },
   {
     id: "rose-unisex",
@@ -98,10 +97,10 @@ const PRODUCTS = [
     sku: "TH-ROSE-UNI-BLK",
     price: 45000,
     category: "tee",
-    collection: "rose-from-the-concrete",
     sizes: ["S", "M", "L", "XL"],
-    front: "assets/rose-unisex-front.png",
-    back: "assets/rose-unisex-back.png",
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/rose-unisex-front.png", back: "assets/rose-unisex-back.png" }
+    ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   }
 ];
