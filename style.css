@@ -363,6 +363,25 @@ img { max-width: 100%; display: block; }
   margin: 6px 0 0;
   width: 100%;
 }
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 0 0 1px transparent;
+  transition: box-shadow 0.15s ease;
+}
+.swatch.selected {
+  box-shadow: 0 0 0 2px var(--cream), 0 0 0 3px var(--ink);
+}
 .product-price {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
@@ -559,6 +578,17 @@ img { max-width: 100%; display: block; }
 }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
+.checkout-summary-lines {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: rgba(23,23,15,0.65);
+  margin-bottom: 6px;
+}
 .checkout-total {
   display: flex; justify-content: space-between; align-items: baseline;
   border-top: 1px solid var(--line); padding-top: 16px; margin-top: 4px;
