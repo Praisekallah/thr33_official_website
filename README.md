@@ -12,7 +12,7 @@ straight onto Netlify.
   city, state, and delivery notes
 - Payment via Paystack's popup (cards, bank transfer, USSD — all the ways
   people pay in Nigeria)
-- A banknote-inspired look built from your two logos and the $100-bill palette
+- A banknote-inspired look built from my two logos and the $100-bill palette
 
 ## 1. Add your real product photos
 
@@ -59,7 +59,7 @@ Netlify's docs walk through adding a function:
 https://docs.netlify.com/build/functions/overview/ — happy to help you
 build this when you're ready; it's maybe 20 lines of code.
 
-## 3. Deploy to Netlify
+## 3. Deploy to vercel
 
 **Easiest way (no account setup needed first):**
 1. Go to [app.netlify.com/drop](https://app.netlify.com/drop)
