@@ -8,6 +8,55 @@
 // It's safe to expose the PUBLIC key in front-end code — never the secret key.
 const PAYSTACK_PUBLIC_KEY = "pk_live_efdfb8f1cbb80b64b7907f7222fcb4801a0909f2";
 
+// ---- CONFIG: shipping fee by state ----
+// Every fee here is in plain Naira and kept above ₦1,500 as requested.
+// Edit any number to adjust pricing — states not listed fall back to
+// DEFAULT_SHIPPING_FEE.
+const SHIPPING_RATES = {
+  "Lagos": 1700,
+  "Ogun": 2000,
+  "Oyo": 2000,
+  "Osun": 2000,
+  "Ondo": 2000,
+  "Ekiti": 2000,
+  "FCT (Abuja)": 2000,
+  "Edo": 2300,
+  "Delta": 2300,
+  "Rivers": 2300,
+  "Bayelsa": 2300,
+  "Cross River": 2300,
+  "Akwa Ibom": 2300,
+  "Abia": 2300,
+  "Imo": 2300,
+  "Anambra": 2300,
+  "Ebonyi": 2300,
+  "Enugu": 2300,
+  "Kwara": 2500,
+  "Kogi": 2500,
+  "Niger": 2500,
+  "Nasarawa": 2500,
+  "Plateau": 2500,
+  "Benue": 2500,
+  "Kaduna": 2800,
+  "Kano": 2800,
+  "Katsina": 2800,
+  "Kebbi": 2800,
+  "Sokoto": 2800,
+  "Zamfara": 2800,
+  "Jigawa": 2800,
+  "Bauchi": 2800,
+  "Gombe": 2800,
+  "Adamawa": 2800,
+  "Taraba": 2800,
+  "Borno": 2800,
+  "Yobe": 2800
+};
+const DEFAULT_SHIPPING_FEE = 2500; // used if a state isn't in the list above — still > ₦1,500
+
+function getShippingFee(state) {
+  return SHIPPING_RATES[state] || DEFAULT_SHIPPING_FEE;
+}
+
 const naira = (n) => "₦" + n.toLocaleString("en-NG");
 
 // ---------------- Cart state ----------------
@@ -18,16 +67,26 @@ function saveCart() {
   renderCart();
 }
 
-function addToCart(productId, size) {
+function addToCart(productId, size, colorIdx) {
   const product = PRODUCTS.find(p => p.id === productId);
-  const existing = cart.find(i => i.id === productId && i.size === size);
+  const color = product.colors[colorIdx] || product.colors[0];
+  const existing = cart.find(i => i.id === productId && i.size === size && i.colorName === color.name);
   if (existing) {
     existing.qty += 1;
   } else {
-    cart.push({ id: productId, size, qty: 1, name: product.name, price: product.price, image: product.front });
+    cart.push({
+      id: productId,
+      size,
+      colorName: color.name,
+      qty: 1,
+      name: product.name,
+      price: product.price,
+      image: color.front
+    });
   }
   saveCart();
-  showToast(`${product.name} (${size}) added to bag`);
+  const colorLabel = product.colors.length > 1 ? `, ${color.name}` : "";
+  showToast(`${product.name} (${size}${colorLabel}) added to bag`);
 }
 
 function removeFromCart(index) {
@@ -47,40 +106,26 @@ function cartSubtotal() {
 
 // ---------------- Filters ----------------
 let activeCategory = "all";
-let activeCollection = "all";
 
-function productHasStock(catId, collId) {
-  return PRODUCTS.some(p =>
-    (catId === "all" || p.category === catId) &&
-    (collId === "all" || p.collection === collId)
-  );
+function categoryHasStock(catId) {
+  return PRODUCTS.some(p => p.category === catId);
 }
 
 function renderFilters() {
   const bar = document.getElementById("filterBar");
 
   const catRow = CATEGORIES.map(c => {
-    const disabled = c.id !== "all" && !productHasStock(c.id, "all");
+    const disabled = c.id !== "all" && !categoryHasStock(c.id);
     return `<button type="button" class="filter-pill ${activeCategory === c.id ? 'active' : ''} ${disabled ? 'disabled' : ''}"
-              data-type="category" data-id="${c.id}">${c.label}${disabled ? ' <span class="soon">soon</span>' : ''}</button>`;
+              data-id="${c.id}">${c.label}${disabled ? ' <span class="soon">soon</span>' : ''}</button>`;
   }).join("");
 
-  const collRow = COLLECTIONS.map(c => {
-    const disabled = c.id !== "all" && !productHasStock("all", c.id);
-    return `<button type="button" class="filter-pill ${activeCollection === c.id ? 'active' : ''} ${disabled ? 'disabled' : ''}"
-              data-type="collection" data-id="${c.id}">${c.label}${disabled ? ' <span class="soon">soon</span>' : ''}</button>`;
-  }).join("");
-
-  bar.innerHTML = `
-    <div class="filter-row">${catRow}</div>
-    <div class="filter-row">${collRow}</div>
-  `;
+  bar.innerHTML = `<div class="filter-row">${catRow}</div>`;
 
   bar.querySelectorAll(".filter-pill").forEach(btn => {
     if (btn.classList.contains("disabled")) return;
     btn.addEventListener("click", () => {
-      if (btn.dataset.type === "category") activeCategory = btn.dataset.id;
-      if (btn.dataset.type === "collection") activeCollection = btn.dataset.id;
+      activeCategory = btn.dataset.id;
       renderFilters();
       renderProducts();
     });
@@ -91,22 +136,27 @@ function renderFilters() {
 function renderProducts() {
   const grid = document.getElementById("productGrid");
 
-  const filtered = PRODUCTS.filter(p =>
-    (activeCategory === "all" || p.category === activeCategory) &&
-    (activeCollection === "all" || p.collection === activeCollection)
-  );
+  const filtered = PRODUCTS.filter(p => activeCategory === "all" || p.category === activeCategory);
 
   if (filtered.length === 0) {
     grid.innerHTML = `<p class="grid-empty">Nothing here yet — check back soon.</p>`;
     return;
   }
 
-  grid.innerHTML = filtered.map(p => `
-    <div class="product-card" data-id="${p.id}">
+  grid.innerHTML = filtered.map(p => {
+    const first = p.colors[0];
+    const swatches = p.colors.length > 1
+      ? `<div class="color-swatches" data-role="colors">
+          ${p.colors.map((c, idx) => `<button type="button" class="swatch ${idx === 0 ? 'selected' : ''}" data-idx="${idx}" style="background:${c.hex}" aria-label="${c.name}" title="${c.name}"></button>`).join("")}
+         </div>`
+      : "";
+
+    return `
+    <div class="product-card" data-id="${p.id}" data-color-idx="0">
       <div class="product-flip">
         <span class="product-tag">${p.sku}</span>
-        <img src="${p.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
-        <img src="${p.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
+        <img src="${first.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
+        <img src="${first.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
       </div>
       <div class="product-info">
         <div class="product-info-top">
@@ -114,16 +164,19 @@ function renderProducts() {
           <span class="product-price">${naira(p.price)}</span>
         </div>
         <p class="product-desc">${p.description}</p>
+        ${swatches}
       </div>
       <div class="product-sizes" data-role="sizes">
         ${p.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
       </div>
       <button type="button" class="add-btn" data-role="add">Add to Bag</button>
-    </div>
-  `).join("");
+    </div>`;
+  }).join("");
 
-  // size selection
   grid.querySelectorAll(".product-card").forEach(card => {
+    const product = PRODUCTS.find(p => p.id === card.dataset.id);
+
+    // size selection
     const sizeButtons = card.querySelectorAll(".size-btn");
     sizeButtons.forEach(btn => {
       btn.addEventListener("click", () => {
@@ -131,9 +184,25 @@ function renderProducts() {
         btn.classList.add("selected");
       });
     });
+
+    // color swatch selection — swaps the front/back photos shown on the card
+    const swatchButtons = card.querySelectorAll(".swatch");
+    swatchButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        swatchButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        const idx = Number(btn.dataset.idx);
+        card.dataset.colorIdx = idx;
+        const color = product.colors[idx];
+        card.querySelector(".img-front").src = color.front;
+        card.querySelector(".img-back").src = color.back;
+      });
+    });
+
     card.querySelector('[data-role="add"]').addEventListener("click", () => {
-      const selected = card.querySelector(".size-btn.selected");
-      addToCart(card.dataset.id, selected ? selected.dataset.size : "One Size");
+      const selectedSize = card.querySelector(".size-btn.selected");
+      const colorIdx = Number(card.dataset.colorIdx || 0);
+      addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", colorIdx);
     });
   });
 }
@@ -157,7 +226,7 @@ function renderCart() {
       <img src="${item.image}" alt="${item.name}" />
       <div>
         <p class="cart-item-name">${item.name}</p>
-        <p class="cart-item-meta">Size ${item.size} · ${naira(item.price)}</p>
+        <p class="cart-item-meta">Size ${item.size}${item.colorName ? ' · ' + item.colorName : ''} · ${naira(item.price)}</p>
         <div class="cart-item-qty">
           <button class="qty-btn" data-action="dec" data-idx="${idx}">−</button>
           <span>${item.qty}</span>
@@ -197,13 +266,29 @@ cartOverlay.addEventListener("click", closeCart);
 
 // ---------------- Checkout modal ----------------
 const checkoutOverlay = document.getElementById("checkoutOverlay");
+const stateSelect = document.querySelector('#checkoutForm select[name="state"]');
+
+function updateCheckoutTotals() {
+  const subtotal = cartSubtotal();
+  const state = stateSelect.value;
+  const shipping = state ? getShippingFee(state) : 0;
+  const total = subtotal + shipping;
+
+  document.getElementById("checkoutSubtotal").textContent = naira(subtotal);
+  document.getElementById("checkoutShipping").textContent = state ? naira(shipping) : "Select a state";
+  document.getElementById("checkoutTotal").textContent = naira(total);
+
+  return { subtotal, shipping, total };
+}
+
+stateSelect.addEventListener("change", updateCheckoutTotals);
 
 function openCheckout() {
   if (cart.length === 0) {
     showToast("Your bag is empty");
     return;
   }
-  document.getElementById("checkoutTotal").textContent = naira(cartSubtotal());
+  updateCheckoutTotals();
   closeCart();
   checkoutOverlay.classList.add("open");
 }
@@ -229,7 +314,15 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
   const form = e.target;
   const data = new FormData(form);
   const email = data.get("email");
-  const amountKobo = cartSubtotal() * 100; // Paystack expects kobo
+  const state = data.get("state");
+
+  if (!state) {
+    showToast("Please select a delivery state");
+    return;
+  }
+
+  const { subtotal, shipping, total } = updateCheckoutTotals();
+  const amountKobo = total * 100; // Paystack expects kobo
 
   const payBtn = document.getElementById("payBtn");
   payBtn.disabled = true;
@@ -244,9 +337,11 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
       custom_fields: [
         { display_name: "Full Name", variable_name: "full_name", value: data.get("fullName") },
         { display_name: "Phone", variable_name: "phone", value: data.get("phone") },
-        { display_name: "Delivery Address", variable_name: "address", value: `${data.get("address")}, ${data.get("city")}, ${data.get("state")}` },
+        { display_name: "Delivery Address", variable_name: "address", value: `${data.get("address")}, ${data.get("city")}, ${state}` },
         { display_name: "Notes", variable_name: "notes", value: data.get("notes") || "" },
-        { display_name: "Order Items", variable_name: "order_items", value: JSON.stringify(cart.map(i => `${i.name} (${i.size}) x${i.qty}`)) }
+        { display_name: "Order Items", variable_name: "order_items", value: JSON.stringify(cart.map(i => `${i.name} (${i.size}${i.colorName ? ', ' + i.colorName : ''}) x${i.qty}`)) },
+        { display_name: "Subtotal", variable_name: "subtotal", value: naira(subtotal) },
+        { display_name: "Shipping Fee", variable_name: "shipping_fee", value: naira(shipping) }
       ]
     },
     callback: function (response) {
