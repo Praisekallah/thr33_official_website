@@ -3,19 +3,24 @@
   --------
   This is the only file you need to touch to update what's for sale.
 
-  - colors: each product has a list of color variants. Every color needs
-    a name, a hex swatch color, and front/back photo paths. If a product
-    only comes in one color, just list one entry — no swatch row will
-    show on the card. The moment you add a second color entry with real
-    photos, a swatch selector automatically appears on that product card.
+  - colors: each product has a list of color variants (name, hex, front/back
+    photo paths). One color = no swatch row shown. 2+ colors = swatches
+    appear automatically.
   - price: in Naira, as a plain number (no commas).
   - sizes: shown as buttons on the product card.
   - sku: shows on the receipt/checkout, purely cosmetic.
   - category: one of the CATEGORIES ids below (controls the nav filter).
 
-  To add a new type (e.g. "Hoodies"), just add it to CATEGORIES — it'll
-  show up in the nav automatically and say "coming soon" until a product
-  uses that id.
+  STOCK: each product starts with 20 units (set in api/get-stock.js and
+  api/verify-payment.js — INITIAL_STOCK). Stock lives on the server, not
+  here, so it survives across visits and decreases automatically after
+  every real paid order. To change the starting stock number, update
+  INITIAL_STOCK in both of those two API files.
+
+  NOT IN PRODUCTION YET: a few products are commented out below so they
+  don't show on the site or take orders. To bring one back, find the
+  comment-start line right above it and the comment-end line right after
+  it (near the bottom of this file) and delete just those two lines.
 */
 
 const CATEGORIES = [
@@ -28,44 +33,99 @@ const CATEGORIES = [
 
 const PRODUCTS = [
   {
-    id: "tee-black",
-    name: "Basic Thr33 Tee — Black",
-    sku: "TH-BASIC-BLK",
+    id: "crop-basic-female",
+    name: "Basic Female Cropped Tee",
+    sku: "TH-CROP-BASIC",
     price: 20000,
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Black", hex: "#17170f", front: "assets/tee-black-front.png", back: "assets/tee-black-back.png" }
-    ],
-    description: "Unisex heavyweight tee in black with the Thr33 monogram print."
-  },
-  {
-    id: "tee-white",
-    name: "Basic Thr33 Tee — White",
-    sku: "TH-BASIC-WHT",
-    price: 20000,
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "White", hex: "#f5f3ec", front: "assets/tee-white-front.png", back: "assets/tee-white-back.png" }
-    ],
-    description: "Unisex heavyweight tee in white with the Thr33 monogram print."
-  },
-  {
-    id: "crop-tee-white",
-    name: "Basic Female Crop Tee",
-    sku: "TH-CROP-WHT",
-    price: 15000,
     category: "tee",
     sizes: ["S", "M", "L"],
     colors: [
-      { name: "White", hex: "#f5f3ec", front: "assets/crop-white-front.png", back: "assets/crop-white-back.png" }
-      // To add black: send the black crop-tee front & back photos, then add:
-      // { name: "Black", hex: "#17170f", front: "assets/crop-black-front.png", back: "assets/crop-black-back.png" }
+      { name: "Black", hex: "#17170f", front: "assets/crop-black-front.png", back: "assets/crop-black-back.png" },
+      { name: "Pink", hex: "#f2a6c1", front: "assets/crop-pink-front.png", back: "assets/crop-pink-back.png" },
+      { name: "White", hex: "#f5f3ec", front: "assets/crop-white-v2-front.png", back: "assets/crop-white-v2-back.png" }
     ],
     description: "Cropped fit, front & back print."
   },
   {
+    id: "rose-graphic-tee",
+    name: "Rose Graphic T",
+    sku: "TH-ROSE-GFX",
+    price: 20000,
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/rose-tee-black-front.png", back: "assets/rose-tee-black-back.png" },
+      { name: "Peach", hex: "#f5c9a8", front: "assets/rose-tee-peach-front.png", back: "assets/rose-tee-peach-back.png" },
+      { name: "Maroon", hex: "#6e1423", front: "assets/rose-tee-maroon-front.png", back: "assets/rose-tee-maroon-back.png" },
+      { name: "White", hex: "#f5f3ec", front: "assets/rose-tee-white-front.png", back: "assets/rose-tee-white-back.png" }
+    ],
+    description: "Unisex tee with a bold rose graphic front and the Thr33 print on the back."
+  },
+  {
+    id: "mfdoom-king-spade",
+    name: "Thr33 x MF Doom — King of Spade",
+    sku: "TH-DOOM-KOS",
+    price: 20000,
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Peach", hex: "#f5c9a8", front: "assets/mfdoom-peach-front.png", back: "assets/mfdoom-peach-back.png" },
+      { name: "White", hex: "#f5f3ec", front: "assets/mfdoom-white-front.png", back: "assets/mfdoom-white-back.png" },
+      { name: "Black", hex: "#17170f", front: "assets/mfdoom-black-front.png", back: "assets/mfdoom-black-back.png" },
+      { name: "Maroon", hex: "#6e1423", front: "assets/mfdoom-maroon-front.png", back: "assets/mfdoom-maroon-back.png" }
+    ],
+    description: "Unisex tee, playing card graphic front, Thr33 print on the back."
+  },
+  {
+    id: "moneyface-tee",
+    name: "Money Face Graphic T",
+    sku: "TH-MONEYFACE",
+    price: 20000,
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Peach", hex: "#f5c9a8", front: "assets/moneyface-peach-front.png", back: "assets/moneyface-peach-back.png" },
+      { name: "Maroon", hex: "#6e1423", front: "assets/moneyface-maroon-front.png", back: "assets/moneyface-maroon-back.png" },
+      { name: "White", hex: "#f5f3ec", front: "assets/moneyface-white-front.png", back: "assets/moneyface-white-back.png" },
+      { name: "Black", hex: "#17170f", front: "assets/moneyface-black-front.png", back: "assets/moneyface-black-back.png" }
+    ],
+    description: "Unisex tee, \"Money Talks\" graphic front, Thr33 print on the back."
+  },
+  {
+    id: "t3-basic-tee",
+    name: "T3 Basic Tee",
+    sku: "TH-T3-BASIC",
+    price: 20000,
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "White", hex: "#f5f3ec", front: "assets/t3basic-white-front.png", back: "assets/t3basic-white-back.png" },
+      { name: "Black", hex: "#17170f", front: "assets/t3basic-black-front.png", back: "assets/t3basic-black-back.png" },
+      { name: "Peach", hex: "#f5c9a8", front: "assets/t3basic-peach-front.png", back: "assets/t3basic-peach-back.png" },
+      { name: "Maroon", hex: "#6e1423", front: "assets/t3basic-maroon-front.png", back: "assets/t3basic-maroon-back.png" }
+    ],
+    description: "Unisex tee with the repeating T3 monogram outline print."
+  },
+  {
+    id: "croptop-thr33-female",
+    name: "Thr33 Cropped Top",
+    sku: "TH-CROPTOP",
+    price: 20000,
+    category: "tee",
+    sizes: ["S", "M", "L"],
+    colors: [
+      { name: "White", hex: "#f5f3ec", front: "assets/croptop-white-front.png", back: "assets/croptop-white-back.png" },
+      { name: "Black", hex: "#17170f", front: "assets/croptop-black-front.png", back: "assets/croptop-black-back.png" },
+      { name: "Pink", hex: "#f2a6c1", front: "assets/croptop-pink-front.png", back: "assets/croptop-pink-back.png" }
+    ],
+    description: "Cropped fit, front & back Thr33 print."
+  }
+
+  /* --- NOT IN PRODUCTION YET — production hasn't started on these.
+     Delete the /* above this note and the closing star-slash below
+     the last item to bring this whole block back into the catalog. ---
+
+  ,{
     id: "jorts-black",
     name: "Thr33 Denim Jorts",
     sku: "TH-JORTS-BLK",
@@ -86,8 +146,6 @@ const PRODUCTS = [
     sizes: ["S", "M", "L"],
     colors: [
       { name: "Black", hex: "#17170f", front: "assets/rose-female-ls-front.png", back: "assets/rose-female-ls-back.png" }
-      // To add white / sky blue / brown: send those front & back photos, then add
-      // entries here the same way as the Black one above.
     ],
     description: "Cropped long-sleeve with the rose back print."
   },
@@ -103,4 +161,5 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   }
+  */
 ];
