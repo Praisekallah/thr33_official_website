@@ -6,7 +6,7 @@
 // ---- CONFIG: replace with your own Paystack public key ----
 // Get this from https://dashboard.paystack.com/#/settings/developer
 // It's safe to expose the PUBLIC key in front-end code — never the secret key.
-const PAYSTACK_PUBLIC_KEY = "pk_live_efdfb8f1cbb80b64b7907f7222fcb4801a0909f2";
+const PAYSTACK_PUBLIC_KEY = "pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY";
 
 // ---- CONFIG: shipping fee by state ----
 // Every fee here is in plain Naira and kept above ₦1,500 as requested.
@@ -71,6 +71,14 @@ function addToCart(productId, size, colorIdx) {
   const product = PRODUCTS.find(p => p.id === productId);
   const color = product.colors[colorIdx] || product.colors[0];
   const existing = cart.find(i => i.id === productId && i.size === size && i.colorName === color.name);
+
+  const remaining = stockLevels[productId];
+  const currentQtyInCart = existing ? existing.qty : 0;
+  if (remaining !== undefined && currentQtyInCart + 1 > remaining) {
+    showToast(remaining <= 0 ? "That's sold out" : `Only ${remaining} left in stock`);
+    return;
+  }
+
   if (existing) {
     existing.qty += 1;
   } else {
@@ -132,6 +140,20 @@ function renderFilters() {
   });
 }
 
+// ---------------- Stock ----------------
+let stockLevels = {}; // populated by fetchStock() — { productId: remainingCount }
+
+async function fetchStock() {
+  try {
+    const res = await fetch("/api/get-stock");
+    const data = await res.json();
+    stockLevels = data.stock || {};
+  } catch (err) {
+    stockLevels = {}; // if this fails, cards just show as normal/in-stock
+  }
+  renderProducts();
+}
+
 // ---------------- Render: product grid ----------------
 function renderProducts() {
   const grid = document.getElementById("productGrid");
@@ -151,10 +173,20 @@ function renderProducts() {
          </div>`
       : "";
 
+    const remaining = stockLevels[p.id];
+    const soldOut = remaining !== undefined && remaining <= 0;
+    const lowStock = remaining !== undefined && remaining > 0 && remaining <= 5;
+    const stockBadge = soldOut
+      ? `<span class="stock-badge sold-out">Sold out</span>`
+      : lowStock
+        ? `<span class="stock-badge low">Only ${remaining} left</span>`
+        : "";
+
     return `
-    <div class="product-card" data-id="${p.id}" data-color-idx="0">
+    <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}" data-color-idx="0">
       <div class="product-flip">
         <span class="product-tag">${p.sku}</span>
+        ${stockBadge}
         <img src="${first.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
         <img src="${first.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
       </div>
@@ -169,7 +201,7 @@ function renderProducts() {
       <div class="product-sizes" data-role="sizes">
         ${p.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
       </div>
-      <button type="button" class="add-btn" data-role="add">Add to Bag</button>
+      <button type="button" class="add-btn" data-role="add" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </div>`;
   }).join("");
 
@@ -199,11 +231,14 @@ function renderProducts() {
       });
     });
 
-    card.querySelector('[data-role="add"]').addEventListener("click", () => {
-      const selectedSize = card.querySelector(".size-btn.selected");
-      const colorIdx = Number(card.dataset.colorIdx || 0);
-      addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", colorIdx);
-    });
+    const addBtn = card.querySelector('[data-role="add"]');
+    if (addBtn && !addBtn.disabled) {
+      addBtn.addEventListener("click", () => {
+        const selectedSize = card.querySelector(".size-btn.selected");
+        const colorIdx = Number(card.dataset.colorIdx || 0);
+        addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", colorIdx);
+      });
+    }
   });
 }
 
@@ -353,7 +388,10 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
       fetch("/api/verify-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference: response.reference })
+        body: JSON.stringify({
+          reference: response.reference,
+          items: cart.map(i => ({ id: i.id, qty: i.qty }))
+        })
       })
         .then(res => res.json())
         .then(result => {
@@ -366,6 +404,7 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
             closeCheckout();
             form.reset();
             showToast(`Payment confirmed — ref ${response.reference}. We'll email your receipt.`);
+            fetchStock(); // reflect the updated stock count right away
           } else {
             showToast("We couldn't confirm this payment. Please contact us with your reference: " + response.reference);
           }
@@ -400,3 +439,4 @@ document.getElementById("year").textContent = new Date().getFullYear();
 renderFilters();
 renderProducts();
 renderCart();
+fetchStock();
