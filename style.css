@@ -180,7 +180,32 @@ img { max-width: 100%; display: block; }
   background-image: repeating-radial-gradient(circle at 20% 30%, transparent 0, transparent 18px, rgba(63,79,52,0.06) 19px, transparent 20px);
   pointer-events: none;
 }
-.hero-inner { position: relative; max-width: 720px; }
+.hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+.hero-text { max-width: 560px; }
+.hero-bill {
+  display: flex;
+  justify-content: center;
+  perspective: 1000px;
+}
+.hero-bill img {
+  width: 100%;
+  max-width: 460px;
+  transform: rotate(-7deg);
+  border-radius: 6px;
+  box-shadow:
+    0 40px 70px -25px rgba(23,23,15,0.4),
+    0 14px 24px -10px rgba(23,23,15,0.28);
+  transition: transform 0.4s ease;
+}
+.hero-bill img:hover {
+  transform: rotate(-3deg) scale(1.02);
+}
 .eyebrow {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
@@ -338,6 +363,29 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.08em;
   padding: 4px 8px;
   border-radius: var(--radius);
+}
+.stock-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+}
+.stock-badge.low {
+  background: rgba(176, 141, 87, 0.92);
+  color: var(--cream);
+}
+.stock-badge.sold-out {
+  background: rgba(23,23,15,0.85);
+  color: var(--cream);
+}
+.product-card.is-sold-out .product-flip {
+  opacity: 0.55;
 }
 
 .product-info {
@@ -617,11 +665,15 @@ img { max-width: 100%; display: block; }
 @media (max-width: 860px) {
   .about-inner { grid-template-columns: 1fr; }
   .main-nav { display: none; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-bill { margin-top: 32px; }
+  .hero-bill img { max-width: 380px; transform: rotate(-5deg); }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 20px; }
   .form-row { grid-template-columns: 1fr; }
   .hero { padding: 64px 0 48px; }
+  .hero-bill img { max-width: 300px; }
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
