@@ -182,6 +182,14 @@ function renderProducts() {
         ? `<span class="stock-badge low">Only ${remaining} left</span>`
         : "";
 
+    const discountPct = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
+    const discountRow = p.originalPrice
+      ? `<div class="price-discount-row">
+          <span class="price-was">${naira(p.originalPrice)}</span>
+          <span class="price-discount">-${discountPct}%</span>
+        </div>`
+      : "";
+
     return `
     <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}" data-color-idx="0">
       <div class="product-flip">
@@ -195,6 +203,7 @@ function renderProducts() {
           <p class="product-name">${p.name}</p>
           <span class="product-price">${naira(p.price)}</span>
         </div>
+        ${discountRow}
         <p class="product-desc">${p.description}</p>
         ${swatches}
       </div>
