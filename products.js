@@ -16,11 +16,6 @@
   here, so it survives across visits and decreases automatically after
   every real paid order. To change the starting stock number, update
   INITIAL_STOCK in both of those two API files.
-
-  NOT IN PRODUCTION YET: a few products are commented out below so they
-  don't show on the site or take orders. To bring one back, find the
-  comment-start line right above it and the comment-end line right after
-  it (near the bottom of this file) and delete just those two lines.
 */
 
 const CATEGORIES = [
@@ -37,6 +32,7 @@ const PRODUCTS = [
     name: "Basic Female Cropped Tee",
     sku: "TH-CROP-BASIC",
     price: 20000,
+    originalPrice: 30000,
     category: "tee",
     sizes: ["S", "M", "L"],
     colors: [
@@ -51,6 +47,7 @@ const PRODUCTS = [
     name: "Rose Graphic T",
     sku: "TH-ROSE-GFX",
     price: 20000,
+    originalPrice: 30000,
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
@@ -66,6 +63,7 @@ const PRODUCTS = [
     name: "Thr33 x MF Doom — King of Spade",
     sku: "TH-DOOM-KOS",
     price: 20000,
+    originalPrice: 30000,
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
@@ -81,6 +79,7 @@ const PRODUCTS = [
     name: "Money Face Graphic T",
     sku: "TH-MONEYFACE",
     price: 20000,
+    originalPrice: 30000,
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
@@ -96,6 +95,7 @@ const PRODUCTS = [
     name: "T3 Basic Tee",
     sku: "TH-T3-BASIC",
     price: 20000,
+    originalPrice: 30000,
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
@@ -111,6 +111,7 @@ const PRODUCTS = [
     name: "Thr33 Cropped Top",
     sku: "TH-CROPTOP",
     price: 20000,
+    originalPrice: 30000,
     category: "tee",
     sizes: ["S", "M", "L"],
     colors: [
@@ -119,17 +120,13 @@ const PRODUCTS = [
       { name: "Pink", hex: "#f2a6c1", front: "assets/croptop-pink-front.png", back: "assets/croptop-pink-back.png" }
     ],
     description: "Cropped fit, front & back Thr33 print."
-  }
-
-  /* --- NOT IN PRODUCTION YET — production hasn't started on these.
-     Delete the /* above this note and the closing star-slash below
-     the last item to bring this whole block back into the catalog. ---
-
-  ,{
+  },
+  {
     id: "jorts-black",
     name: "Thr33 Denim Jorts",
     sku: "TH-JORTS-BLK",
     price: 20000,
+    originalPrice: 30000,
     category: "shorts",
     sizes: ["28", "30", "32", "34", "36"],
     colors: [
@@ -161,5 +158,4 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   }
-  */
 ];
