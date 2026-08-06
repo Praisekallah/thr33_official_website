@@ -411,6 +411,28 @@ img { max-width: 100%; display: block; }
   margin: 6px 0 0;
   width: 100%;
 }
+.price-discount-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.price-was {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(23,23,15,0.45);
+  text-decoration: line-through;
+}
+.price-discount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--gold);
+  color: var(--ink);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
 .color-swatches {
   display: flex;
   flex-wrap: wrap;
