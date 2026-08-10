@@ -352,18 +352,6 @@ img { max-width: 100%; display: block; }
 .product-card:hover .img-front { opacity: 0; }
 .product-card:hover .img-back { opacity: 1; }
 
-.product-tag {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 3;
-  background: rgba(242,234,211,0.9);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  padding: 4px 8px;
-  border-radius: var(--radius);
-}
 .stock-badge {
   position: absolute;
   top: 12px;
@@ -459,11 +447,36 @@ img { max-width: 100%; display: block; }
   flex-shrink: 0;
 }
 
+.product-sizes-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
 .product-sizes {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 12px;
+}
+.size-guide-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-decoration: underline;
+  color: rgba(23,23,15,0.55);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.size-guide-link:hover { color: var(--ink); }
+.delivery-note {
+  font-size: 0.75rem;
+  color: rgba(23,23,15,0.55);
+  margin: 10px 0 0;
 }
 .size-btn {
   border: 1px solid var(--line);
@@ -682,6 +695,91 @@ img { max-width: 100%; display: block; }
   z-index: 80;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- Size guide ---------- */
+.size-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+}
+.size-table th, .size-table td {
+  padding: 10px 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+.size-table th:first-child, .size-table td:first-child {
+  text-align: left;
+  color: rgba(23,23,15,0.6);
+  font-weight: 400;
+}
+.size-table th { font-weight: 600; }
+.size-note {
+  font-size: 0.78rem;
+  color: rgba(23,23,15,0.55);
+  margin-top: 14px;
+}
+
+/* ---------- Track order ---------- */
+#trackOrderForm { display: flex; flex-direction: column; gap: 14px; }
+#trackOrderForm input {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.track-result {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+}
+.track-confirmed { background: rgba(63,79,52,0.08); }
+.track-confirmed ul { margin: 8px 0; padding-left: 18px; }
+.track-meta { color: rgba(23,23,15,0.6); margin-top: 8px; font-size: 0.8rem; }
+.track-pending, .track-not-found {
+  background: rgba(176,141,87,0.12);
+  color: rgba(23,23,15,0.8);
+}
+
+/* ---------- Footer links / WhatsApp ---------- */
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.footer-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  color: rgba(23,23,15,0.6);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.footer-link-btn:hover { color: var(--ink); }
+
+.whatsapp-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  z-index: 45;
+  transition: transform 0.2s ease;
+}
+.whatsapp-fab:hover { transform: scale(1.08); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
