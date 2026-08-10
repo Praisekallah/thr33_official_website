@@ -59,6 +59,9 @@ function getShippingFee(state) {
 
 const naira = (n) => "₦" + n.toLocaleString("en-NG");
 
+// Product ids that are cropped fits — used to show the crop note in the size guide
+const CROP_IDS = ["crop-basic-female", "croptop-thr33-female"];
+
 // ---------------- Cart state ----------------
 let cart = JSON.parse(localStorage.getItem("three_cart") || "[]");
 
@@ -190,10 +193,13 @@ function renderProducts() {
         </div>`
       : "";
 
+    const sizeGuideLink = p.category !== "shorts"
+      ? `<button type="button" class="size-guide-link" data-role="size-guide" data-crop="${CROP_IDS.includes(p.id) ? "1" : "0"}">Size Guide</button>`
+      : "";
+
     return `
     <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}" data-color-idx="0">
       <div class="product-flip">
-        <span class="product-tag">${p.sku}</span>
         ${stockBadge}
         <img src="${first.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
         <img src="${first.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
@@ -207,9 +213,13 @@ function renderProducts() {
         <p class="product-desc">${p.description}</p>
         ${swatches}
       </div>
-      <div class="product-sizes" data-role="sizes">
-        ${p.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
+      <div class="product-sizes-row">
+        <div class="product-sizes" data-role="sizes">
+          ${p.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
+        </div>
+        ${sizeGuideLink}
       </div>
+      <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
       <button type="button" class="add-btn" data-role="add" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </div>`;
   }).join("");
@@ -246,6 +256,13 @@ function renderProducts() {
         const selectedSize = card.querySelector(".size-btn.selected");
         const colorIdx = Number(card.dataset.colorIdx || 0);
         addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", colorIdx);
+      });
+    }
+
+    const sizeGuideBtn = card.querySelector('[data-role="size-guide"]');
+    if (sizeGuideBtn) {
+      sizeGuideBtn.addEventListener("click", () => {
+        openSizeGuide(sizeGuideBtn.dataset.crop === "1");
       });
     }
   });
@@ -431,6 +448,89 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
   });
 
   handler.openIframe();
+});
+
+// ---------------- Size Guide modal ----------------
+const sizeGuideOverlay = document.getElementById("sizeGuideOverlay");
+const sizeGuideCropNote = document.getElementById("sizeGuideCropNote");
+
+function openSizeGuide(isCrop) {
+  sizeGuideCropNote.style.display = isCrop ? "block" : "none";
+  sizeGuideOverlay.classList.add("open");
+}
+function closeSizeGuide() {
+  sizeGuideOverlay.classList.remove("open");
+}
+document.getElementById("sizeGuideClose").addEventListener("click", closeSizeGuide);
+sizeGuideOverlay.addEventListener("click", (e) => {
+  if (e.target === sizeGuideOverlay) closeSizeGuide();
+});
+
+// ---------------- Track Order modal ----------------
+const trackOrderOverlay = document.getElementById("trackOrderOverlay");
+const trackOrderResult = document.getElementById("trackOrderResult");
+
+function openTrackOrder() {
+  trackOrderResult.innerHTML = "";
+  trackOrderOverlay.classList.add("open");
+}
+function closeTrackOrder() {
+  trackOrderOverlay.classList.remove("open");
+}
+document.getElementById("trackOrderOpen").addEventListener("click", openTrackOrder);
+document.getElementById("trackOrderClose").addEventListener("click", closeTrackOrder);
+trackOrderOverlay.addEventListener("click", (e) => {
+  if (e.target === trackOrderOverlay) closeTrackOrder();
+});
+
+document.getElementById("trackOrderForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const reference = new FormData(e.target).get("reference").trim();
+  if (!reference) return;
+
+  const submitBtn = document.getElementById("trackOrderSubmit");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Checking…";
+  trackOrderResult.innerHTML = "";
+
+  fetch("/api/track-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reference })
+  })
+    .then(res => res.json())
+    .then(result => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Check Status";
+
+      if (!result.found) {
+        trackOrderResult.innerHTML = `<p class="track-result track-not-found">We couldn't find that reference. Double-check for typos, or message us on WhatsApp.</p>`;
+        return;
+      }
+
+      if (result.status === "success") {
+        let itemsHtml = "";
+        try {
+          const items = JSON.parse(result.items);
+          itemsHtml = `<ul>${items.map(i => `<li>${i}</li>`).join("")}</ul>`;
+        } catch (e) {
+          itemsHtml = "";
+        }
+        trackOrderResult.innerHTML = `
+          <div class="track-result track-confirmed">
+            <p><strong>✅ Confirmed</strong> — ${result.amount}</p>
+            ${itemsHtml}
+            <p class="track-meta">Delivering to: ${result.address || "—"}</p>
+          </div>`;
+      } else {
+        trackOrderResult.innerHTML = `<p class="track-result track-pending">This payment shows as <strong>${result.status}</strong> — not yet confirmed. If you believe this is wrong, message us on WhatsApp with your reference.</p>`;
+      }
+    })
+    .catch(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Check Status";
+      trackOrderResult.innerHTML = `<p class="track-result track-not-found">Something went wrong checking that reference. Try again in a moment.</p>`;
+    });
 });
 
 // ---------------- Toast ----------------
