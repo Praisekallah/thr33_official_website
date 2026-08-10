@@ -86,6 +86,77 @@ async function sendOrderEmail(order) {
   }
 }
 
+function buildCustomerEmailHtml(order) {
+  const fields = (order.metadata && order.metadata.custom_fields) || [];
+  const get = (varName) => {
+    const f = fields.find(x => x.variable_name === varName);
+    return f ? f.value : "";
+  };
+  const itemsRaw = get("order_items");
+  let itemsList = "";
+  try {
+    const items = JSON.parse(itemsRaw);
+    itemsList = items.map(i => `<li style="margin-bottom:4px;">${i}</li>`).join("");
+  } catch (e) {
+    itemsList = `<li>${itemsRaw}</li>`;
+  }
+
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#17170f;">
+      <h2 style="margin-bottom:4px;">Order confirmed 🎉</h2>
+      <p style="color:#666;margin-top:0;">Thanks for shopping with THR33 — reference <strong>${order.reference}</strong></p>
+
+      <ul style="padding-left:18px;margin:20px 0;">${itemsList}</ul>
+
+      <table style="border-collapse:collapse;width:100%;margin-top:8px;">
+        <tr><td style="padding:6px 0;color:#666;">Subtotal</td><td style="padding:6px 0;text-align:right;">${get("subtotal")}</td></tr>
+        <tr><td style="padding:6px 0;color:#666;">Shipping</td><td style="padding:6px 0;text-align:right;">${get("shipping_fee")}</td></tr>
+        <tr><td style="padding:8px 0;font-weight:700;border-top:1px solid #eee;">Total paid</td><td style="padding:8px 0;text-align:right;font-weight:700;border-top:1px solid #eee;">${naira(order.amount)}</td></tr>
+      </table>
+
+      <p style="margin-top:24px;color:#444;">
+        Delivering to: ${get("address")}
+      </p>
+
+      <p style="margin-top:20px;color:#444;">
+        <strong>What happens next:</strong> we're prepping your order now.
+        Lagos &amp; Abuja usually arrive in 2–4 working days, other states 4–7 working days.
+      </p>
+
+      <p style="margin-top:20px;">
+        Questions about your order? Message us on
+        <a href="https://wa.me/2347063467013" style="color:#3f4f34;">WhatsApp</a>.
+      </p>
+
+      <p style="margin-top:28px;color:#999;font-size:12px;">— THR33</p>
+    </div>
+  `;
+}
+
+async function sendCustomerEmail(order) {
+  if (!process.env.RESEND_API_KEY) return;
+  const to = order.customer && order.customer.email;
+  if (!to) return;
+
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: "THR33 <onboarding@resend.dev>",
+        to: to,
+        subject: `Your THR33 order is confirmed — ${order.reference}`,
+        html: buildCustomerEmailHtml(order)
+      })
+    });
+  } catch (err) {
+    console.error("Customer confirmation email failed:", err);
+  }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ verified: false, error: "Method not allowed" });
@@ -111,6 +182,7 @@ module.exports = async (req, res) => {
     if (data.status && data.data && data.data.status === "success") {
       await decrementStock(items);
       await sendOrderEmail(data.data);
+      await sendCustomerEmail(data.data);
 
       return res.status(200).json({
         verified: true,
