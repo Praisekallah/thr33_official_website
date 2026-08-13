@@ -375,6 +375,22 @@ img { max-width: 100%; display: block; }
 .product-card.is-sold-out .product-flip {
   opacity: 0.55;
 }
+.featured-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  background: rgba(242,234,211,0.92);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--gold);
+}
 
 .product-info {
   margin-top: 14px;
@@ -559,6 +575,22 @@ img { max-width: 100%; display: block; }
 }
 .footer-mono { height: 22px; filter: sepia(1) saturate(0) brightness(0.5); }
 .footer-inner a { text-decoration: none; }
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.footer-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  color: rgba(23,23,15,0.6);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.footer-link-btn:hover { color: var(--ink); }
 
 /* ---------- Cart drawer ---------- */
 .cart-overlay, .modal-overlay {
@@ -680,22 +712,6 @@ img { max-width: 100%; display: block; }
 .checkout-total strong { font-size: 1.2rem; }
 .secure-note { font-size: 0.75rem; color: rgba(23,23,15,0.55); text-align: center; margin: 4px 0 0; }
 
-/* ---------- Toast ---------- */
-.toast {
-  position: fixed;
-  bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--ink); color: var(--cream);
-  padding: 14px 22px;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
-  border-radius: var(--radius);
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 80;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
 /* ---------- Size guide ---------- */
 .size-table {
   width: 100%;
@@ -745,24 +761,7 @@ img { max-width: 100%; display: block; }
   color: rgba(23,23,15,0.8);
 }
 
-/* ---------- Footer links / WhatsApp ---------- */
-.footer-links {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.footer-link-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 12px;
-  color: rgba(23,23,15,0.6);
-  text-decoration: underline;
-  cursor: pointer;
-}
-.footer-link-btn:hover { color: var(--ink); }
-
+/* ---------- WhatsApp floating button ---------- */
 .whatsapp-fab {
   position: fixed;
   bottom: 24px;
@@ -781,6 +780,22 @@ img { max-width: 100%; display: block; }
 }
 .whatsapp-fab:hover { transform: scale(1.08); }
 
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--cream);
+  padding: 14px 22px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  border-radius: var(--radius);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 80;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .about-inner { grid-template-columns: 1fr; }
@@ -798,4 +813,5 @@ img { max-width: 100%; display: block; }
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
+  .whatsapp-fab { width: 46px; height: 46px; bottom: 18px; right: 18px; }
 }
