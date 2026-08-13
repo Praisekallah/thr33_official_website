@@ -161,7 +161,9 @@ async function fetchStock() {
 function renderProducts() {
   const grid = document.getElementById("productGrid");
 
-  const filtered = PRODUCTS.filter(p => activeCategory === "all" || p.category === activeCategory);
+  const filtered = PRODUCTS
+    .filter(p => activeCategory === "all" || p.category === activeCategory)
+    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
   if (filtered.length === 0) {
     grid.innerHTML = `<p class="grid-empty">Nothing here yet — check back soon.</p>`;
@@ -185,6 +187,8 @@ function renderProducts() {
         ? `<span class="stock-badge low">Only ${remaining} left</span>`
         : "";
 
+    const featuredBadge = p.featured ? `<span class="featured-badge">${p.featured}</span>` : "";
+
     const discountPct = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
     const discountRow = p.originalPrice
       ? `<div class="price-discount-row">
@@ -200,6 +204,7 @@ function renderProducts() {
     return `
     <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}" data-color-idx="0">
       <div class="product-flip">
+        ${featuredBadge}
         ${stockBadge}
         <img src="${first.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
         <img src="${first.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
