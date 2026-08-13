@@ -10,6 +10,9 @@
   - sizes: shown as buttons on the product card.
   - sku: shows on the receipt/checkout, purely cosmetic.
   - category: one of the CATEGORIES ids below (controls the nav filter).
+  - featured: optional. Add a short string (e.g. "Best Seller") to show a
+    badge on the top-left of that product's card. Leave it off entirely
+    for products that shouldn't have one.
 
   STOCK: each product starts with 20 units (set in api/get-stock.js and
   api/verify-payment.js — INITIAL_STOCK). Stock lives on the server, not
@@ -139,6 +142,7 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
     sku: "TH-ROSE-LS-BLK",
     price: 45000,
+    featured: "Best Seller",
     category: "long-sleeve",
     sizes: ["S", "M", "L"],
     colors: [
@@ -151,6 +155,7 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Unisex",
     sku: "TH-ROSE-UNI-BLK",
     price: 45000,
+    featured: "Best Seller",
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
