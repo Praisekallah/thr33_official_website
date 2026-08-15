@@ -45,6 +45,7 @@ const PRODUCTS = [
     ],
     description: "Cropped fit, front & back print."
   },
+  /*
   {
     id: "rose-graphic-tee",
     name: "Rose Graphic T",
@@ -61,6 +62,7 @@ const PRODUCTS = [
     ],
     description: "Unisex tee with a bold rose graphic front and the Thr33 print on the back."
   },
+  */
   {
     id: "mfdoom-king-spade",
     name: "Thr33 x MF Doom — King of Spade",
