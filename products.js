@@ -19,6 +19,11 @@
   here, so it survives across visits and decreases automatically after
   every real paid order. To change the starting stock number, update
   INITIAL_STOCK in both of those two API files.
+
+  PAUSED PRODUCTS: everything below the active three is commented out,
+  not deleted — find the comment-start line above that block and the
+  comment-end line after it (near the bottom of this file) and delete
+  just those two lines to bring the product straight back.
 */
 
 const CATEGORIES = [
@@ -31,6 +36,49 @@ const CATEGORIES = [
 
 const PRODUCTS = [
   {
+    id: "jorts-black",
+    name: "Thr33 Denim Jorts",
+    sku: "TH-JORTS-BLK",
+    price: 25999,
+    originalPrice: 35000,
+    category: "shorts",
+    sizes: ["28", "30", "32", "34", "36"],
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/jorts-front.png", back: "assets/jorts-back.png" }
+    ],
+    description: "Washed black denim jorts with the embroidered TB monogram pocket."
+  },
+  {
+    id: "rose-female-ls",
+    name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
+    sku: "TH-ROSE-LS-BLK",
+    price: 45000,
+    featured: "Best Seller",
+    category: "long-sleeve",
+    sizes: ["S", "M", "L"],
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/rose-female-ls-front.png", back: "assets/rose-female-ls-back.png" }
+    ],
+    description: "Cropped long-sleeve with the rose back print."
+  },
+  {
+    id: "rose-unisex",
+    name: "Rose From the Concrete Boxy Tee — Unisex",
+    sku: "TH-ROSE-UNI-BLK",
+    price: 45000,
+    featured: "Best Seller",
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", hex: "#17170f", front: "assets/rose-unisex-front.png", back: "assets/rose-unisex-back.png" }
+    ],
+    description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
+  }
+
+  /* --- PAUSED — delete this comment-start line and the comment-end
+     line after the last item below to bring these back into the catalog. ---
+
+  ,{
     id: "crop-basic-female",
     name: "Basic Female Cropped Tee",
     sku: "TH-CROP-BASIC",
@@ -45,7 +93,6 @@ const PRODUCTS = [
     ],
     description: "Cropped fit, front & back print."
   },
-  /*
   {
     id: "rose-graphic-tee",
     name: "Rose Graphic T",
@@ -62,7 +109,6 @@ const PRODUCTS = [
     ],
     description: "Unisex tee with a bold rose graphic front and the Thr33 print on the back."
   },
-  */
   {
     id: "mfdoom-king-spade",
     name: "Thr33 x MF Doom — King of Spade",
@@ -125,44 +171,6 @@ const PRODUCTS = [
       { name: "Pink", hex: "#f2a6c1", front: "assets/croptop-pink-front.png", back: "assets/croptop-pink-back.png" }
     ],
     description: "Cropped fit, front & back Thr33 print."
-  },
-  {
-    id: "jorts-black",
-    name: "Thr33 Denim Jorts",
-    sku: "TH-JORTS-BLK",
-    price: 25999,
-    originalPrice: 35000,
-    category: "shorts",
-    sizes: ["28", "30", "32", "34", "36"],
-    colors: [
-      { name: "Black", hex: "#17170f", front: "assets/jorts-front.png", back: "assets/jorts-back.png" }
-    ],
-    description: "Washed black denim jorts with the embroidered TB monogram pocket."
-  },
-  {
-    id: "rose-female-ls",
-    name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
-    sku: "TH-ROSE-LS-BLK",
-    price: 45000,
-    featured: "Best Seller",
-    category: "long-sleeve",
-    sizes: ["S", "M", "L"],
-    colors: [
-      { name: "Black", hex: "#17170f", front: "assets/rose-female-ls-front.png", back: "assets/rose-female-ls-back.png" }
-    ],
-    description: "Cropped long-sleeve with the rose back print."
-  },
-  {
-    id: "rose-unisex",
-    name: "Rose From the Concrete Boxy Tee — Unisex",
-    sku: "TH-ROSE-UNI-BLK",
-    price: 45000,
-    featured: "Best Seller",
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Black", hex: "#17170f", front: "assets/rose-unisex-front.png", back: "assets/rose-unisex-back.png" }
-    ],
-    description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   }
+  */
 ];
