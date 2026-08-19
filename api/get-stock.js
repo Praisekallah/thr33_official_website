@@ -4,12 +4,9 @@
 // initialized to INITIAL_STOCK the first time it's read.
 
 const PRODUCT_IDS = [
-  "crop-basic-female",
-  "rose-graphic-tee",
-  "mfdoom-king-spade",
-  "moneyface-tee",
-  "t3-basic-tee",
-  "croptop-thr33-female"
+  "jorts-black",
+  "rose-female-ls",
+  "rose-unisex"
 ];
 
 const INITIAL_STOCK = 20; // change this number to adjust the starting stock for every product
@@ -26,7 +23,6 @@ async function redis(command) {
 
 module.exports = async (req, res) => {
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-    // Stock tracking isn't set up yet — tell the front-end to treat everything as in stock.
     const fallback = {};
     PRODUCT_IDS.forEach(id => (fallback[id] = INITIAL_STOCK));
     return res.status(200).json({ stock: fallback });
