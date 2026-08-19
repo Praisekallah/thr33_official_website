@@ -4,7 +4,8 @@
 //
 // This checks a payment reference against Paystack's own records before
 // the site treats an order as actually paid, decreases stock for the
-// items ordered, then emails you the order details via Resend.
+// items ordered, tracks THR33 TRIBE loyalty progress, and emails
+// everyone who needs emailing.
 
 const INITIAL_STOCK = 20; // keep this the same number as in api/get-stock.js
 
@@ -22,8 +23,28 @@ async function redis(command) {
   return data.result;
 }
 
+function hasRedis() {
+  return !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+}
+
+// ---------------- Idempotency guard ----------------
+// Makes sure a given payment reference only ever gets processed once,
+// even if the browser calls this endpoint twice for the same payment.
+// Without this, a retried request could double-count loyalty orders.
+async function markProcessedOnce(reference) {
+  if (!hasRedis()) return true;
+  try {
+    const result = await redis(["setnx", `processed:${reference}`, "1"]);
+    return Number(result) === 1;
+  } catch (err) {
+    console.error("Idempotency check failed:", err);
+    return true;
+  }
+}
+
+// ---------------- Stock ----------------
 async function decrementStock(items) {
-  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) return;
+  if (!hasRedis()) return;
   if (!Array.isArray(items)) return;
 
   try {
@@ -43,6 +64,97 @@ async function decrementStock(items) {
   }
 }
 
+// ---------------- THR33 TRIBE loyalty ----------------
+// Every 5th confirmed order for a given email earns an embroidered TRIBE
+// patch (included physically with that order). Every 10th also earns a
+// free tee. Milestones keep repeating (5, 10, 15, 20, 25...).
+async function incrementLoyalty(email) {
+  if (!email || !hasRedis()) return null;
+  try {
+    const key = `loyalty:${email.toLowerCase()}`;
+    const newCount = await redis(["incr", key]);
+    return Number(newCount);
+  } catch (err) {
+    console.error("Loyalty increment failed:", err);
+    return null;
+  }
+}
+
+function generateRewardCode() {
+  return "TRIBE-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+}
+
+async function issueRewardCode(email, milestone) {
+  try {
+    const code = generateRewardCode();
+    await redis(["set", `reward-code:${code}`, JSON.stringify({
+      email: email.toLowerCase(),
+      used: 0,
+      milestone
+    })]);
+    return code;
+  } catch (err) {
+    console.error("Reward code issue failed:", err);
+    return null;
+  }
+}
+
+function buildRewardEmailHtml({ milestone, teeCode }) {
+  const teeBlock = teeCode
+    ? `
+      <div style="background:#f2ead3;border:1px solid #b08d57;border-radius:4px;padding:16px;margin:20px 0;">
+        <p style="margin:0 0 6px;font-weight:700;">🎁 You've also unlocked a FREE TEE</p>
+        <p style="margin:0;">Add any tee to your bag next time and quote this code when you message us on WhatsApp to redeem it:</p>
+        <p style="font-family:monospace;font-size:1.2rem;font-weight:700;margin:10px 0 0;letter-spacing:1px;">${teeCode}</p>
+      </div>`
+    : "";
+
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#17170f;">
+      <h2 style="margin-bottom:4px;">Welcome deeper into THR33 TRIBE 🏅</h2>
+      <p style="color:#666;margin-top:0;">This is order #${milestone} — thank you for riding with us.</p>
+
+      <div style="background:#3f4f34;color:#f2ead3;border-radius:4px;padding:16px;margin:20px 0;">
+        <p style="margin:0;font-weight:700;">🧵 An embroidered TRIBE patch is riding along with this order.</p>
+      </div>
+
+      ${teeBlock}
+
+      <p style="margin-top:24px;color:#444;">
+        Every 5th order earns a TRIBE patch. Every 10th earns a free tee on top.
+        Keep going — we see you.
+      </p>
+
+      <p style="margin-top:28px;color:#999;font-size:12px;">— THR33 TRIBE</p>
+    </div>
+  `;
+}
+
+async function sendRewardEmail(email, milestone, teeCode) {
+  if (!process.env.RESEND_API_KEY || !email) return;
+
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: "THR33 TRIBE <onboarding@resend.dev>",
+        to: email,
+        subject: teeCode
+          ? `🎁 You unlocked a free tee — THR33 TRIBE`
+          : `🧵 You unlocked a TRIBE patch — THR33 TRIBE`,
+        html: buildRewardEmailHtml({ milestone, teeCode })
+      })
+    });
+  } catch (err) {
+    console.error("Reward email failed:", err);
+  }
+}
+
+// ---------------- Owner order-notification email ----------------
 function buildOrderEmailHtml(order) {
   const fields = (order.metadata && order.metadata.custom_fields) || [];
   const rows = fields.map(f =>
@@ -86,6 +198,7 @@ async function sendOrderEmail(order) {
   }
 }
 
+// ---------------- Customer confirmation email ----------------
 function buildCustomerEmailHtml(order) {
   const fields = (order.metadata && order.metadata.custom_fields) || [];
   const get = (varName) => {
@@ -120,7 +233,6 @@ function buildCustomerEmailHtml(order) {
 
       <p style="margin-top:20px;color:#444;">
         <strong>What happens next:</strong> we're prepping your order now.
-        Lagos &amp; Abuja usually arrive in 2–4 working days, other states 4–7 working days.
       </p>
 
       <p style="margin-top:20px;">
@@ -180,15 +292,29 @@ module.exports = async (req, res) => {
     const data = await paystackRes.json();
 
     if (data.status && data.data && data.data.status === "success") {
+      const order = data.data;
+      const email = order.customer && order.customer.email;
+      const isFirstTime = await markProcessedOnce(order.reference);
+
       await decrementStock(items);
-      await sendOrderEmail(data.data);
-      await sendCustomerEmail(data.data);
+      await sendOrderEmail(order);
+
+      if (isFirstTime) {
+        await sendCustomerEmail(order);
+
+        const count = await incrementLoyalty(email);
+        if (count && count % 5 === 0) {
+          const isTeeMilestone = count % 10 === 0;
+          const teeCode = isTeeMilestone ? await issueRewardCode(email, count) : null;
+          await sendRewardEmail(email, count, teeCode);
+        }
+      }
 
       return res.status(200).json({
         verified: true,
-        reference: data.data.reference,
-        amount: data.data.amount,
-        email: data.data.customer && data.data.customer.email
+        reference: order.reference,
+        amount: order.amount,
+        email: email
       });
     }
 
