@@ -32,6 +32,7 @@
       <a href="#shop">Shop</a>
       <a href="#about">About</a>
       <a href="#faq">FAQ</a>
+      <button type="button" class="nav-link-btn" data-role="track-order-open">Track Order</button>
     </nav>
     <button class="cart-btn" id="cartToggle" aria-haspopup="dialog" aria-controls="cartDrawer">
       <span class="cart-label">Bag</span>
@@ -62,7 +63,14 @@
   <div class="wrap">
     <div class="section-head">
       <h2>The Collection</h2>
-      <p class="section-note">Hover a note to flip it.</p>
+      <label class="sort-control">
+        Sort
+        <select id="sortSelect">
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+      </label>
     </div>
     <div class="filter-bar" id="filterBar"><!-- injected by script.js --></div>
     <div class="product-grid" id="productGrid"><!-- injected by script.js --></div>
@@ -99,6 +107,10 @@
       <summary>Can I return or exchange?</summary>
       <p>Reach out within 48 hours of delivery if there's a sizing or quality issue and we'll sort a swap.</p>
     </details>
+    <details>
+      <summary>What's THR33 TRIBE?</summary>
+      <p>Our loyalty program. Every 5th order you place earns you an embroidered TRIBE patch, and every 10th also earns a free tee. Rewards keep repeating the more you order.</p>
+    </details>
   </div>
 </section>
 
@@ -107,7 +119,7 @@
     <img src="assets/logo-monogram.png" alt="THREE" class="footer-mono" />
     <p>&copy; <span id="year"></span> THR33. All rights reserved.</p>
     <div class="footer-links">
-      <button type="button" class="footer-link-btn" id="trackOrderOpen">Track your order</button>
+      <button type="button" class="footer-link-btn" data-role="track-order-open">Track your order</button>
       <a href="mailto:hello@example.com">thr33enterprise@gmail.com</a>
     </div>
   </div>
@@ -127,8 +139,17 @@
       <span id="cartSubtotal">&#8358;0</span>
     </div>
     <button class="btn btn-primary btn-full" id="checkoutBtn">Checkout</button>
+    <button type="button" class="cart-track-link" data-role="track-order-open">Already ordered? Track it here</button>
   </div>
 </aside>
+
+<!-- Quick Add Modal -->
+<div class="modal-overlay" id="quickAddOverlay">
+  <div class="modal quick-add-modal" role="dialog" aria-label="Add to bag">
+    <button class="modal-close" id="quickAddClose" aria-label="Close">&times;</button>
+    <div id="quickAddBody"><!-- injected by script.js --></div>
+  </div>
+</div>
 
 <!-- Checkout Modal -->
 <div class="modal-overlay" id="checkoutOverlay">
@@ -144,8 +165,9 @@
         <input type="tel" name="phone" required autocomplete="tel" placeholder="080..." />
       </label>
       <label>Email
-        <input type="email" name="email" required autocomplete="email" />
+        <input type="email" name="email" id="checkoutEmail" required autocomplete="email" />
       </label>
+      <p id="loyaltyProgress" class="loyalty-progress"></p>
       <label>Delivery address
         <textarea name="address" rows="2" required autocomplete="street-address" placeholder="House/street, area/landmark"></textarea>
       </label>
@@ -245,4 +267,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
