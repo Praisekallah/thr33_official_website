@@ -4,14 +4,9 @@
    ============================================ */
 
 // ---- CONFIG: replace with your own Paystack public key ----
-// Get this from https://dashboard.paystack.com/#/settings/developer
-// It's safe to expose the PUBLIC key in front-end code — never the secret key.
 const PAYSTACK_PUBLIC_KEY = "pk_live_efdfb8f1cbb80b64b7907f7222fcb4801a0909f2";
 
 // ---- CONFIG: shipping fee by state ----
-// Every fee here is in plain Naira and kept above ₦1,500 as requested.
-// Edit any number to adjust pricing — states not listed fall back to
-// DEFAULT_SHIPPING_FEE.
 const SHIPPING_RATES = {
   "Lagos": 3500,
   "Ogun": 3500,
@@ -51,7 +46,7 @@ const SHIPPING_RATES = {
   "Borno": 2800,
   "Yobe": 2800
 };
-const DEFAULT_SHIPPING_FEE = 2500; // used if a state isn't in the list above — still > ₦1,500
+const DEFAULT_SHIPPING_FEE = 2500;
 
 function getShippingFee(state) {
   return SHIPPING_RATES[state] || DEFAULT_SHIPPING_FEE;
@@ -59,7 +54,6 @@ function getShippingFee(state) {
 
 const naira = (n) => "₦" + n.toLocaleString("en-NG");
 
-// Product ids that are cropped fits — used to show the crop note in the size guide
 const CROP_IDS = ["crop-basic-female", "croptop-thr33-female"];
 
 // ---------------- Cart state ----------------
@@ -98,6 +92,7 @@ function addToCart(productId, size, colorIdx) {
   saveCart();
   const colorLabel = product.colors.length > 1 ? `, ${color.name}` : "";
   showToast(`${product.name} (${size}${colorLabel}) added to bag`);
+  closeQuickAdd();
 }
 
 function removeFromCart(index) {
@@ -143,8 +138,22 @@ function renderFilters() {
   });
 }
 
+// ---------------- Sort ----------------
+let activeSort = "featured";
+
+document.getElementById("sortSelect").addEventListener("change", (e) => {
+  activeSort = e.target.value;
+  renderProducts();
+});
+
+function sortProducts(list) {
+  if (activeSort === "price-asc") return [...list].sort((a, b) => a.price - b.price);
+  if (activeSort === "price-desc") return [...list].sort((a, b) => b.price - a.price);
+  return [...list].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+}
+
 // ---------------- Stock ----------------
-let stockLevels = {}; // populated by fetchStock() — { productId: remainingCount }
+let stockLevels = {};
 
 async function fetchStock() {
   try {
@@ -152,18 +161,18 @@ async function fetchStock() {
     const data = await res.json();
     stockLevels = data.stock || {};
   } catch (err) {
-    stockLevels = {}; // if this fails, cards just show as normal/in-stock
+    stockLevels = {};
   }
   renderProducts();
 }
 
-// ---------------- Render: product grid ----------------
+// ---------------- Render: product grid (simplified card) ----------------
 function renderProducts() {
   const grid = document.getElementById("productGrid");
 
-  const filtered = PRODUCTS
-    .filter(p => activeCategory === "all" || p.category === activeCategory)
-    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+  const filtered = sortProducts(
+    PRODUCTS.filter(p => activeCategory === "all" || p.category === activeCategory)
+  );
 
   if (filtered.length === 0) {
     grid.innerHTML = `<p class="grid-empty">Nothing here yet — check back soon.</p>`;
@@ -172,11 +181,6 @@ function renderProducts() {
 
   grid.innerHTML = filtered.map(p => {
     const first = p.colors[0];
-    const swatches = p.colors.length > 1
-      ? `<div class="color-swatches" data-role="colors">
-          ${p.colors.map((c, idx) => `<button type="button" class="swatch ${idx === 0 ? 'selected' : ''}" data-idx="${idx}" style="background:${c.hex}" aria-label="${c.name}" title="${c.name}"></button>`).join("")}
-         </div>`
-      : "";
 
     const remaining = stockLevels[p.id];
     const soldOut = remaining !== undefined && remaining <= 0;
@@ -197,13 +201,9 @@ function renderProducts() {
         </div>`
       : "";
 
-    const sizeGuideLink = p.category !== "shorts"
-      ? `<button type="button" class="size-guide-link" data-role="size-guide" data-crop="${CROP_IDS.includes(p.id) ? "1" : "0"}">Size Guide</button>`
-      : "";
-
     return `
-    <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}" data-color-idx="0">
-      <div class="product-flip">
+    <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}">
+      <div class="product-flip" data-role="open-quick-add">
         ${featuredBadge}
         ${stockBadge}
         <img src="${first.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
@@ -215,62 +215,101 @@ function renderProducts() {
           <span class="product-price">${naira(p.price)}</span>
         </div>
         ${discountRow}
-        <p class="product-desc">${p.description}</p>
-        ${swatches}
       </div>
-      <div class="product-sizes-row">
-        <div class="product-sizes" data-role="sizes">
-          ${p.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
-        </div>
-        ${sizeGuideLink}
-      </div>
-      <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
-      <button type="button" class="add-btn" data-role="add" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
+      <button type="button" class="quick-add-btn" data-role="open-quick-add" ${soldOut ? 'disabled' : ''}>
+        ${soldOut ? 'Sold Out' : 'Quick Add'}
+      </button>
     </div>`;
   }).join("");
 
   grid.querySelectorAll(".product-card").forEach(card => {
     const product = PRODUCTS.find(p => p.id === card.dataset.id);
-
-    // size selection
-    const sizeButtons = card.querySelectorAll(".size-btn");
-    sizeButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        sizeButtons.forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-      });
+    card.querySelectorAll('[data-role="open-quick-add"]').forEach(el => {
+      if (el.disabled) return;
+      el.addEventListener("click", () => openQuickAdd(product));
     });
-
-    // color swatch selection — swaps the front/back photos shown on the card
-    const swatchButtons = card.querySelectorAll(".swatch");
-    swatchButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        swatchButtons.forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        const idx = Number(btn.dataset.idx);
-        card.dataset.colorIdx = idx;
-        const color = product.colors[idx];
-        card.querySelector(".img-front").src = color.front;
-        card.querySelector(".img-back").src = color.back;
-      });
-    });
-
-    const addBtn = card.querySelector('[data-role="add"]');
-    if (addBtn && !addBtn.disabled) {
-      addBtn.addEventListener("click", () => {
-        const selectedSize = card.querySelector(".size-btn.selected");
-        const colorIdx = Number(card.dataset.colorIdx || 0);
-        addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", colorIdx);
-      });
-    }
-
-    const sizeGuideBtn = card.querySelector('[data-role="size-guide"]');
-    if (sizeGuideBtn) {
-      sizeGuideBtn.addEventListener("click", () => {
-        openSizeGuide(sizeGuideBtn.dataset.crop === "1");
-      });
-    }
   });
+}
+
+// ---------------- Quick Add modal ----------------
+const quickAddOverlay = document.getElementById("quickAddOverlay");
+const quickAddBody = document.getElementById("quickAddBody");
+let quickAddColorIdx = 0;
+
+function openQuickAdd(product) {
+  quickAddColorIdx = 0;
+  renderQuickAdd(product);
+  quickAddOverlay.classList.add("open");
+}
+function closeQuickAdd() {
+  quickAddOverlay.classList.remove("open");
+}
+document.getElementById("quickAddClose").addEventListener("click", closeQuickAdd);
+quickAddOverlay.addEventListener("click", (e) => {
+  if (e.target === quickAddOverlay) closeQuickAdd();
+});
+
+function renderQuickAdd(product) {
+  const color = product.colors[quickAddColorIdx];
+  const remaining = stockLevels[product.id];
+  const soldOut = remaining !== undefined && remaining <= 0;
+
+  const swatches = product.colors.length > 1
+    ? `<div class="color-swatches" data-role="qa-colors">
+        ${product.colors.map((c, idx) => `<button type="button" class="swatch ${idx === quickAddColorIdx ? 'selected' : ''}" data-idx="${idx}" style="background:${c.hex}" aria-label="${c.name}" title="${c.name}"></button>`).join("")}
+       </div>`
+    : "";
+
+  const sizeGuideLink = product.category !== "shorts"
+    ? `<button type="button" class="size-guide-link" id="qaSizeGuideBtn">Size Guide</button>`
+    : "";
+
+  quickAddBody.innerHTML = `
+    <div class="qa-image">
+      <img src="${color.front}" alt="${product.name}" id="qaImage" />
+    </div>
+    <p class="qa-name">${product.name}</p>
+    <p class="qa-price">${naira(product.price)}</p>
+    <p class="qa-desc">${product.description}</p>
+    ${swatches}
+    <div class="product-sizes-row">
+      <div class="product-sizes" id="qaSizes">
+        ${product.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
+      </div>
+      ${sizeGuideLink}
+    </div>
+    <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
+    <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
+      ${soldOut ? 'Sold Out' : 'Add to Bag'}
+    </button>
+  `;
+
+  quickAddBody.querySelectorAll(".swatch").forEach(btn => {
+    btn.addEventListener("click", () => {
+      quickAddColorIdx = Number(btn.dataset.idx);
+      renderQuickAdd(product);
+    });
+  });
+
+  quickAddBody.querySelectorAll(".size-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      quickAddBody.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    });
+  });
+
+  const sizeGuideBtn = document.getElementById("qaSizeGuideBtn");
+  if (sizeGuideBtn) {
+    sizeGuideBtn.addEventListener("click", () => openSizeGuide(CROP_IDS.includes(product.id)));
+  }
+
+  const addBtn = document.getElementById("qaAddBtn");
+  if (addBtn && !addBtn.disabled) {
+    addBtn.addEventListener("click", () => {
+      const selectedSize = quickAddBody.querySelector(".size-btn.selected");
+      addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", quickAddColorIdx);
+    });
+  }
 }
 
 // ---------------- Render: cart drawer ----------------
@@ -333,6 +372,8 @@ cartOverlay.addEventListener("click", closeCart);
 // ---------------- Checkout modal ----------------
 const checkoutOverlay = document.getElementById("checkoutOverlay");
 const stateSelect = document.querySelector('#checkoutForm select[name="state"]');
+const checkoutEmailInput = document.querySelector('#checkoutForm input[name="email"]');
+const loyaltyProgressEl = document.getElementById("loyaltyProgress");
 
 function updateCheckoutTotals() {
   const subtotal = cartSubtotal();
@@ -349,12 +390,49 @@ function updateCheckoutTotals() {
 
 stateSelect.addEventListener("change", updateCheckoutTotals);
 
+// ---------------- THR33 TRIBE loyalty progress ----------------
+let loyaltyLookupTimer;
+checkoutEmailInput.addEventListener("input", () => {
+  clearTimeout(loyaltyLookupTimer);
+  const email = checkoutEmailInput.value.trim();
+  if (!email.includes("@")) {
+    loyaltyProgressEl.textContent = "";
+    return;
+  }
+  loyaltyLookupTimer = setTimeout(() => fetchLoyaltyProgress(email), 500);
+});
+
+function fetchLoyaltyProgress(email) {
+  fetch("/api/loyalty-status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const completedOrders = data.count || 0;
+      const thisOrderNumber = completedOrders + 1;
+      const nextMilestone = Math.ceil(thisOrderNumber / 5) * 5;
+      const positionInCycle = thisOrderNumber - (nextMilestone - 5);
+      const remaining = nextMilestone - thisOrderNumber;
+      const rewardLabel = nextMilestone % 10 === 0 ? "a TRIBE patch + a free tee" : "a TRIBE patch";
+
+      loyaltyProgressEl.innerHTML = remaining === 0
+        ? `🏅 This order unlocks <strong>${rewardLabel}</strong> — welcome deeper into THR33 TRIBE!`
+        : `🏅 <strong>${positionInCycle}/5</strong> orders — ${remaining} more to unlock ${rewardLabel}`;
+    })
+    .catch(() => {
+      loyaltyProgressEl.textContent = "";
+    });
+}
+
 function openCheckout() {
   if (cart.length === 0) {
     showToast("Your bag is empty");
     return;
   }
   updateCheckoutTotals();
+  loyaltyProgressEl.textContent = "";
   closeCart();
   checkoutOverlay.classList.add("open");
 }
@@ -388,7 +466,7 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
   }
 
   const { subtotal, shipping, total } = updateCheckoutTotals();
-  const amountKobo = total * 100; // Paystack expects kobo
+  const amountKobo = total * 100;
 
   const payBtn = document.getElementById("payBtn");
   payBtn.disabled = true;
@@ -411,9 +489,6 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
       ]
     },
     callback: function (response) {
-      // Paystack reports success client-side here. Before trusting it,
-      // confirm with our own server (/api/verify-payment), which checks
-      // the reference against Paystack's records using the secret key.
       payBtn.textContent = "Confirming payment…";
 
       fetch("/api/verify-payment", {
@@ -435,7 +510,7 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
             closeCheckout();
             form.reset();
             showToast(`Payment confirmed — ref ${response.reference}. We'll email your receipt.`);
-            fetchStock(); // reflect the updated stock count right away
+            fetchStock();
           } else {
             showToast("We couldn't confirm this payment. Please contact us with your reference: " + response.reference);
           }
@@ -482,7 +557,9 @@ function openTrackOrder() {
 function closeTrackOrder() {
   trackOrderOverlay.classList.remove("open");
 }
-document.getElementById("trackOrderOpen").addEventListener("click", openTrackOrder);
+document.querySelectorAll('[data-role="track-order-open"]').forEach(el => {
+  el.addEventListener("click", openTrackOrder);
+});
 document.getElementById("trackOrderClose").addEventListener("click", closeTrackOrder);
 trackOrderOverlay.addEventListener("click", (e) => {
   if (e.target === trackOrderOverlay) closeTrackOrder();
