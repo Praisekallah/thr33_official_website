@@ -3,9 +3,16 @@
   --------
   This is the only file you need to touch to update what's for sale.
 
-  - colors: each product has a list of color variants (name, hex, front/back
-    photo paths). One color = no swatch row shown. 2+ colors = swatches
-    appear automatically.
+  - colors: each product has a list of color variants (name, hex, images).
+    One color = no swatch row shown. 2+ colors = swatches appear
+    automatically.
+  - images: an ARRAY of photo paths for that color, in the order you want
+    them to appear in the product gallery. Order convention:
+      [0] = front           (used as the main grid photo)
+      [1] = back             (used for the hover-flip on the grid card)
+      [2+] = anything else — on-model shots, detail close-ups, etc.
+    You need at least 1 image. 2+ unlocks the hover-flip on the grid.
+    3+ gives customers a swipeable gallery inside the product popup.
   - price: in Naira, as a plain number (no commas).
   - sizes: shown as buttons on the product card.
   - sku: shows on the receipt/checkout, purely cosmetic.
@@ -44,7 +51,16 @@ const PRODUCTS = [
     category: "shorts",
     sizes: ["28", "30", "32", "34", "36"],
     colors: [
-      { name: "Black", hex: "#17170f", front: "assets/jorts-front.png", back: "assets/jorts-back.png" }
+      {
+        name: "Black",
+        hex: "#17170f",
+        images: [
+          "assets/jorts-front.png",
+          "assets/jorts-back.png"
+          // add on-model shots here once the shoot is in, e.g.:
+          // "assets/jorts-model-1.jpg", "assets/jorts-model-2.jpg"
+        ]
+      }
     ],
     description: "Washed black denim jorts with the embroidered TB monogram pocket."
   },
@@ -57,7 +73,15 @@ const PRODUCTS = [
     category: "long-sleeve",
     sizes: ["S", "M", "L"],
     colors: [
-      { name: "Black", hex: "#17170f", front: "assets/rose-female-ls-front.png", back: "assets/rose-female-ls-back.png" }
+      {
+        name: "Black",
+        hex: "#17170f",
+        images: [
+          "assets/rose-female-ls-front.png",
+          "assets/rose-female-ls-back.png"
+          // "assets/rose-female-ls-model-1.jpg"
+        ]
+      }
     ],
     description: "Cropped long-sleeve with the rose back print."
   },
@@ -70,7 +94,15 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", hex: "#17170f", front: "assets/rose-unisex-front.png", back: "assets/rose-unisex-back.png" }
+      {
+        name: "Black",
+        hex: "#17170f",
+        images: [
+          "assets/rose-unisex-front.png",
+          "assets/rose-unisex-back.png"
+          // "assets/rose-unisex-model-1.jpg"
+        ]
+      }
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   }
@@ -87,9 +119,9 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L"],
     colors: [
-      { name: "Black", hex: "#17170f", front: "assets/crop-black-front.png", back: "assets/crop-black-back.png" },
-      { name: "Pink", hex: "#f2a6c1", front: "assets/crop-pink-front.png", back: "assets/crop-pink-back.png" },
-      { name: "White", hex: "#f5f3ec", front: "assets/crop-white-v2-front.png", back: "assets/crop-white-v2-back.png" }
+      { name: "Black", hex: "#17170f", images: ["assets/crop-black-front.png", "assets/crop-black-back.png"] },
+      { name: "Pink", hex: "#f2a6c1", images: ["assets/crop-pink-front.png", "assets/crop-pink-back.png"] },
+      { name: "White", hex: "#f5f3ec", images: ["assets/crop-white-v2-front.png", "assets/crop-white-v2-back.png"] }
     ],
     description: "Cropped fit, front & back print."
   },
@@ -102,10 +134,10 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", hex: "#17170f", front: "assets/rose-tee-black-front.png", back: "assets/rose-tee-black-back.png" },
-      { name: "Peach", hex: "#f5c9a8", front: "assets/rose-tee-peach-front.png", back: "assets/rose-tee-peach-back.png" },
-      { name: "Maroon", hex: "#6e1423", front: "assets/rose-tee-maroon-front.png", back: "assets/rose-tee-maroon-back.png" },
-      { name: "White", hex: "#f5f3ec", front: "assets/rose-tee-white-front.png", back: "assets/rose-tee-white-back.png" }
+      { name: "Black", hex: "#17170f", images: ["assets/rose-tee-black-front.png", "assets/rose-tee-black-back.png"] },
+      { name: "Peach", hex: "#f5c9a8", images: ["assets/rose-tee-peach-front.png", "assets/rose-tee-peach-back.png"] },
+      { name: "Maroon", hex: "#6e1423", images: ["assets/rose-tee-maroon-front.png", "assets/rose-tee-maroon-back.png"] },
+      { name: "White", hex: "#f5f3ec", images: ["assets/rose-tee-white-front.png", "assets/rose-tee-white-back.png"] }
     ],
     description: "Unisex tee with a bold rose graphic front and the Thr33 print on the back."
   },
@@ -118,10 +150,10 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Peach", hex: "#f5c9a8", front: "assets/mfdoom-peach-front.png", back: "assets/mfdoom-peach-back.png" },
-      { name: "White", hex: "#f5f3ec", front: "assets/mfdoom-white-front.png", back: "assets/mfdoom-white-back.png" },
-      { name: "Black", hex: "#17170f", front: "assets/mfdoom-black-front.png", back: "assets/mfdoom-black-back.png" },
-      { name: "Maroon", hex: "#6e1423", front: "assets/mfdoom-maroon-front.png", back: "assets/mfdoom-maroon-back.png" }
+      { name: "Peach", hex: "#f5c9a8", images: ["assets/mfdoom-peach-front.png", "assets/mfdoom-peach-back.png"] },
+      { name: "White", hex: "#f5f3ec", images: ["assets/mfdoom-white-front.png", "assets/mfdoom-white-back.png"] },
+      { name: "Black", hex: "#17170f", images: ["assets/mfdoom-black-front.png", "assets/mfdoom-black-back.png"] },
+      { name: "Maroon", hex: "#6e1423", images: ["assets/mfdoom-maroon-front.png", "assets/mfdoom-maroon-back.png"] }
     ],
     description: "Unisex tee, playing card graphic front, Thr33 print on the back."
   },
@@ -134,10 +166,10 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Peach", hex: "#f5c9a8", front: "assets/moneyface-peach-front.png", back: "assets/moneyface-peach-back.png" },
-      { name: "Maroon", hex: "#6e1423", front: "assets/moneyface-maroon-front.png", back: "assets/moneyface-maroon-back.png" },
-      { name: "White", hex: "#f5f3ec", front: "assets/moneyface-white-front.png", back: "assets/moneyface-white-back.png" },
-      { name: "Black", hex: "#17170f", front: "assets/moneyface-black-front.png", back: "assets/moneyface-black-back.png" }
+      { name: "Peach", hex: "#f5c9a8", images: ["assets/moneyface-peach-front.png", "assets/moneyface-peach-back.png"] },
+      { name: "Maroon", hex: "#6e1423", images: ["assets/moneyface-maroon-front.png", "assets/moneyface-maroon-back.png"] },
+      { name: "White", hex: "#f5f3ec", images: ["assets/moneyface-white-front.png", "assets/moneyface-white-back.png"] },
+      { name: "Black", hex: "#17170f", images: ["assets/moneyface-black-front.png", "assets/moneyface-black-back.png"] }
     ],
     description: "Unisex tee, \"Money Talks\" graphic front, Thr33 print on the back."
   },
@@ -150,10 +182,10 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "White", hex: "#f5f3ec", front: "assets/t3basic-white-front.png", back: "assets/t3basic-white-back.png" },
-      { name: "Black", hex: "#17170f", front: "assets/t3basic-black-front.png", back: "assets/t3basic-black-back.png" },
-      { name: "Peach", hex: "#f5c9a8", front: "assets/t3basic-peach-front.png", back: "assets/t3basic-peach-back.png" },
-      { name: "Maroon", hex: "#6e1423", front: "assets/t3basic-maroon-front.png", back: "assets/t3basic-maroon-back.png" }
+      { name: "White", hex: "#f5f3ec", images: ["assets/t3basic-white-front.png", "assets/t3basic-white-back.png"] },
+      { name: "Black", hex: "#17170f", images: ["assets/t3basic-black-front.png", "assets/t3basic-black-back.png"] },
+      { name: "Peach", hex: "#f5c9a8", images: ["assets/t3basic-peach-front.png", "assets/t3basic-peach-back.png"] },
+      { name: "Maroon", hex: "#6e1423", images: ["assets/t3basic-maroon-front.png", "assets/t3basic-maroon-back.png"] }
     ],
     description: "Unisex tee with the repeating T3 monogram outline print."
   },
@@ -166,9 +198,9 @@ const PRODUCTS = [
     category: "tee",
     sizes: ["S", "M", "L"],
     colors: [
-      { name: "White", hex: "#f5f3ec", front: "assets/croptop-white-front.png", back: "assets/croptop-white-back.png" },
-      { name: "Black", hex: "#17170f", front: "assets/croptop-black-front.png", back: "assets/croptop-black-back.png" },
-      { name: "Pink", hex: "#f2a6c1", front: "assets/croptop-pink-front.png", back: "assets/croptop-pink-back.png" }
+      { name: "White", hex: "#f5f3ec", images: ["assets/croptop-white-front.png", "assets/croptop-white-back.png"] },
+      { name: "Black", hex: "#17170f", images: ["assets/croptop-black-front.png", "assets/croptop-black-back.png"] },
+      { name: "Pink", hex: "#f2a6c1", images: ["assets/croptop-pink-front.png", "assets/croptop-pink-back.png"] }
     ],
     description: "Cropped fit, front & back Thr33 print."
   }
