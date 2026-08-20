@@ -86,7 +86,7 @@ function addToCart(productId, size, colorIdx) {
       qty: 1,
       name: product.name,
       price: product.price,
-      image: color.front
+      image: color.images[0]
     });
   }
   saveCart();
@@ -139,12 +139,10 @@ function renderFilters() {
 }
 
 // ---------------- Sort ----------------
+// Default sort is always "featured" now that the sort dropdown has been
+// removed from the simplified layout. If you bring the dropdown back,
+// wire it to `activeSort` again.
 let activeSort = "featured";
-
-document.getElementById("sortSelect").addEventListener("change", (e) => {
-  activeSort = e.target.value;
-  renderProducts();
-});
 
 function sortProducts(list) {
   if (activeSort === "price-asc") return [...list].sort((a, b) => a.price - b.price);
@@ -181,6 +179,8 @@ function renderProducts() {
 
   grid.innerHTML = filtered.map(p => {
     const first = p.colors[0];
+    const frontImg = first.images[0];
+    const backImg = first.images[1] || first.images[0];
 
     const remaining = stockLevels[p.id];
     const soldOut = remaining !== undefined && remaining <= 0;
@@ -206,38 +206,36 @@ function renderProducts() {
       <div class="product-flip" data-role="open-quick-add">
         ${featuredBadge}
         ${stockBadge}
-        <img src="${first.front}" alt="${p.name} — front" class="img-front" loading="lazy" />
-        <img src="${first.back}" alt="${p.name} — back" class="img-back" loading="lazy" />
+        <img src="${frontImg}" alt="${p.name} — front" class="img-front" loading="lazy" />
+        <img src="${backImg}" alt="${p.name} — back" class="img-back" loading="lazy" />
       </div>
-      <div class="product-info">
+      <div class="product-info" data-role="open-quick-add">
         <div class="product-info-top">
           <p class="product-name">${p.name}</p>
           <span class="product-price">${naira(p.price)}</span>
         </div>
         ${discountRow}
       </div>
-      <button type="button" class="quick-add-btn" data-role="open-quick-add" ${soldOut ? 'disabled' : ''}>
-        ${soldOut ? 'Sold Out' : 'Quick Add'}
-      </button>
     </div>`;
   }).join("");
 
   grid.querySelectorAll(".product-card").forEach(card => {
     const product = PRODUCTS.find(p => p.id === card.dataset.id);
     card.querySelectorAll('[data-role="open-quick-add"]').forEach(el => {
-      if (el.disabled) return;
       el.addEventListener("click", () => openQuickAdd(product));
     });
   });
 }
 
-// ---------------- Quick Add modal ----------------
+// ---------------- Product Detail modal (image gallery + add to bag) ----------------
 const quickAddOverlay = document.getElementById("quickAddOverlay");
 const quickAddBody = document.getElementById("quickAddBody");
 let quickAddColorIdx = 0;
+let quickAddImageIdx = 0;
 
 function openQuickAdd(product) {
   quickAddColorIdx = 0;
+  quickAddImageIdx = 0;
   renderQuickAdd(product);
   quickAddOverlay.classList.add("open");
 }
@@ -251,6 +249,7 @@ quickAddOverlay.addEventListener("click", (e) => {
 
 function renderQuickAdd(product) {
   const color = product.colors[quickAddColorIdx];
+  const images = color.images;
   const remaining = stockLevels[product.id];
   const soldOut = remaining !== undefined && remaining <= 0;
 
@@ -264,29 +263,55 @@ function renderQuickAdd(product) {
     ? `<button type="button" class="size-guide-link" id="qaSizeGuideBtn">Size Guide</button>`
     : "";
 
+  const galleryTrack = images.map((src, idx) =>
+    `<img src="${src}" alt="${product.name} — view ${idx + 1}" />`
+  ).join("");
+
+  const arrows = images.length > 1
+    ? `<button type="button" class="pd-arrow prev" id="qaPrev" aria-label="Previous image">&#8249;</button>
+       <button type="button" class="pd-arrow next" id="qaNext" aria-label="Next image">&#8250;</button>`
+    : "";
+
+  const dots = images.length > 1
+    ? `<div class="pd-dots" id="qaDots">
+        ${images.map((_, idx) => `<span class="pd-dot ${idx === quickAddImageIdx ? 'active' : ''}" data-idx="${idx}"></span>`).join("")}
+       </div>`
+    : "";
+
   quickAddBody.innerHTML = `
-    <div class="qa-image">
-      <img src="${color.front}" alt="${product.name}" id="qaImage" />
-    </div>
-    <p class="qa-name">${product.name}</p>
-    <p class="qa-price">${naira(product.price)}</p>
-    <p class="qa-desc">${product.description}</p>
-    ${swatches}
-    <div class="product-sizes-row">
-      <div class="product-sizes" id="qaSizes">
-        ${product.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
+    <div class="pd-gallery" id="qaGallery">
+      <div class="pd-gallery-track" id="qaGalleryTrack">
+        ${galleryTrack}
       </div>
-      ${sizeGuideLink}
+      ${arrows}
     </div>
-    <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
-    <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
-      ${soldOut ? 'Sold Out' : 'Add to Bag'}
-    </button>
+    ${dots}
+    <div class="pd-details">
+      <p class="qa-name">${product.name}</p>
+      <p class="qa-price">${naira(product.price)}</p>
+      <p class="qa-desc">${product.description}</p>
+      ${swatches}
+      <div class="product-sizes-row">
+        <div class="product-sizes" id="qaSizes">
+          ${product.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
+        </div>
+        ${sizeGuideLink}
+      </div>
+      <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
+    </div>
+    <div class="pd-sticky-add">
+      <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
+        ${soldOut ? 'Sold Out' : 'Add to Bag'}
+      </button>
+    </div>
   `;
+
+  setGalleryPosition(0);
 
   quickAddBody.querySelectorAll(".swatch").forEach(btn => {
     btn.addEventListener("click", () => {
       quickAddColorIdx = Number(btn.dataset.idx);
+      quickAddImageIdx = 0;
       renderQuickAdd(product);
     });
   });
@@ -308,6 +333,51 @@ function renderQuickAdd(product) {
     addBtn.addEventListener("click", () => {
       const selectedSize = quickAddBody.querySelector(".size-btn.selected");
       addToCart(product.id, selectedSize ? selectedSize.dataset.size : "One Size", quickAddColorIdx);
+    });
+  }
+
+  // ---- gallery nav (arrows, dots, swipe) ----
+  const prevBtn = document.getElementById("qaPrev");
+  const nextBtn = document.getElementById("qaNext");
+  if (prevBtn) prevBtn.addEventListener("click", () => stepGallery(images.length, -1));
+  if (nextBtn) nextBtn.addEventListener("click", () => stepGallery(images.length, 1));
+
+  const dotsEl = document.getElementById("qaDots");
+  if (dotsEl) {
+    dotsEl.querySelectorAll(".pd-dot").forEach(dot => {
+      dot.addEventListener("click", () => {
+        quickAddImageIdx = Number(dot.dataset.idx);
+        setGalleryPosition(quickAddImageIdx);
+      });
+    });
+  }
+
+  const galleryEl = document.getElementById("qaGallery");
+  if (galleryEl && images.length > 1) {
+    let touchStartX = 0;
+    galleryEl.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    galleryEl.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) stepGallery(images.length, dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+}
+
+function stepGallery(count, delta) {
+  quickAddImageIdx = (quickAddImageIdx + delta + count) % count;
+  setGalleryPosition(quickAddImageIdx);
+}
+
+function setGalleryPosition(idx) {
+  const track = document.getElementById("qaGalleryTrack");
+  if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+
+  const dotsEl = document.getElementById("qaDots");
+  if (dotsEl) {
+    dotsEl.querySelectorAll(".pd-dot").forEach((dot, i) => {
+      dot.classList.toggle("active", i === idx);
     });
   }
 }
