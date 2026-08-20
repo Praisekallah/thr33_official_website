@@ -147,7 +147,7 @@ let activeSort = "featured";
 function sortProducts(list) {
   if (activeSort === "price-asc") return [...list].sort((a, b) => a.price - b.price);
   if (activeSort === "price-desc") return [...list].sort((a, b) => b.price - a.price);
-  return [...list].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+  return [...list].sort((a, b) => ((b.badges && b.badges.length) ? 1 : 0) - ((a.badges && a.badges.length) ? 1 : 0));
 }
 
 // ---------------- Stock ----------------
@@ -191,7 +191,9 @@ function renderProducts() {
         ? `<span class="stock-badge low">Only ${remaining} left</span>`
         : "";
 
-    const featuredBadge = p.featured ? `<span class="featured-badge">${p.featured}</span>` : "";
+    const badgeStack = (p.badges && p.badges.length)
+      ? `<div class="badge-stack">${p.badges.map(b => `<span class="featured-badge">${b}</span>`).join("")}</div>`
+      : "";
 
     const discountPct = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
     const discountRow = p.originalPrice
@@ -204,7 +206,7 @@ function renderProducts() {
     return `
     <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}">
       <div class="product-flip" data-role="open-quick-add">
-        ${featuredBadge}
+        ${badgeStack}
         ${stockBadge}
         <img src="${frontImg}" alt="${p.name} — front" class="img-front" loading="lazy" />
         <img src="${backImg}" alt="${p.name} — back" class="img-back" loading="lazy" />
