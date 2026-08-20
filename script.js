@@ -299,11 +299,16 @@ function renderQuickAdd(product) {
       </div>
       <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
     </div>
-    <div class="pd-sticky-add">
-      <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
-        ${soldOut ? 'Sold Out' : 'Add to Bag'}
-      </button>
-    </div>
+  `;
+
+  // Add-to-bag button lives OUTSIDE the scrollable area (as a sibling, not
+  // a child of #quickAddBody) so it's always visible regardless of how
+  // tall the description/gallery content is or how the phone scrolls.
+  const qaStickyAdd = document.getElementById("qaStickyAdd");
+  qaStickyAdd.innerHTML = `
+    <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
+      ${soldOut ? 'Sold Out' : 'Add to Bag'}
+    </button>
   `;
 
   setGalleryPosition(0);
