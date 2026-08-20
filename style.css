@@ -288,8 +288,8 @@ img { max-width: 100%; display: block; }
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
+  border-radius: 0;
+  border: none;
   background: transparent;
   cursor: pointer;
 }
@@ -329,11 +329,17 @@ img { max-width: 100%; display: block; }
 .product-card.is-sold-out .product-flip {
   opacity: 0.55;
 }
-.featured-badge {
+.badge-stack {
   position: absolute;
   top: 12px;
   left: 12px;
   z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+.featured-badge {
   background: rgba(242,234,211,0.92);
   color: var(--ink);
   font-family: 'Space Grotesk', sans-serif;
@@ -533,6 +539,12 @@ img { max-width: 100%; display: block; }
   transition: opacity 0.25s ease;
   z-index: 50;
 }
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
 .cart-overlay.open, .modal-overlay.open { opacity: 1; visibility: visible; }
 
 .cart-drawer {
@@ -590,16 +602,14 @@ img { max-width: 100%; display: block; }
 
 /* ---------- Checkout modal ---------- */
 .modal {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -48%);
   background: var(--cream);
-  width: min(480px, 92vw);
-  max-height: 88vh;
+  width: min(480px, 100%);
+  max-height: 100%;
   overflow-y: auto;
   padding: 32px;
   border-radius: var(--radius);
   z-index: 61;
+  position: relative;
 }
 .modal-overlay .modal { display: none; }
 .modal-overlay.open .modal { display: block; }
@@ -715,7 +725,11 @@ img { max-width: 100%; display: block; }
 .whatsapp-fab:hover { transform: scale(1.08); }
 
 /* ---------- Product Detail modal ---------- */
-.quick-add-modal { padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 92vh; }
+.quick-add-modal { padding: 0; overflow: hidden; max-height: 100%; }
+.modal-overlay.open .quick-add-modal {
+  display: flex;
+  flex-direction: column;
+}
 .quick-add-modal .modal-close {
   background: rgba(242,234,211,0.9);
   border-radius: 50%;
