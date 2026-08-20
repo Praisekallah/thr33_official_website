@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>THREE — Shop the Collection</title>
 <meta name="description" content="THREE. Official store. Ships within Nigeria." />
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -28,50 +26,33 @@
     <a href="#" class="brand-mark" aria-label="THREE home">
       <img src="assets/logo-monogram.png" alt="" class="brand-mono" />
     </a>
+
     <nav class="main-nav">
       <a href="#shop">Shop</a>
       <a href="#about">About</a>
       <a href="#faq">FAQ</a>
-      <button type="button" class="nav-link-btn" data-role="track-order-open">Track Order</button>
     </nav>
-    <button class="cart-btn" id="cartToggle" aria-haspopup="dialog" aria-controls="cartDrawer">
-      <span class="cart-label">Bag</span>
-      <span class="cart-count" id="cartCount">0</span>
-    </button>
+
+    <div class="header-actions">
+      <button type="button" class="track-order-btn" data-role="track-order-open" aria-label="Track your order">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3.2 2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="track-order-label">Track Order</span>
+      </button>
+
+      <button class="cart-btn" id="cartToggle" aria-haspopup="dialog" aria-controls="cartDrawer">
+        <span class="cart-label">Bag</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
   </div>
 </header>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-guilloche" aria-hidden="true"></div>
-  <div class="wrap hero-inner">
-    <div class="hero-text">
-      <p class="eyebrow">No. 001 &nbsp;—&nbsp; Legal Tender for Good Taste</p>
-      <h1 class="hero-title">Wear the<br/>currency of <span class="ital">THR33</span></h1>
-      <p class="hero-sub">A small run of pieces, made like they mean something. Every order ships within Nigeria — pay by card, bank transfer, or USSD.</p>
-      <a href="#shop" class="btn btn-primary">View the Collection</a>
-    </div>
-    <div class="hero-bill" aria-hidden="true">
-      <img src="assets/thr33-100-bill.png" alt="" />
-    </div>
-  </div>
-  <div class="hero-rule" aria-hidden="true"></div>
-</section>
-
-<!-- Shop -->
-<section id="shop" class="shop">
+<!-- Shop — straight to product grid, no hero -->
+<section id="shop" class="shop shop-top">
   <div class="wrap">
-    <div class="section-head">
-      <h2>The Collection</h2>
-      <label class="sort-control">
-        Sort
-        <select id="sortSelect">
-          <option value="featured">Featured</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-        </select>
-      </label>
-    </div>
     <div class="filter-bar" id="filterBar"><!-- injected by script.js --></div>
     <div class="product-grid" id="productGrid"><!-- injected by script.js --></div>
   </div>
@@ -120,7 +101,7 @@
     <p>&copy; <span id="year"></span> THR33. All rights reserved.</p>
     <div class="footer-links">
       <button type="button" class="footer-link-btn" data-role="track-order-open">Track your order</button>
-      <a href="mailto:hello@example.com">thr33enterprise@gmail.com</a>
+      <a href="mailto:thr33enterprise@gmail.com">thr33enterprise@gmail.com</a>
     </div>
   </div>
 </footer>
@@ -143,9 +124,9 @@
   </div>
 </aside>
 
-<!-- Quick Add Modal -->
+<!-- Product Detail Modal -->
 <div class="modal-overlay" id="quickAddOverlay">
-  <div class="modal quick-add-modal" role="dialog" aria-label="Add to bag">
+  <div class="modal quick-add-modal" role="dialog" aria-label="Product details">
     <button class="modal-close" id="quickAddClose" aria-label="Close">&times;</button>
     <div id="quickAddBody"><!-- injected by script.js --></div>
   </div>
@@ -193,7 +174,6 @@
       <label>Notes for delivery (optional)
         <input type="text" name="notes" placeholder="Gate code, best time to reach you, etc." />
       </label>
-
       <div class="checkout-summary-lines">
         <div class="summary-line"><span>Subtotal</span><span id="checkoutSubtotal">&#8358;0</span></div>
         <div class="summary-line"><span>Shipping</span><span id="checkoutShipping">Select a state</span></div>
@@ -202,7 +182,6 @@
         <span>Total to pay</span>
         <strong id="checkoutTotal">&#8358;0</strong>
       </div>
-
       <button type="submit" class="btn btn-primary btn-full" id="payBtn">Pay with Paystack</button>
       <p class="secure-note">🔒 Payment is processed securely by Paystack. THREE never sees your card details.</p>
     </form>
