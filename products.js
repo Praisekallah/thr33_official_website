@@ -190,6 +190,8 @@ const PRODUCTS = [
     ],
     description: "Unisex tee with the repeating T3 monogram outline print."
   },
+
+  */
   {
     id: "croptop-thr33-female",
     name: "Thr33 Cropped Top",
@@ -205,5 +207,4 @@ const PRODUCTS = [
     ],
     description: "Cropped fit, front & back Thr33 print."
   }
-  */
 ];
