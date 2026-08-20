@@ -48,6 +48,7 @@ const PRODUCTS = [
     sku: "TH-JORTS-BLK",
     price: 25999,
     originalPrice: 35000,
+    featured: "Presale",
     category: "shorts",
     sizes: ["28", "30", "32", "34", "36"],
     colors: [
@@ -69,7 +70,7 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
     sku: "TH-ROSE-LS-BLK",
     price: 45000,
-    featured: "Best Seller",
+    featured: "New",
     category: "long-sleeve",
     sizes: ["S", "M", "L"],
     colors: [
@@ -90,7 +91,7 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Unisex",
     sku: "TH-ROSE-UNI-BLK",
     price: 45000,
-    featured: "Best Seller",
+    featured: "New",
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
     colors: [
