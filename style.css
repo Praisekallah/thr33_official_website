@@ -290,7 +290,7 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: var(--green-soft);
+  background: transparent;
   cursor: pointer;
 }
 .product-flip img {
@@ -727,6 +727,7 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   overflow-y: auto;
   min-height: 0;
+  flex: 1 1 auto;
 }
 
 /* Gallery */
@@ -735,7 +736,7 @@ img { max-width: 100%; display: block; }
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: var(--green-soft);
+  background: transparent;
   flex-shrink: 0;
 }
 .pd-gallery-track {
@@ -808,8 +809,6 @@ img { max-width: 100%; display: block; }
 }
 
 .pd-sticky-add {
-  position: sticky;
-  bottom: 0;
   background: var(--cream);
   border-top: 1px solid var(--line);
   padding: 14px 24px;
