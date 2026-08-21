@@ -94,7 +94,7 @@ const PRODUCTS = [
     price: 45000,
     badges: ["New", "Presale"],
     category: "tee",
-    sizes: ["S", "M", "L", "XL"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
     colors: [
       {
         name: "Black",
