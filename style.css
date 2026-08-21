@@ -353,26 +353,21 @@ img { max-width: 100%; display: block; }
 }
 
 .product-info {
-  margin-top: 14px;
+  margin-top: 12px;
   cursor: pointer;
-}
-.product-info-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
+  text-align: center;
 }
 .product-name {
   font-family: 'Fraunces', serif;
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 0;
-  flex: 1 1 auto;
-  min-width: 0;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin: 0 0 4px;
+  line-height: 1.35;
 }
 .price-discount-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   margin-top: 4px;
 }
@@ -414,8 +409,8 @@ img { max-width: 100%; display: block; }
 .product-price {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
+  font-size: 0.85rem;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .product-sizes-row {
@@ -903,4 +898,66 @@ img { max-width: 100%; display: block; }
   .track-order-label { display: none; }
   .track-order-btn { padding: 9px; }
   .header-inner { height: 68px; }
+}
+
+/* ---------- Landing page ---------- */
+.landing-body {
+  margin: 0;
+  background: var(--ink);
+}
+.landing {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+.landing-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--ink);
+  z-index: 0;
+}
+.landing-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(23,23,15,0.55) 0%,
+    rgba(23,23,15,0.15) 35%,
+    rgba(23,23,15,0.55) 100%
+  );
+  z-index: 1;
+}
+.landing-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.landing-logo {
+  margin-top: 56px;
+  width: 96px;
+  height: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 10px rgba(0,0,0,0.35));
+}
+.landing-cta-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landing-shop-btn {
+  padding: 17px 40px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+@media (max-width: 560px) {
+  .landing-logo { width: 76px; margin-top: 40px; }
+  .landing-shop-btn { padding: 16px 34px; }
 }
