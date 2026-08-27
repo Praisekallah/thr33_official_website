@@ -137,7 +137,7 @@ const PRODUCTS = [
   ],
   description: "A short line about the piece."
 },
-  {
+{
   id: "thr33-crop-top",
   name: "Thr33 girls Top",
   sku: "TH-crop-top",
