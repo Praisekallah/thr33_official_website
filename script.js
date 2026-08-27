@@ -251,7 +251,7 @@ function renderQuickAdd(product) {
   const color = product.colors[quickAddColorIdx];
   const images = color.images;
   const remaining = stockLevels[product.id];
-  const soldOut = remaining !== undefined && remaining <= 0;
+  const soldOut = (remaining !== undefined && remaining <= 0) || product.comingSoon;
 
   const swatches = product.colors.length > 1
     ? `<div class="color-swatches" data-role="qa-colors">
@@ -307,7 +307,7 @@ function renderQuickAdd(product) {
   const qaStickyAdd = document.getElementById("qaStickyAdd");
   qaStickyAdd.innerHTML = `
     <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
-      ${soldOut ? 'Sold Out' : 'Add to Bag'}
+      ${product.comingSoon ? 'Coming Soon' : (soldOut ? 'Sold Out' : 'Add to Bag')}
     </button>
   `;
 
