@@ -136,5 +136,34 @@ const PRODUCTS = [
     }
   ],
   description: "A short line about the piece."
+},
+  {
+  id: "thr33-crop-top",
+  name: "Thr33 girls Top",
+  sku: "TH-crop-top",
+  price: 25000,
+  originalPrice: 35000,
+  badges: ["New Drop"],
+  category: "tee",
+  sizes: ["S", "M", "L", "XL"],
+  colors: [
+    {
+      name: "Black",
+      hex: "#17170f",
+      images: [
+        "assets/thr33-crop-black-front.png",
+        "assets/thr33-crop-black-back.png"
+      ]
+    },
+    {
+      name: "White",
+      hex: "#f5f3ec",
+      images: [
+        "assets/thr33-white-front.png",
+        "assets/thr33-white-back.png"
+      ]
+    }
+  ],
+  description: "Comfy girls' crop top."
 }
 ];
