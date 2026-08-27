@@ -108,19 +108,33 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   },
-  {
-  id: "T3-basic-Tee",
+{
+  id: "t3-basic-tee",
   name: "T3 Basic Tee",
-  sku: "TH-YOURCODE",
+  sku: "TH-T3-BASIC",
   price: 25000,
-  originalPrice: 35000,   // optional — delete this line for no discount badge
-  featured: "New Drop",   // optional — delete this line for no badge
-  category: "tee",         // "tee", "long-sleeve", "shorts", or "hoodie"
+  originalPrice: 35000,
+  badges: ["New Drop"],
+  category: "tee",
   sizes: ["S", "M", "L", "XL"],
   colors: [
-    { name: "Black", hex: "#17170f", front: "assets/your-front.png", back: "assets/your-back.png" }
-    { name: "white", hex: "#f5f3ec", front: "assets/your-front.png", back: "assets/your-back.png" }
+    {
+      name: "Black",
+      hex: "#17170f",
+      images: [
+        "assets/t3-black-front.png",
+        "assets/t3-black-back.png"
+      ]
+    },
+    {
+      name: "White",
+      hex: "#f5f3ec",
+      images: [
+        "assets/t3-white-front.png",
+        "assets/t3-white-back.png"
+      ]
+    }
   ],
   description: "A short line about the piece."
-},
+}
 ];
