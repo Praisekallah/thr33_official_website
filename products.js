@@ -50,6 +50,7 @@ const PRODUCTS = [
     price: 25999,
     originalPrice: 35000,
     badges: ["New", "Presale"],
+    comingSoon: true,
     category: "shorts",
     sizes: ["28", "30", "32", "34", "36"],
     colors: [
