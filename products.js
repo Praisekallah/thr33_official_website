@@ -107,103 +107,20 @@ const PRODUCTS = [
       }
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
-  }
-  /* --- PAUSED — delete this comment-start line and the comment-end
-     line after the last item below to bring these back into the catalog. ---
-
-  ,{
-    id: "crop-basic-female",
-    name: "Basic Female Cropped Tee",
-    sku: "TH-CROP-BASIC",
-    price: 20000,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L"],
-    colors: [
-      { name: "Black", hex: "#17170f", images: ["assets/crop-black-front.png", "assets/crop-black-back.png"] },
-      { name: "Pink", hex: "#f2a6c1", images: ["assets/crop-pink-front.png", "assets/crop-pink-back.png"] },
-      { name: "White", hex: "#f5f3ec", images: ["assets/crop-white-v2-front.png", "assets/crop-white-v2-back.png"] }
-    ],
-    description: "Cropped fit, front & back print."
   },
   {
-    id: "rose-graphic-tee",
-    name: "Rose Graphic T",
-    sku: "TH-ROSE-GFX",
-    price: 20000,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Black", hex: "#17170f", images: ["assets/rose-tee-black-front.png", "assets/rose-tee-black-back.png"] },
-      { name: "Peach", hex: "#f5c9a8", images: ["assets/rose-tee-peach-front.png", "assets/rose-tee-peach-back.png"] },
-      { name: "Maroon", hex: "#6e1423", images: ["assets/rose-tee-maroon-front.png", "assets/rose-tee-maroon-back.png"] },
-      { name: "White", hex: "#f5f3ec", images: ["assets/rose-tee-white-front.png", "assets/rose-tee-white-back.png"] }
-    ],
-    description: "Unisex tee with a bold rose graphic front and the Thr33 print on the back."
-  },
-  {
-    id: "mfdoom-king-spade",
-    name: "Thr33 x MF Doom — King of Spade",
-    sku: "TH-DOOM-KOS",
-    price: 21999,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Peach", hex: "#f5c9a8", images: ["assets/mfdoom-peach-front.png", "assets/mfdoom-peach-back.png"] },
-      { name: "White", hex: "#f5f3ec", images: ["assets/mfdoom-white-front.png", "assets/mfdoom-white-back.png"] },
-      { name: "Black", hex: "#17170f", images: ["assets/mfdoom-black-front.png", "assets/mfdoom-black-back.png"] },
-      { name: "Maroon", hex: "#6e1423", images: ["assets/mfdoom-maroon-front.png", "assets/mfdoom-maroon-back.png"] }
-    ],
-    description: "Unisex tee, playing card graphic front, Thr33 print on the back."
-  },
-  {
-    id: "moneyface-tee",
-    name: "Money Face Graphic T",
-    sku: "TH-MONEYFACE",
-    price: 21999,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Peach", hex: "#f5c9a8", images: ["assets/moneyface-peach-front.png", "assets/moneyface-peach-back.png"] },
-      { name: "Maroon", hex: "#6e1423", images: ["assets/moneyface-maroon-front.png", "assets/moneyface-maroon-back.png"] },
-      { name: "White", hex: "#f5f3ec", images: ["assets/moneyface-white-front.png", "assets/moneyface-white-back.png"] },
-      { name: "Black", hex: "#17170f", images: ["assets/moneyface-black-front.png", "assets/moneyface-black-back.png"] }
-    ],
-    description: "Unisex tee, \"Money Talks\" graphic front, Thr33 print on the back."
-  },
-  {
-    id: "t3-basic-tee",
-    name: "T3 Basic Tee",
-    sku: "TH-T3-BASIC",
-    price: 21999,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "White", hex: "#f5f3ec", images: ["assets/t3basic-white-front.png", "assets/t3basic-white-back.png"] },
-      { name: "Black", hex: "#17170f", images: ["assets/t3basic-black-front.png", "assets/t3basic-black-back.png"] },
-      { name: "Peach", hex: "#f5c9a8", images: ["assets/t3basic-peach-front.png", "assets/t3basic-peach-back.png"] },
-      { name: "Maroon", hex: "#6e1423", images: ["assets/t3basic-maroon-front.png", "assets/t3basic-maroon-back.png"] }
-    ],
-    description: "Unisex tee with the repeating T3 monogram outline print."
-  },
-      {
-    id: "croptop-thr33-female",
-    name: "Thr33 Cropped Top",
-    sku: "TH-CROPTOP",
-    price: 20000,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L"],
-    colors: [
-      { name: "White", hex: "#f5f3ec", images: ["assets/croptop-white-front.png", "assets/croptop-white-back.png"] },
-      { name: "Black", hex: "#17170f", images: ["assets/croptop-black-front.png", "assets/croptop-black-back.png"] },
-      { name: "Pink", hex: "#f2a6c1", images: ["assets/croptop-pink-front.png", "assets/croptop-pink-back.png"] }
-    ],
-    description: "Cropped fit, front & back Thr33 print."
-  }
-  */
+  id: "T3-basic-Tee",
+  name: "T3 Basic Tee",
+  sku: "TH-YOURCODE",
+  price: 25000,
+  originalPrice: 35000,   // optional — delete this line for no discount badge
+  featured: "New Drop",   // optional — delete this line for no badge
+  category: "tee",         // "tee", "long-sleeve", "shorts", or "hoodie"
+  sizes: ["S", "M", "L", "XL"],
+  colors: [
+    { name: "Black", hex: "#17170f", front: "assets/your-front.png", back: "assets/your-back.png" }
+    { name: "white", hex: "#f5f3ec", front: "assets/your-front.png", back: "assets/your-back.png" }
+  ],
+  description: "A short line about the piece."
+},
 ];
