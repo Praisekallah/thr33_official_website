@@ -132,7 +132,8 @@ const PRODUCTS = [
       hex: "#f5f3ec",
       images: [
         "assets/t3basic-white-front.png",
-        "assets/t3basic-white-back.png"
+        "assets/t3basic-white-back.png",
+        "assets/model-basic-thr33-tee.jpg"
       ]
     }
   ],
@@ -161,7 +162,8 @@ const PRODUCTS = [
       hex: "#f5f3ec",
       images: [
         "assets/croptop-white-front.png",
-        "assets/croptop-white-back.png"
+        "assets/croptop-white-back.png",
+        "assets/model-black-thr33-croptop.png"
       ]
     }
   ],
