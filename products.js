@@ -123,16 +123,16 @@ const PRODUCTS = [
       name: "Black",
       hex: "#17170f",
       images: [
-        "assets/t3-black-front.png",
-        "assets/t3-black-back.png"
+        "assets/t3basic-black-front.png",
+        "assets/t3basic-black-back.png"
       ]
     },
     {
       name: "White",
       hex: "#f5f3ec",
       images: [
-        "assets/t3-white-front.png",
-        "assets/t3-white-back.png"
+        "assets/t3basic-white-front.png",
+        "assets/t3basic-white-back.png"
       ]
     }
   ],
