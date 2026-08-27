@@ -114,7 +114,7 @@ const PRODUCTS = [
   sku: "TH-T3-BASIC",
   price: 25000,
   originalPrice: 35000,
-  badges: ["New Drop"],
+  badges: ["Live"],
   category: "tee",
   sizes: ["S", "M", "L", "XL"],
   colors: [
@@ -135,15 +135,15 @@ const PRODUCTS = [
       ]
     }
   ],
-  description: "A short line about the piece."
+  description: "Basic T3 Tee - Unisex."
 },
 {
   id: "thr33-crop-top",
-  name: "Thr33 girls Top",
+  name: "Thr33 girls Crop Top",
   sku: "TH-crop-top",
   price: 25000,
   originalPrice: 35000,
-  badges: ["New Drop"],
+  badges: ["Live"],
   category: "tee",
   sizes: ["S", "M", "L", "XL"],
   colors: [
