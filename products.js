@@ -108,21 +108,6 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   }
-    {
-    id: "croptop-thr33-female",
-    name: "Thr33 Cropped Top",
-    sku: "TH-CROPTOP",
-    price: 20000,
-    originalPrice: 30000,
-    category: "tee",
-    sizes: ["S", "M", "L"],
-    colors: [
-      { name: "White", hex: "#f5f3ec", images: ["assets/croptop-white-front.png", "assets/croptop-white-back.png"] },
-      { name: "Black", hex: "#17170f", images: ["assets/croptop-black-front.png", "assets/croptop-black-back.png"] },
-      { name: "Pink", hex: "#f2a6c1", images: ["assets/croptop-pink-front.png", "assets/croptop-pink-back.png"] }
-    ],
-    description: "Cropped fit, front & back Thr33 print."
-  }
   /* --- PAUSED — delete this comment-start line and the comment-end
      line after the last item below to bring these back into the catalog. ---
 
@@ -205,5 +190,20 @@ const PRODUCTS = [
     ],
     description: "Unisex tee with the repeating T3 monogram outline print."
   },
+      {
+    id: "croptop-thr33-female",
+    name: "Thr33 Cropped Top",
+    sku: "TH-CROPTOP",
+    price: 20000,
+    originalPrice: 30000,
+    category: "tee",
+    sizes: ["S", "M", "L"],
+    colors: [
+      { name: "White", hex: "#f5f3ec", images: ["assets/croptop-white-front.png", "assets/croptop-white-back.png"] },
+      { name: "Black", hex: "#17170f", images: ["assets/croptop-black-front.png", "assets/croptop-black-back.png"] },
+      { name: "Pink", hex: "#f2a6c1", images: ["assets/croptop-pink-front.png", "assets/croptop-pink-back.png"] }
+    ],
+    description: "Cropped fit, front & back Thr33 print."
+  }
   */
 ];
