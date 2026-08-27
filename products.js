@@ -152,16 +152,16 @@ const PRODUCTS = [
       name: "Black",
       hex: "#17170f",
       images: [
-        "assets/thr33-crop-black-front.png",
-        "assets/thr33-crop-black-back.png"
+        "assets/croptop-black-front.png",
+        "assets/croptopblack-back.pngg"
       ]
     },
     {
       name: "White",
       hex: "#f5f3ec",
       images: [
-        "assets/thr33-white-front.png",
-        "assets/thr33-white-back.png"
+        "assets/croptop-white-front.png",
+        "assets/croptop-white-back.png"
       ]
     }
   ],
