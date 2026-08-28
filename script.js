@@ -3,6 +3,14 @@
    Plain JS, no framework, no build step.
    ============================================ */
 
+// Image fallback helper for missing model/flatlay photos
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80";
+
+function handleImgError(imgEl) {
+  imgEl.onerror = null; // Prevents infinite loop if fallback fails
+  imgEl.src = FALLBACK_IMAGE;
+}
+
 // ---- CONFIG: replace with your own Paystack public key ----
 const PAYSTACK_PUBLIC_KEY = "pk_live_efdfb8f1cbb80b64b7907f7222fcb4801a0909f2";
 
@@ -48,7 +56,7 @@ function saveCart() {
 
 function addToCart(productId, size, colorIdx) {
   const product = PRODUCTS.find(p => p.id === productId);
-  const color = product.colors[colorIdx] || product.colors[0];
+  const color = (product.colors && product.colors[colorIdx]) || (product.colors && product.colors[0]) || {};
   const existing = cart.find(i => i.id === productId && i.size === size && i.colorName === color.name);
 
   const remaining = stockLevels[productId];
@@ -58,21 +66,23 @@ function addToCart(productId, size, colorIdx) {
     return;
   }
 
+  const imageSrc = (color.images && color.images[0]) || FALLBACK_IMAGE;
+
   if (existing) {
     existing.qty += 1;
   } else {
     cart.push({
       id: productId,
       size,
-      colorName: color.name,
+      colorName: color.name || "",
       qty: 1,
       name: product.name,
       price: product.price,
-      image: color.images[0]
+      image: imageSrc
     });
   }
   saveCart();
-  const colorLabel = product.colors.length > 1 ? `, ${color.name}` : "";
+  const colorLabel = product.colors && product.colors.length > 1 ? `, ${color.name}` : "";
   showToast(`${product.name} (${size}${colorLabel}) added to bag`);
   closeQuickAdd();
 }
@@ -158,9 +168,11 @@ function renderProducts() {
   }
 
   grid.innerHTML = filtered.map(p => {
-    const first = p.colors[0];
-    const frontImg = first.images[0];
-    const backImg = first.images[1] || first.images[0];
+    const firstColor = (p.colors && p.colors[0]) || {};
+    const images = firstColor.images || [];
+
+    const frontImg = images[0] || FALLBACK_IMAGE;
+    const backImg = images[1] || frontImg;
 
     const remaining = stockLevels[p.id];
     const soldOut = remaining !== undefined && remaining <= 0;
@@ -191,8 +203,8 @@ function renderProducts() {
       <div class="product-flip" data-role="open-quick-add">
         ${badgeStack}
         ${stockBadge}
-        <img src="${frontImg}" alt="${p.name} — front" class="img-front" loading="lazy" />
-        <img src="${backImg}" alt="${p.name} — back" class="img-back" loading="lazy" />
+        <img src="${frontImg}" alt="${p.name} — front" class="img-front" loading="lazy" onerror="handleImgError(this)" />
+        <img src="${backImg}" alt="${p.name} — back" class="img-back" loading="lazy" onerror="handleImgError(this)" />
       </div>
       <div class="product-info" data-role="open-quick-add">
         <p class="product-name">${p.name}</p>
@@ -233,20 +245,20 @@ if (quickAddOverlay) {
 }
 
 function renderQuickAdd(product) {
-  const color = product.colors[quickAddColorIdx] || product.colors[0];
-  const images = color.images;
+  const color = (product.colors && product.colors[quickAddColorIdx]) || (product.colors && product.colors[0]) || {};
+  const images = (color.images && color.images.length > 0) ? color.images : [FALLBACK_IMAGE];
   const remaining = stockLevels[product.id];
   const soldOut = (remaining !== undefined && remaining <= 0);
   const isComingSoon = Boolean(product.comingSoon);
 
-  const swatches = product.colors.length > 1
+  const swatches = (product.colors && product.colors.length > 1)
     ? `<div class="color-swatches">
         ${product.colors.map((c, idx) => `<button type="button" class="swatch ${idx === quickAddColorIdx ? 'selected' : ''}" data-idx="${idx}" style="background:${c.hex}" aria-label="${c.name}"></button>`).join("")}
        </div>`
     : "";
 
   const galleryTrack = images.map((src, idx) =>
-    `<img src="${src}" alt="${product.name} — view ${idx + 1}" />`
+    `<img src="${src}" alt="${product.name} — view ${idx + 1}" onerror="handleImgError(this)" />`
   ).join("");
 
   const arrows = images.length > 1
@@ -269,11 +281,11 @@ function renderQuickAdd(product) {
     <div class="pd-details">
       <p class="qa-name">${product.name}</p>
       <p class="qa-price">${naira(product.price)}</p>
-      <p class="qa-desc">${product.description}</p>
+      <p class="qa-desc">${product.description || ''}</p>
       ${swatches}
       <div class="product-sizes-row">
         <div class="product-sizes" id="qaSizes">
-          ${product.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
+          ${(product.sizes || []).map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
         </div>
       </div>
       <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
@@ -355,7 +367,7 @@ function renderCart() {
 
   itemsEl.innerHTML = cart.map((item, idx) => `
     <div class="cart-item">
-      <img src="${item.image}" alt="${item.name}" />
+      <img src="${item.image}" alt="${item.name}" onerror="handleImgError(this)" />
       <div>
         <p class="cart-item-name">${item.name}</p>
         <p class="cart-item-meta">Size ${item.size}${item.colorName ? ' · ' + item.colorName : ''} · ${naira(item.price)}</p>
@@ -553,7 +565,7 @@ if (checkoutForm) {
   });
 }
 
-// ---------------- STEP 3: Order Tracking Logic ----------------
+// ---------------- Order Tracking Logic ----------------
 const trackOverlay = document.getElementById("trackOrderOverlay");
 const trackCloseBtn = document.getElementById("trackOrderClose");
 const trackForm = document.getElementById("trackOrderForm");
@@ -573,7 +585,6 @@ function closeTrackModal() {
   if (trackOverlay) trackOverlay.classList.remove("open");
 }
 
-// Bind all open triggers (header button, footer link, cart drawer link)
 document.querySelectorAll('[data-role="track-order-open"]').forEach(btn => {
   btn.addEventListener("click", openTrackModal);
 });
@@ -607,7 +618,7 @@ if (trackForm) {
       if (data.found) {
         trackResultEl.innerHTML = `
           <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; text-align: left; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
-            <p style="margin-bottom: 0.4rem;"><strong>Status:</strong> <span style="color: var(--accent, #3b82f6); text-transform: uppercase;">${data.status || 'Processing'}</span></p>
+            <p style="margin-bottom: 0.4rem;"><strong>Status:</strong> <span style="color: var(--gold, #b08d57); text-transform: uppercase;">${data.status || 'Processing'}</span></p>
             <p style="margin-bottom: 0.4rem;"><strong>Customer:</strong> ${data.fullName || 'Valued Customer'}</p>
             <p style="margin-bottom: 0.4rem;"><strong>Date:</strong> ${data.date ? new Date(data.date).toLocaleDateString() : 'Recent'}</p>
             <p style="margin: 0;"><strong>Delivery To:</strong> ${data.address || 'Address on file'}</p>
