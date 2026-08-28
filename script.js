@@ -303,13 +303,19 @@ function renderQuickAdd(product) {
 
   setGalleryPosition(quickAddImageIdx);
 
-  quickAddBody.querySelectorAll(".swatch").forEach(btn => {
-    btn.addEventListener("click", () => {
-      quickAddColorIdx = Number(btn.dataset.idx);
-      quickAddImageIdx = 0;
-      renderQuickAdd(product);
-    });
+quickAddBody.querySelectorAll(".swatch").forEach(btn => {
+  btn.addEventListener("click", () => {
+    quickAddColorIdx = Number(btn.dataset.idx);
+    quickAddImageIdx = 0; // Resets gallery to front image [0] when switching colors
+    
+    const selectedColor = (product.colors && product.colors[quickAddColorIdx]) || product.colors[0];
+    const newImages = (selectedColor.images && selectedColor.images.length > 0) 
+      ? selectedColor.images 
+      : [FALLBACK_IMAGE];
+    
+    renderQuickAdd(product);
   });
+});
 
   quickAddBody.querySelectorAll(".size-btn").forEach(btn => {
     btn.addEventListener("click", () => {
