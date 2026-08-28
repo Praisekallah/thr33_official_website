@@ -568,7 +568,14 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           reference: response.reference,
-          items: cart.map(i => ({ id: i.id, qty: i.qty }))
+          email: email,
+          fullName: data.get("fullName"),
+          phone: data.get("phone"),
+          address: `${data.get("address")}, ${data.get("city")}, ${state}`,
+          items: cart,
+          subtotal: subtotal,
+          shipping: shipping,
+          total: total
         })
       })
         .then(res => res.json())
