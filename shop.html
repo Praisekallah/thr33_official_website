@@ -227,11 +227,11 @@
     <p class="modal-sub">Paste the payment reference from your confirmation email.</p>
     <form id="trackOrderForm">
       <label>Payment reference
-        <input type="text" name="reference" required placeholder="e.g. T123456789012345" />
+        <input type="text" name="reference" required placeholder="e.g. T123456789012345" autocomplete="off" />
       </label>
       <button type="submit" class="btn btn-primary btn-full" id="trackOrderSubmit">Check Status</button>
     </form>
-    <div id="trackOrderResult"></div>
+    <div id="trackOrderResult" class="track-order-result" style="display: none; margin-top: 1.25rem;"></div>
   </div>
 </div>
 
