@@ -1023,3 +1023,49 @@ img { max-width: 100%; display: block; }
   z-index: 10 !important;
 }
 
+/* ============================================
+   PRODUCT DETAIL MODAL FIXES
+   ============================================ */
+
+/* 1. Set background to match dark shop page */
+.modal,
+.quick-add-modal,
+.pd-sticky-add {
+  background: var(--ink) !important;
+  color: var(--cream) !important;
+  border-color: var(--line) !important;
+}
+
+/* Fix close button background & icon color on dark theme */
+.quick-add-modal .modal-close {
+  background: var(--gold) !important;
+  color: var(--ink) !important;
+}
+
+/* 2. Contain gallery image scaling so it fits screen height */
+.pd-gallery {
+  aspect-ratio: 1 / 1 !important; /* Square frame keeps modal compact */
+  max-height: 45vh;               /* Limits modal height on desktop & mobile */
+  background: transparent !important;
+}
+
+.pd-gallery-track img {
+  object-fit: contain !important; /* Shows full garment without cropping */
+  padding: 12px;
+}
+
+/* 3. Text & controls contrast updates inside modal */
+.qa-name, 
+.qa-price {
+  color: var(--cream) !important;
+}
+
+.qa-desc {
+  color: var(--gold) !important;
+}
+
+.pd-arrow {
+  background: var(--gold) !important;
+  color: var(--ink) !important;
+}
+
