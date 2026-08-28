@@ -1069,3 +1069,28 @@ img { max-width: 100%; display: block; }
   color: var(--ink) !important;
 }
 
+/* ============================================
+   COMING SOON BLUR CONTROL
+   ============================================ */
+
+/* 1. Blur ONLY cards with explicit coming soon status */
+.product-card.coming-soon .product-flip img,
+.product-card[data-status="coming-soon"] .product-flip img {
+  filter: blur(6px) opacity(0.75) !important;
+}
+
+/* 2. Freeze image flip hover on Coming Soon cards */
+.product-card.coming-soon:hover .img-front,
+.product-card[data-status="coming-soon"]:hover .img-front {
+  opacity: 1 !important;
+}
+.product-card.coming-soon:hover .img-back,
+.product-card[data-status="coming-soon"]:hover .img-back {
+  opacity: 0 !important;
+}
+
+/* 3. Ensure LIVE products stay 100% sharp */
+.product-card:not(.coming-soon):not([data-status="coming-soon"]) .product-flip img {
+  filter: none !important;
+}
+
