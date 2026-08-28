@@ -11,7 +11,7 @@ async function redis(command) {
   if (!base || !token) return null;
   
   const res = await fetch(`${base}/${command.join("/")}`, {
-    headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY || process.env.PAYSTACK_LIVE_KEY}` }
+    headers: { Authorization: `Bearer ${token}` }
   });
   const data = await res.json();
   return data.result;
