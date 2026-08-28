@@ -40,7 +40,7 @@ const SHIPPING_RATES = {
   "Zamfara": 2800,
   "Jigawa": 2800,
   "Bauchi": 2800,
-  "Gombe": 2800,
+  "Gombe": 100,
   "Adamawa": 2800,
   "Taraba": 2800,
   "Borno": 2800,
