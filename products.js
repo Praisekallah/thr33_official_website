@@ -156,7 +156,8 @@ const PRODUCTS = [
       hex: "#17170f",
       images: [
         "assets/croptop-black-front.png",
-        "assets/croptopblack-back.pngg"
+        "assets/croptop-black-back.png",
+        "assets/model-black-thr33-croptop.png"
       ]
     },
     {
@@ -164,8 +165,7 @@ const PRODUCTS = [
       hex: "#f5f3ec",
       images: [
         "assets/croptop-white-front.png",
-        "assets/croptop-white-back.png",
-        "assets/model-black-thr33-croptop.png"
+        "assets/croptop-white-back.png"
       ]
     }
   ],
