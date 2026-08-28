@@ -54,7 +54,7 @@ function getShippingFee(state) {
 
 const naira = (n) => "₦" + n.toLocaleString("en-NG");
 
-const CROP_IDS = ["crop-basic-female", "croptop-thr33-female"];
+const CROP_IDS = ["crop-basic-female", "croptop-thr33-female", "thr33-crop-top"];
 
 // ---------------- Cart state ----------------
 let cart = JSON.parse(localStorage.getItem("three_cart") || "[]");
@@ -139,9 +139,6 @@ function renderFilters() {
 }
 
 // ---------------- Sort ----------------
-// Default sort is always "featured" now that the sort dropdown has been
-// removed from the simplified layout. If you bring the dropdown back,
-// wire it to `activeSort` again.
 let activeSort = "featured";
 
 function sortProducts(list) {
@@ -164,7 +161,7 @@ async function fetchStock() {
   renderProducts();
 }
 
-// ---------------- Render: product grid (simplified card) ----------------
+// ---------------- Render: product grid ----------------
 function renderProducts() {
   const grid = document.getElementById("productGrid");
 
@@ -185,6 +182,8 @@ function renderProducts() {
     const remaining = stockLevels[p.id];
     const soldOut = remaining !== undefined && remaining <= 0;
     const lowStock = remaining !== undefined && remaining > 0 && remaining <= 5;
+    const isComingSoon = Boolean(p.comingSoon);
+
     const stockBadge = soldOut
       ? `<span class="stock-badge sold-out">Sold out</span>`
       : lowStock
@@ -205,7 +204,7 @@ function renderProducts() {
       : `<span class="product-price">${naira(p.price)}</span>`;
 
     return `
-    <div class="product-card ${soldOut ? 'is-sold-out' : ''}" data-id="${p.id}">
+    <div class="product-card ${soldOut ? 'is-sold-out' : ''} ${isComingSoon ? 'coming-soon' : ''}" data-id="${p.id}" data-status="${isComingSoon ? 'coming-soon' : 'live'}">
       <div class="product-flip" data-role="open-quick-add">
         ${badgeStack}
         ${stockBadge}
@@ -227,7 +226,7 @@ function renderProducts() {
   });
 }
 
-// ---------------- Product Detail modal (image gallery + add to bag) ----------------
+// ---------------- Product Detail modal ----------------
 const quickAddOverlay = document.getElementById("quickAddOverlay");
 const quickAddBody = document.getElementById("quickAddBody");
 let quickAddColorIdx = 0;
@@ -248,10 +247,11 @@ quickAddOverlay.addEventListener("click", (e) => {
 });
 
 function renderQuickAdd(product) {
-  const color = product.colors[quickAddColorIdx];
+  const color = product.colors[quickAddColorIdx] || product.colors[0];
   const images = color.images;
   const remaining = stockLevels[product.id];
-  const soldOut = (remaining !== undefined && remaining <= 0) || product.comingSoon;
+  const soldOut = (remaining !== undefined && remaining <= 0);
+  const isComingSoon = Boolean(product.comingSoon);
 
   const swatches = product.colors.length > 1
     ? `<div class="color-swatches" data-role="qa-colors">
@@ -301,17 +301,14 @@ function renderQuickAdd(product) {
     </div>
   `;
 
-  // Add-to-bag button lives OUTSIDE the scrollable area (as a sibling, not
-  // a child of #quickAddBody) so it's always visible regardless of how
-  // tall the description/gallery content is or how the phone scrolls.
   const qaStickyAdd = document.getElementById("qaStickyAdd");
   qaStickyAdd.innerHTML = `
-    <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${soldOut ? 'disabled' : ''}>
-      ${product.comingSoon ? 'Coming Soon' : (soldOut ? 'Sold Out' : 'Add to Bag')}
+    <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${(soldOut || isComingSoon) ? 'disabled' : ''}>
+      ${isComingSoon ? 'Coming Soon' : (soldOut ? 'Sold Out' : 'Add to Bag')}
     </button>
   `;
 
-  setGalleryPosition(0);
+  setGalleryPosition(quickAddImageIdx);
 
   quickAddBody.querySelectorAll(".swatch").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -341,7 +338,7 @@ function renderQuickAdd(product) {
     });
   }
 
-  // ---- gallery nav (arrows, dots, swipe) ----
+  // Gallery navigation
   const prevBtn = document.getElementById("qaPrev");
   const nextBtn = document.getElementById("qaNext");
   if (prevBtn) prevBtn.addEventListener("click", () => stepGallery(images.length, -1));
