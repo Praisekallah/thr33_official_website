@@ -47,7 +47,7 @@ const PRODUCTS = [
     id: "jorts-black",
     name: "Thr33 Denim Jorts",
     sku: "TH-JORTS-BLK",
-    price: 25999,
+    price: 2000,
     originalPrice: 35000,
     badges: ["Coming Soon"],
     comingSoon: true,
