@@ -42,6 +42,14 @@ const CATEGORIES = [
   { id: "hoodie", label: "Hoodies" }
 ];
 
+const CATEGORIES = [
+  { id: "all", label: "All" },
+  { id: "tee", label: "Tees" },
+  { id: "long-sleeve", label: "Long Sleeve" },
+  { id: "shorts", label: "Shorts" },
+  { id: "hoodie", label: "Hoodies" }
+];
+
 const PRODUCTS = [
   {
     id: "jorts-black",
@@ -60,8 +68,6 @@ const PRODUCTS = [
         images: [
           "assets/jorts-front.png",
           "assets/jorts-back.png"
-          // add on-model shots here once the shoot is in, e.g.:
-          // "assets/jorts-model-1.jpg", "assets/jorts-model-2.jpg"
         ]
       }
     ],
@@ -83,7 +89,6 @@ const PRODUCTS = [
         images: [
           "assets/rose-female-ls-front.png",
           "assets/rose-female-ls-back.png"
-          // "assets/rose-female-ls-model-1.jpg"
         ]
       }
     ],
@@ -105,98 +110,98 @@ const PRODUCTS = [
         images: [
           "assets/rose-unisex-front.png",
           "assets/rose-unisex-back.png"
-          // "assets/rose-unisex-model-1.jpg"
         ]
       }
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   },
-{
-  id: "t3-basic-tee",
-  name: "T3 Basic Tee",
-  sku: "TH-T3-BASIC",
-  price: 25000,
-  originalPrice: 35000,
-  badges: ["Live"],
-  category: "tee",
-  sizes: ["S", "M", "L", "XL"],
-  colors: [
-    {
-      name: "Black",
-      hex: "#17170f",
-      images: [
-        "assets/t3basic-black-front.png",
-        "assets/t3basic-black-back.png",
-        "assets/model-black-thr33-basicT32.jpg",
-        "assets/model-black-thr33-basicT32.png"
-      ]
-    },
-    {
-      name: "White",
-      hex: "#f5f3ec",
-      images: [
-        "assets/t3basic-white-front.png",
-        "assets/t3basic-white-back.png",
-        "assets/model-white-thr33-basicT31.jpg",
-        "assets/model-white-thr33-basicT32.jpg"
-      ]
-    }
-  ],
-  description: "Basic T3 Tee - Unisex."
-},
-{
-  id: "thr33-crop-top",
-  name: "Thr33 girls Crop Top",
-  sku: "TH-crop-top",
-  price: 25000,
-  originalPrice: 35000,
-  badges: ["Live"],
-  category: "tee",
-  sizes: ["S", "M", "L", "XL"],
-  colors: [
-    {
-      name: "Black",
-      hex: "#17170f",
-      images: [
-        "assets/croptop-black-front.png",
-        "assets/croptop-black-back.png",
-        "assets/model-black-thr33-croptop1.png",
-        "assets/model-black-thr33-croptop2.png"
-      ]
-    },
-    {
-      name: "White",
-      hex: "#f5f3ec",
-      images: [
-        "assets/croptop-white-front.png",
-        "assets/croptop-white-back.png",
-        "assets/model-white-thr33-croptop1.png",
-        "assets/model-white-thr33-croptop2.png"
-      ]
-    }
-  ],
-  description: "Comfy girls' crop top."
-},
-{
-  id: "thr33-peach-graphic-tee",
-  name: "Thr33 girls Crop Top",
-  sku: "THR-Pch-grph-top",
-  price: 25000,
-  originalPrice: 35000,
-  badges: ["Live"],
-  category: "tee",
-  sizes: ["S", "M", "L", "XL"],
-  colors: [
-    {
-      name: "Peach",
-      hex: "#ffb38a",
-      images: [
-        "assets/thr33-peach-graphic-tee-front.png",
-        "assets/thr33-peach-graphic-tee-back.png",
-        "model-peach-thr33-soph-brain2.png",
-        "model-peach-thr33-soph-brain1.png",
-      ],
-      description: "Boxy Thr33 Peach-colored graphic Tee."
-    }
-}
+  {
+    id: "t3-basic-tee",
+    name: "T3 Basic Tee",
+    sku: "TH-T3-BASIC",
+    price: 25000,
+    originalPrice: 35000,
+    badges: ["Live"],
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      {
+        name: "Black",
+        hex: "#17170f",
+        images: [
+          "assets/t3basic-black-front.png",
+          "assets/t3basic-black-back.png",
+          "assets/model-black-thr33-basicT32.jpg",
+          "assets/model-black-thr33-basicT32.png"
+        ]
+      },
+      {
+        name: "White",
+        hex: "#f5f3ec",
+        images: [
+          "assets/t3basic-white-front.png",
+          "assets/t3basic-white-back.png",
+          "assets/model-white-thr33-basicT31.jpg",
+          "assets/model-white-thr33-basicT32.jpg"
+        ]
+      }
+    ],
+    description: "Basic T3 Tee - Unisex."
+  },
+  {
+    id: "thr33-crop-top",
+    name: "Thr33 girls Crop Top",
+    sku: "TH-crop-top",
+    price: 25000,
+    originalPrice: 35000,
+    badges: ["Live"],
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      {
+        name: "Black",
+        hex: "#17170f",
+        images: [
+          "assets/croptop-black-front.png",
+          "assets/croptop-black-back.png",
+          "assets/model-black-thr33-croptop1.png",
+          "assets/model-black-thr33-croptop2.png"
+        ]
+      },
+      {
+        name: "White",
+        hex: "#f5f3ec",
+        images: [
+          "assets/croptop-white-front.png",
+          "assets/croptop-white-back.png",
+          "assets/model-white-thr33-croptop1.png",
+          "assets/model-white-thr33-croptop2.png"
+        ]
+      }
+    ],
+    description: "Comfy girls' crop top."
+  },
+  {
+    id: "thr33-peach-graphic-tee",
+    name: "Thr33 Peach Graphic Tee",
+    sku: "THR-Pch-grph-top",
+    price: 25000,
+    originalPrice: 35000,
+    badges: ["Live"],
+    category: "tee",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      {
+        name: "Peach",
+        hex: "#ffb38a",
+        images: [
+          "assets/thr33-peach-graphic-tee-front.png",
+          "assets/thr33-peach-graphic-tee-back.png",
+          "assets/model-peach-thr33-soph-brain2.png",
+          "assets/model-peach-thr33-soph-brain1.png"
+        ]
+      }
+    ],
+    description: "Boxy Thr33 Peach-colored graphic Tee."
+  }
 ];
