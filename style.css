@@ -978,3 +978,46 @@ img { max-width: 100%; display: block; }
     grid-template-rows: repeat(5, 1fr);
   }
 }
+/* ============================================
+   IMAGE FIX & COMING SOON BLUR STYLES
+   ============================================ */
+
+/* 1. Prevent image cropping across product cards */
+.product-flip img {
+  object-fit: contain !important; /* Ensures the entire clothing item is shown */
+  object-position: center;
+  background-color: transparent;  /* Keeps your section canvas background */
+}
+
+/* Fix product cards container height to fit full images nicely */
+.product-flip {
+  aspect-ratio: 1 / 1; /* Adjusts aspect ratio so wide/boxy items fit cleanly */
+}
+
+/* 2. Coming Soon Blur Effect */
+/* Apply blur effect to cards tagged with coming-soon classes */
+.product-card.coming-soon .product-flip img,
+.product-card[data-status="coming-soon"] .product-flip img {
+  filter: blur(6px);
+  opacity: 0.75;
+}
+
+/* Prevent hover effect on Coming Soon items */
+.product-card.coming-soon:hover .img-front,
+.product-card[data-status="coming-soon"]:hover .img-front {
+  opacity: 1 !important;
+}
+
+.product-card.coming-soon:hover .img-back,
+.product-card[data-status="coming-soon"]:hover .img-back {
+  opacity: 0 !important;
+}
+
+/* Keep badges completely sharp above the blurred image */
+.stock-badge, 
+.badge-stack, 
+.featured-badge {
+  filter: none !important;
+  z-index: 10 !important;
+}
+
