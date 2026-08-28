@@ -126,7 +126,9 @@ const PRODUCTS = [
       hex: "#17170f",
       images: [
         "assets/t3basic-black-front.png",
-        "assets/t3basic-black-back.png"
+        "assets/t3basic-black-back.png",
+        "assets/model-black-thr33-basicT32.jpg",
+        "assets/model-black-thr33-basicT32.png"
       ]
     },
     {
@@ -135,7 +137,8 @@ const PRODUCTS = [
       images: [
         "assets/t3basic-white-front.png",
         "assets/t3basic-white-back.png",
-        "assets/model-basic-thr33-tee.jpg"
+        "assets/model-white-thr33-basicT31.jpg",
+        "assets/model-white-thr33-basicT32.jpg"
       ]
     }
   ],
@@ -157,7 +160,8 @@ const PRODUCTS = [
       images: [
         "assets/croptop-black-front.png",
         "assets/croptop-black-back.png",
-        "assets/model-black-thr33-croptop.png"
+        "assets/model-black-thr33-croptop1.png",
+        "assets/model-black-thr33-croptop2.png"
       ]
     },
     {
@@ -165,10 +169,34 @@ const PRODUCTS = [
       hex: "#f5f3ec",
       images: [
         "assets/croptop-white-front.png",
-        "assets/croptop-white-back.png"
+        "assets/croptop-white-back.png",
+        "assets/model-white-thr33-croptop1.png",
+        "assets/model-white-thr33-croptop2.png"
       ]
     }
   ],
   description: "Comfy girls' crop top."
+},
+{
+  id: "thr33-peach-graphic-tee",
+  name: "Thr33 girls Crop Top",
+  sku: "THR-Pch-grph-top",
+  price: 25000,
+  originalPrice: 35000,
+  badges: ["Live"],
+  category: "tee",
+  sizes: ["S", "M", "L", "XL"],
+  colors: [
+    {
+      name: "Peach",
+      hex: "#ffb38a",
+      images: [
+        "assets/thr33-peach-graphic-tee-front.png",
+        "assets/thr33-peach-graphic-tee-back.png",
+        "model-peach-thr33-soph-brain2.png",
+        "model-peach-thr33-soph-brain1.png",
+      ],
+      description: "Boxy Thr33 Peach-colored graphic Tee."
+    }
 }
 ];
