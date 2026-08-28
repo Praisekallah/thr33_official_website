@@ -78,7 +78,7 @@ img { max-width: 100%; display: block; }
 /* ---------- Ticker ---------- */
 .ticker {
   background: var(--ink);
-  color: var(--cream);
+  color: var(--gold);
   overflow: hidden;
   white-space: nowrap;
   padding: 7px 0;
