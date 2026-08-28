@@ -123,8 +123,8 @@ const PRODUCTS = [
         images: [
           "assets/t3basic-black-front.png",
           "assets/t3basic-black-back.png",
-          "/assets/model-black-thr33-basicT31.jpg",
-          "/assets/model-black-thr33-basicT32.png"
+          "assets/model-black-thr33-basicT31.JPG",
+          "assets/model-black-thr33-basicT32.PNG"
         ]
       },
       {
@@ -133,9 +133,10 @@ const PRODUCTS = [
         images: [
           "assets/t3basic-white-front.png",
           "assets/t3basic-white-back.png",
-          "/assets/model-white-thr33-basicT31.jpg",
-          "/assets/model-white-thr33-basicT32.jpg"
+          "assets/model-white-thr33-basicT31.JPG",
+          "assets/model-white-thr33-basicT32.JPG"
         ]
+
       }
     ],
     description: "Basic T3 Tee - Unisex."
@@ -156,8 +157,8 @@ const PRODUCTS = [
         images: [
           "assets/croptop-black-front.png",
           "assets/croptop-black-back.png",
-          "/assets/model-black-thr33-croptop1.png",
-          "/assets/model-black-thr33-croptop2.png"
+          "assets/model-black-thr33-croptop.PNG",
+          "assets/model-black-thr33-croptop2.PNG"
         ]
       },
       {
@@ -166,8 +167,8 @@ const PRODUCTS = [
         images: [
           "assets/croptop-white-front.png",
           "assets/croptop-white-back.png",
-          "/assets/model-white-thr33-croptop1.png",
-          "/assets/model-white-thr33-croptop2.png"
+          "assets/model-white-thr33-croptop1.PNG",
+          "assets/model-white-thr33-croptop2.PNG"
         ]
       }
     ],
@@ -189,8 +190,8 @@ const PRODUCTS = [
         images: [
           "assets/thr33-peach-graphic-tee-front.png",
           "assets/thr33-peach-graphic-tee-back.png",
-          "/assets/model-peach-thr33-soph-brain2.png",
-          "/assets/model-peach-thr33-soph-brain1.png"
+          "assets/model-peach-thr33-soph-brain2.JPG",
+          "assets/model-peach-thr33-soph-brain1.JPG"
         ]
       }
     ],
