@@ -42,14 +42,6 @@ const CATEGORIES = [
   { id: "hoodie", label: "Hoodies" }
 ];
 
-const CATEGORIES = [
-  { id: "all", label: "All" },
-  { id: "tee", label: "Tees" },
-  { id: "long-sleeve", label: "Long Sleeve" },
-  { id: "shorts", label: "Shorts" },
-  { id: "hoodie", label: "Hoodies" }
-];
-
 const PRODUCTS = [
   {
     id: "jorts-black",
