@@ -1,7 +1,4 @@
-// Vercel Serverless Function.
-// Lets a customer check their own order status by pasting their payment
-// reference — read-only, no stock changes, no emails sent.
-
+// Vercel Serverless Function
 function naira(kobo) {
   return "₦" + Math.round(kobo / 100).toLocaleString("en-NG");
 }
@@ -39,13 +36,19 @@ module.exports = async (req, res) => {
       return f ? f.value : null;
     };
 
+    let itemsVal = get("order_items");
+    // Ensure tracking modal receives a consistent format
+    if (typeof itemsVal === "string" && !itemsVal.startsWith("[")) {
+      itemsVal = JSON.stringify([itemsVal]);
+    }
+
     return res.status(200).json({
       found: true,
-      status: order.status, // "success", "abandoned", "failed", etc.
+      status: order.status,
       reference: order.reference,
       amount: naira(order.amount),
       date: order.paid_at || order.created_at,
-      items: get("order_items"),
+      items: itemsVal,
       address: get("address")
     });
   } catch (err) {
