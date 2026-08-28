@@ -52,9 +52,22 @@ function getShippingFee(state) {
   return SHIPPING_RATES[state] || DEFAULT_SHIPPING_FEE;
 }
 
-const naira = (n) => "₦" + n.toLocaleString("en-NG");
+const naira = (n) => "₦" + (n || 0).toLocaleString("en-NG");
 
 const CROP_IDS = ["crop-basic-female", "croptop-thr33-female", "thr33-crop-top"];
+
+// ---------------- Helper Toast ----------------
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3500);
+}
+
+// Set dynamic copyright year
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // ---------------- Cart state ----------------
 let cart = JSON.parse(localStorage.getItem("three_cart") || "[]");
@@ -119,6 +132,7 @@ function categoryHasStock(catId) {
 
 function renderFilters() {
   const bar = document.getElementById("filterBar");
+  if (!bar) return;
 
   const catRow = CATEGORIES.map(c => {
     const disabled = c.id !== "all" && !categoryHasStock(c.id);
@@ -164,6 +178,7 @@ async function fetchStock() {
 // ---------------- Render: product grid ----------------
 function renderProducts() {
   const grid = document.getElementById("productGrid");
+  if (!grid) return;
 
   const filtered = sortProducts(
     PRODUCTS.filter(p => activeCategory === "all" || p.category === activeCategory)
@@ -236,15 +251,18 @@ function openQuickAdd(product) {
   quickAddColorIdx = 0;
   quickAddImageIdx = 0;
   renderQuickAdd(product);
-  quickAddOverlay.classList.add("open");
+  if (quickAddOverlay) quickAddOverlay.classList.add("open");
 }
 function closeQuickAdd() {
-  quickAddOverlay.classList.remove("open");
+  if (quickAddOverlay) quickAddOverlay.classList.remove("open");
 }
-document.getElementById("quickAddClose").addEventListener("click", closeQuickAdd);
-quickAddOverlay.addEventListener("click", (e) => {
-  if (e.target === quickAddOverlay) closeQuickAdd();
-});
+const qaCloseBtn = document.getElementById("quickAddClose");
+if (qaCloseBtn) qaCloseBtn.addEventListener("click", closeQuickAdd);
+if (quickAddOverlay) {
+  quickAddOverlay.addEventListener("click", (e) => {
+    if (e.target === quickAddOverlay) closeQuickAdd();
+  });
+}
 
 function renderQuickAdd(product) {
   const color = product.colors[quickAddColorIdx] || product.colors[0];
@@ -302,11 +320,13 @@ function renderQuickAdd(product) {
   `;
 
   const qaStickyAdd = document.getElementById("qaStickyAdd");
-  qaStickyAdd.innerHTML = `
-    <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${(soldOut || isComingSoon) ? 'disabled' : ''}>
-      ${isComingSoon ? 'Coming Soon' : (soldOut ? 'Sold Out' : 'Add to Bag')}
-    </button>
-  `;
+  if (qaStickyAdd) {
+    qaStickyAdd.innerHTML = `
+      <button type="button" class="btn btn-primary btn-full" id="qaAddBtn" ${(soldOut || isComingSoon) ? 'disabled' : ''}>
+        ${isComingSoon ? 'Coming Soon' : (soldOut ? 'Sold Out' : 'Add to Bag')}
+      </button>
+    `;
+  }
 
   setGalleryPosition(quickAddImageIdx);
 
@@ -325,11 +345,6 @@ function renderQuickAdd(product) {
     });
   });
 
-  const sizeGuideBtn = document.getElementById("qaSizeGuideBtn");
-  if (sizeGuideBtn) {
-    sizeGuideBtn.addEventListener("click", () => openSizeGuide(CROP_IDS.includes(product.id)));
-  }
-
   const addBtn = document.getElementById("qaAddBtn");
   if (addBtn && !addBtn.disabled) {
     addBtn.addEventListener("click", () => {
@@ -338,7 +353,6 @@ function renderQuickAdd(product) {
     });
   }
 
-  // Gallery navigation
   const prevBtn = document.getElementById("qaPrev");
   const nextBtn = document.getElementById("qaNext");
   if (prevBtn) prevBtn.addEventListener("click", () => stepGallery(images.length, -1));
@@ -390,8 +404,10 @@ function renderCart() {
   const countEl = document.getElementById("cartCount");
   const subtotalEl = document.getElementById("cartSubtotal");
 
-  countEl.textContent = cart.reduce((n, i) => n + i.qty, 0);
-  subtotalEl.textContent = naira(cartSubtotal());
+  if (countEl) countEl.textContent = cart.reduce((n, i) => n + i.qty, 0);
+  if (subtotalEl) subtotalEl.textContent = naira(cartSubtotal());
+
+  if (!itemsEl) return;
 
   if (cart.length === 0) {
     itemsEl.innerHTML = `<p class="cart-empty">Your bag is empty.</p>`;
@@ -429,17 +445,19 @@ const cartDrawer = document.getElementById("cartDrawer");
 const cartOverlay = document.getElementById("cartOverlay");
 
 function openCart() {
-  cartDrawer.classList.add("open");
-  cartOverlay.classList.add("open");
+  if (cartDrawer) cartDrawer.classList.add("open");
+  if (cartOverlay) cartOverlay.classList.add("open");
 }
 function closeCart() {
-  cartDrawer.classList.remove("open");
-  cartOverlay.classList.remove("open");
+  if (cartDrawer) cartDrawer.classList.remove("open");
+  if (cartOverlay) cartOverlay.classList.remove("open");
 }
 
-document.getElementById("cartToggle").addEventListener("click", openCart);
-document.getElementById("cartClose").addEventListener("click", closeCart);
-cartOverlay.addEventListener("click", closeCart);
+const cartToggleBtn = document.getElementById("cartToggle");
+if (cartToggleBtn) cartToggleBtn.addEventListener("click", openCart);
+const cartCloseBtn = document.getElementById("cartClose");
+if (cartCloseBtn) cartCloseBtn.addEventListener("click", closeCart);
+if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
 
 // ---------------- Checkout modal ----------------
 const checkoutOverlay = document.getElementById("checkoutOverlay");
@@ -449,30 +467,36 @@ const loyaltyProgressEl = document.getElementById("loyaltyProgress");
 
 function updateCheckoutTotals() {
   const subtotal = cartSubtotal();
-  const state = stateSelect.value;
+  const state = stateSelect ? stateSelect.value : "";
   const shipping = state ? getShippingFee(state) : 0;
   const total = subtotal + shipping;
 
-  document.getElementById("checkoutSubtotal").textContent = naira(subtotal);
-  document.getElementById("checkoutShipping").textContent = state ? naira(shipping) : "Select a state";
-  document.getElementById("checkoutTotal").textContent = naira(total);
+  const subEl = document.getElementById("checkoutSubtotal");
+  const shipEl = document.getElementById("checkoutShipping");
+  const totEl = document.getElementById("checkoutTotal");
+
+  if (subEl) subEl.textContent = naira(subtotal);
+  if (shipEl) shipEl.textContent = state ? naira(shipping) : "Select a state";
+  if (totEl) totEl.textContent = naira(total);
 
   return { subtotal, shipping, total };
 }
 
-stateSelect.addEventListener("change", updateCheckoutTotals);
+if (stateSelect) stateSelect.addEventListener("change", updateCheckoutTotals);
 
 // ---------------- THR33 TRIBE loyalty progress ----------------
 let loyaltyLookupTimer;
-checkoutEmailInput.addEventListener("input", () => {
-  clearTimeout(loyaltyLookupTimer);
-  const email = checkoutEmailInput.value.trim();
-  if (!email.includes("@")) {
-    loyaltyProgressEl.textContent = "";
-    return;
-  }
-  loyaltyLookupTimer = setTimeout(() => fetchLoyaltyProgress(email), 500);
-});
+if (checkoutEmailInput) {
+  checkoutEmailInput.addEventListener("input", () => {
+    clearTimeout(loyaltyLookupTimer);
+    const email = checkoutEmailInput.value.trim();
+    if (!email.includes("@")) {
+      if (loyaltyProgressEl) loyaltyProgressEl.textContent = "";
+      return;
+    }
+    loyaltyLookupTimer = setTimeout(() => fetchLoyaltyProgress(email), 500);
+  });
+}
 
 function fetchLoyaltyProgress(email) {
   fetch("/api/loyalty-status", {
@@ -489,12 +513,14 @@ function fetchLoyaltyProgress(email) {
       const remaining = nextMilestone - thisOrderNumber;
       const rewardLabel = nextMilestone % 10 === 0 ? "a TRIBE patch + a free tee" : "a TRIBE patch";
 
-      loyaltyProgressEl.innerHTML = remaining === 0
-        ? `🏅 This order unlocks <strong>${rewardLabel}</strong> — welcome deeper into THR33 TRIBE!`
-        : `🏅 <strong>${positionInCycle}/5</strong> orders — ${remaining} more to unlock ${rewardLabel}`;
+      if (loyaltyProgressEl) {
+        loyaltyProgressEl.innerHTML = remaining === 0
+          ? `🏅 This order unlocks <strong>${rewardLabel}</strong> — welcome deeper into THR33 TRIBE!`
+          : `🏅 <strong>${positionInCycle}/5</strong> orders — ${remaining} more to unlock ${rewardLabel}`;
+      }
     })
     .catch(() => {
-      loyaltyProgressEl.textContent = "";
+      if (loyaltyProgressEl) loyaltyProgressEl.textContent = "";
     });
 }
 
@@ -504,209 +530,173 @@ function openCheckout() {
     return;
   }
   updateCheckoutTotals();
-  loyaltyProgressEl.textContent = "";
+  if (loyaltyProgressEl) loyaltyProgressEl.textContent = "";
   closeCart();
-  checkoutOverlay.classList.add("open");
+  if (checkoutOverlay) checkoutOverlay.classList.add("open");
 }
 function closeCheckout() {
-  checkoutOverlay.classList.remove("open");
+  if (checkoutOverlay) checkoutOverlay.classList.remove("open");
 }
 
-document.getElementById("checkoutBtn").addEventListener("click", openCheckout);
-document.getElementById("checkoutClose").addEventListener("click", closeCheckout);
-checkoutOverlay.addEventListener("click", (e) => {
-  if (e.target === checkoutOverlay) closeCheckout();
-});
-
-// ---------------- Checkout form -> Paystack ----------------
-document.getElementById("checkoutForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  if (PAYSTACK_PUBLIC_KEY.includes("REPLACE")) {
-    showToast("Add your Paystack public key in script.js to accept payment");
-    return;
-  }
-
-  const form = e.target;
-  const data = new FormData(form);
-  const email = data.get("email");
-  const state = data.get("state");
-
-  if (!state) {
-    showToast("Please select a delivery state");
-    return;
-  }
-
-  const { subtotal, shipping, total } = updateCheckoutTotals();
-  const amountKobo = total * 100;
-
-  const payBtn = document.getElementById("payBtn");
-  payBtn.disabled = true;
-  payBtn.textContent = "Opening secure payment…";
-
-  const handler = PaystackPop.setup({
-    key: PAYSTACK_PUBLIC_KEY,
-    email: email,
-    amount: amountKobo,
-    currency: "NGN",
-    metadata: {
-      custom_fields: [
-        { display_name: "Full Name", variable_name: "full_name", value: data.get("fullName") },
-        { display_name: "Phone", variable_name: "phone", value: data.get("phone") },
-        { display_name: "Delivery Address", variable_name: "address", value: `${data.get("address")}, ${data.get("city")}, ${state}` },
-        { display_name: "Notes", variable_name: "notes", value: data.get("notes") || "" },
-        { display_name: "Order Items", variable_name: "order_items", value: JSON.stringify(cart.map(i => `${i.name} (${i.size}${i.colorName ? ', ' + i.colorName : ''}) x${i.qty}`)) },
-        { display_name: "Subtotal", variable_name: "subtotal", value: naira(subtotal) },
-        { display_name: "Shipping Fee", variable_name: "shipping_fee", value: naira(shipping) }
-      ]
-    },
-    callback: function (response) {
-      payBtn.textContent = "Confirming payment…";
-
-      fetch("/api/verify-payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          reference: response.reference,
-          email: email,
-          fullName: data.get("fullName"),
-          phone: data.get("phone"),
-          address: `${data.get("address")}, ${data.get("city")}, ${state}`,
-          items: cart,
-          subtotal: subtotal,
-          shipping: shipping,
-          total: total
-        })
-      })
-        .then(res => res.json())
-        .then(result => {
-          payBtn.disabled = false;
-          payBtn.textContent = "Pay with Paystack";
-
-          if (result.verified) {
-            cart = [];
-            saveCart();
-            closeCheckout();
-            form.reset();
-            showToast(`Payment confirmed — ref ${response.reference}. We'll email your receipt.`);
-            fetchStock();
-          } else {
-            showToast("We couldn't confirm this payment. Please contact us with your reference: " + response.reference);
-          }
-        })
-        .catch(() => {
-          payBtn.disabled = false;
-          payBtn.textContent = "Pay with Paystack";
-          showToast("Payment went through, but we couldn't confirm it automatically. Please contact us with your reference: " + response.reference);
-        });
-    },
-    onClose: function () {
-      payBtn.disabled = false;
-      payBtn.textContent = "Pay with Paystack";
-    }
+const checkoutBtn = document.getElementById("checkoutBtn");
+if (checkoutBtn) checkoutBtn.addEventListener("click", openCheckout);
+const checkoutCloseBtn = document.getElementById("checkoutClose");
+if (checkoutCloseBtn) checkoutCloseBtn.addEventListener("click", closeCheckout);
+if (checkoutOverlay) {
+  checkoutOverlay.addEventListener("click", (e) => {
+    if (e.target === checkoutOverlay) closeCheckout();
   });
-
-  handler.openIframe();
-});
-
-// ---------------- Size Guide modal ----------------
-const sizeGuideOverlay = document.getElementById("sizeGuideOverlay");
-const sizeGuideCropNote = document.getElementById("sizeGuideCropNote");
-
-function openSizeGuide(isCrop) {
-  sizeGuideCropNote.style.display = isCrop ? "block" : "none";
-  sizeGuideOverlay.classList.add("open");
 }
-function closeSizeGuide() {
-  sizeGuideOverlay.classList.remove("open");
-}
-document.getElementById("sizeGuideClose").addEventListener("click", closeSizeGuide);
-sizeGuideOverlay.addEventListener("click", (e) => {
-  if (e.target === sizeGuideOverlay) closeSizeGuide();
-});
 
-// ---------------- Track Order modal ----------------
-const trackOrderOverlay = document.getElementById("trackOrderOverlay");
-const trackOrderResult = document.getElementById("trackOrderResult");
+// ---------------- Success Modal Control ----------------
+const successOverlay = document.getElementById("successOverlay");
+const successCloseBtn = document.getElementById("successClose");
+const successDoneBtn = document.getElementById("successDoneBtn");
 
-function openTrackOrder() {
-  trackOrderResult.innerHTML = "";
-  trackOrderOverlay.classList.add("open");
-}
-function closeTrackOrder() {
-  trackOrderOverlay.classList.remove("open");
-}
-document.querySelectorAll('[data-role="track-order-open"]').forEach(el => {
-  el.addEventListener("click", openTrackOrder);
-});
-document.getElementById("trackOrderClose").addEventListener("click", closeTrackOrder);
-trackOrderOverlay.addEventListener("click", (e) => {
-  if (e.target === trackOrderOverlay) closeTrackOrder();
-});
+function openSuccessModal(details) {
+  const refEl = document.getElementById("successRef");
+  const amtEl = document.getElementById("successAmount");
+  const banner = document.getElementById("successLoyaltyBanner");
+  const msg = document.getElementById("successLoyaltyMessage");
 
-document.getElementById("trackOrderForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const reference = new FormData(e.target).get("reference").trim();
-  if (!reference) return;
+  if (refEl) refEl.textContent = details.reference;
+  if (amtEl) amtEl.textContent = naira(details.totalAmount);
 
-  const submitBtn = document.getElementById("trackOrderSubmit");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Checking…";
-  trackOrderResult.innerHTML = "";
-
-  fetch("/api/track-order", {
+  // Fetch updated loyalty count post-purchase
+  fetch("/api/loyalty-status", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reference })
+    body: JSON.stringify({ email: details.email })
   })
     .then(res => res.json())
-    .then(result => {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Check Status";
-
-      if (!result.found) {
-        trackOrderResult.innerHTML = `<p class="track-result track-not-found">We couldn't find that reference. Double-check for typos, or message us on WhatsApp.</p>`;
-        return;
-      }
-
-      if (result.status === "success") {
-        let itemsHtml = "";
-        try {
-          const items = JSON.parse(result.items);
-          itemsHtml = `<ul>${items.map(i => `<li>${i}</li>`).join("")}</ul>`;
-        } catch (e) {
-          itemsHtml = "";
+    .then(data => {
+      const count = data.count || 0;
+      if (count > 0 && banner && msg) {
+        banner.style.display = "block";
+        if (count % 5 === 0) {
+          msg.innerHTML = `🏅 <strong>THR33 TRIBE Milestone Unlocked!</strong> This was order #${count}. Check your email for your reward details!`;
+        } else {
+          const nextMilestone = 5 - (count % 5);
+          msg.innerHTML = `🔥 You have completed <strong>${count} order(s)</strong> with THR33 TRIBE. Only <strong>${nextMilestone} more order(s)</strong> until your next reward!`;
         }
-        trackOrderResult.innerHTML = `
-          <div class="track-result track-confirmed">
-            <p><strong>✅ Confirmed</strong> — ${result.amount}</p>
-            ${itemsHtml}
-            <p class="track-meta">Delivering to: ${result.address || "—"}</p>
-          </div>`;
-      } else {
-        trackOrderResult.innerHTML = `<p class="track-result track-pending">This payment shows as <strong>${result.status}</strong> — not yet confirmed. If you believe this is wrong, message us on WhatsApp with your reference.</p>`;
       }
     })
-    .catch(() => {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Check Status";
-      trackOrderResult.innerHTML = `<p class="track-result track-not-found">Something went wrong checking that reference. Try again in a moment.</p>`;
-    });
-});
+    .catch(() => {});
 
-// ---------------- Toast ----------------
-let toastTimer;
-function showToast(msg) {
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
+  if (successOverlay) successOverlay.classList.add("open");
 }
 
-// ---------------- Init ----------------
-document.getElementById("year").textContent = new Date().getFullYear();
+function closeSuccessModal() {
+  if (successOverlay) successOverlay.classList.remove("open");
+}
+
+if (successCloseBtn) successCloseBtn.addEventListener("click", closeSuccessModal);
+if (successDoneBtn) successDoneBtn.addEventListener("click", closeSuccessModal);
+if (successOverlay) {
+  successOverlay.addEventListener("click", (e) => {
+    if (e.target === successOverlay) closeSuccessModal();
+  });
+}
+
+// ---------------- Checkout form -> Paystack ----------------
+const checkoutForm = document.getElementById("checkoutForm");
+if (checkoutForm) {
+  checkoutForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    if (PAYSTACK_PUBLIC_KEY.includes("REPLACE")) {
+      showToast("Add your Paystack public key in script.js to accept payment");
+      return;
+    }
+
+    const form = e.target;
+    const data = new FormData(form);
+    const email = data.get("email");
+    const state = data.get("state");
+
+    if (!state) {
+      showToast("Please select a delivery state");
+      return;
+    }
+
+    const { subtotal, shipping, total } = updateCheckoutTotals();
+    const amountKobo = total * 100;
+
+    const payBtn = document.getElementById("payBtn");
+    payBtn.disabled = true;
+    payBtn.textContent = "Opening secure payment…";
+
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: email,
+      amount: amountKobo,
+      currency: "NGN",
+      metadata: {
+        custom_fields: [
+          { display_name: "Full Name", variable_name: "full_name", value: data.get("fullName") },
+          { display_name: "Phone", variable_name: "phone", value: data.get("phone") },
+          { display_name: "Delivery Address", variable_name: "address", value: `${data.get("address")}, ${data.get("city")}, ${state}` },
+          { display_name: "Notes", variable_name: "notes", value: data.get("notes") || "" },
+          { display_name: "Order Items", variable_name: "order_items", value: JSON.stringify(cart.map(i => `${i.name} (${i.size}${i.colorName ? ', ' + i.colorName : ''}) x${i.qty}`)) },
+          { display_name: "Subtotal", variable_name: "subtotal", value: naira(subtotal) },
+          { display_name: "Shipping Fee", variable_name: "shipping_fee", value: naira(shipping) }
+        ]
+      },
+      callback: function (response) {
+        payBtn.textContent = "Confirming payment…";
+
+        fetch("/api/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reference: response.reference,
+            email: email,
+            fullName: data.get("fullName"),
+            phone: data.get("phone"),
+            address: `${data.get("address")}, ${data.get("city")}, ${state}`,
+            items: cart,
+            subtotal: subtotal,
+            shipping: shipping,
+            total: total
+          })
+        })
+          .then(res => res.json())
+          .then(result => {
+            payBtn.disabled = false;
+            payBtn.textContent = "Pay with Paystack";
+
+            if (result.verified) {
+              cart = [];
+              saveCart();
+              closeCheckout();
+              form.reset();
+              openSuccessModal({
+                reference: response.reference,
+                totalAmount: total,
+                email: email
+              });
+              fetchStock();
+            } else {
+              showToast("We couldn't confirm this payment. Please contact us with your reference: " + response.reference);
+            }
+          })
+          .catch(() => {
+            payBtn.disabled = false;
+            payBtn.textContent = "Pay with Paystack";
+            showToast("Network error verifying payment. Keep your reference: " + response.reference);
+          });
+      },
+      onClose: function () {
+        payBtn.disabled = false;
+        payBtn.textContent = "Pay with Paystack";
+      }
+    });
+
+    handler.openIframe();
+  });
+}
+
+// Initial renders
 renderFilters();
-renderProducts();
-renderCart();
 fetchStock();
+renderCart();
