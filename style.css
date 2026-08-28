@@ -30,8 +30,8 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--cream);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--cream);
   font-family: 'Inter', sans-serif;
   font-size: 16px;
   line-height: 1.5;
