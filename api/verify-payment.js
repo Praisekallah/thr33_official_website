@@ -1,13 +1,5 @@
-// Vercel Serverless Function.
-// Runs on Vercel's servers only — never in the customer's browser —
-// so it's the safe place to use your PAYSTACK SECRET key.
-//
-// This checks a payment reference against Paystack's own records before
-// the site treats an order as actually paid, decreases stock for the
-// items ordered, tracks THR33 TRIBE loyalty progress, and emails
-// everyone who needs emailing.
-
-const INITIAL_STOCK = 20; // keep this the same number as in api/get-stock.js
+// Vercel Serverless Function
+const INITIAL_STOCK = 20;
 
 function naira(kobo) {
   return "₦" + Math.round(kobo / 100).toLocaleString("en-NG");
@@ -16,6 +8,8 @@ function naira(kobo) {
 async function redis(command) {
   const base = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!base || !token) return null;
+  
   const res = await fetch(`${base}/${command.join("/")}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -28,9 +22,6 @@ function hasRedis() {
 }
 
 // ---------------- Idempotency guard ----------------
-// Makes sure a given payment reference only ever gets processed once,
-// even if the browser calls this endpoint twice for the same payment.
-// Without this, a retried request could double-count loyalty orders.
 async function markProcessedOnce(reference) {
   if (!hasRedis()) return true;
   try {
@@ -44,8 +35,7 @@ async function markProcessedOnce(reference) {
 
 // ---------------- Stock ----------------
 async function decrementStock(items) {
-  if (!hasRedis()) return;
-  if (!Array.isArray(items)) return;
+  if (!hasRedis() || !Array.isArray(items)) return;
 
   try {
     await Promise.all(
@@ -65,13 +55,10 @@ async function decrementStock(items) {
 }
 
 // ---------------- THR33 TRIBE loyalty ----------------
-// Every 5th confirmed order for a given email earns an embroidered TRIBE
-// patch (included physically with that order). Every 10th also earns a
-// free tee. Milestones keep repeating (5, 10, 15, 20, 25...).
 async function incrementLoyalty(email) {
   if (!email || !hasRedis()) return null;
   try {
-    const key = `loyalty:${email.toLowerCase()}`;
+    const key = `loyalty:${email.trim().toLowerCase()}`;
     const newCount = await redis(["incr", key]);
     return Number(newCount);
   } catch (err) {
@@ -158,7 +145,7 @@ async function sendRewardEmail(email, milestone, teeCode) {
 function buildOrderEmailHtml(order) {
   const fields = (order.metadata && order.metadata.custom_fields) || [];
   const rows = fields.map(f =>
-    `<tr><td style="padding:6px 12px;color:#666;">${f.display_name}</td><td style="padding:6px 12px;"><strong>${f.value}</strong></td></tr>`
+    `<tr><td style="padding:6px 12px;color:#666;vertical-align:top;">${f.display_name}</td><td style="padding:6px 12px;"><strong>${f.value}</strong></td></tr>`
   ).join("");
 
   return `
@@ -209,9 +196,11 @@ function buildCustomerEmailHtml(order) {
   let itemsList = "";
   try {
     const items = JSON.parse(itemsRaw);
-    itemsList = items.map(i => `<li style="margin-bottom:4px;">${i}</li>`).join("");
+    itemsList = Array.isArray(items) 
+      ? items.map(i => `<li style="margin-bottom:4px;">${i}</li>`).join("")
+      : `<li style="margin-bottom:4px;">${itemsRaw}</li>`;
   } catch (e) {
-    itemsList = `<li>${itemsRaw}</li>`;
+    itemsList = `<li style="margin-bottom:4px;">${itemsRaw}</li>`;
   }
 
   return `
