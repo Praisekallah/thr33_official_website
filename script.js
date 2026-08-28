@@ -4,7 +4,7 @@
    ============================================ */
 
 // Image fallback helper for missing model/flatlay photos
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80";
+const FALLBACK_IMAGE = "assets/croptop-black-front.png";
 
 function handleImgError(imgEl) {
   imgEl.onerror = null; // Prevents infinite loop if fallback fails
