@@ -213,7 +213,7 @@ img { max-width: 100%; display: block; }
   transition: transform 0.15s ease, background 0.2s ease;
 }
 .btn-primary {
-  background: var(--cream);
+  background: var(--gold);
   color: var(--ink);
 }
 .btn-primary:hover { background: var(--green-deep); }
