@@ -460,6 +460,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* ---------- About ---------- */
+/*
 .about { padding: 96px 0; background: var(--green-deep); color: var(--cream); }
 .about-inner {
   display: grid;
@@ -479,6 +480,7 @@ img { max-width: 100%; display: block; }
   justify-content: center;
 }
 .about-figure img { filter: invert(1) brightness(1.6); opacity: 0.9; max-width: 200px; }
+*/
 
 /* ---------- FAQ ---------- */
 .faq { padding: 96px 0; max-width: 720px; margin: 0 auto; }
@@ -494,7 +496,7 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   font-size: 0.95rem;
 }
-.faq p { margin: 12px 0 0; color: rgba(23,23,15,0.7); }
+.faq p { margin: 12px 0 0; color: var(--gold); }
 
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--line); padding: 40px 0; }
@@ -505,7 +507,7 @@ img { max-width: 100%; display: block; }
   gap: 16px;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
-  color: rgba(23,23,15,0.6);
+  color: var(--gold);
 }
 .footer-mono { height: 22px; filter: sepia(1) saturate(0) brightness(0.5); }
 .footer-inner a { text-decoration: none; }
@@ -520,7 +522,7 @@ img { max-width: 100%; display: block; }
   padding: 0;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
-  color: rgba(23,23,15,0.6);
+  color: var(--gold);
   text-decoration: underline;
   cursor: pointer;
 }
