@@ -8,43 +8,14 @@ const PAYSTACK_PUBLIC_KEY = "pk_live_efdfb8f1cbb80b64b7907f7222fcb4801a0909f2";
 
 // ---- CONFIG: shipping fee by state ----
 const SHIPPING_RATES = {
-  "Lagos": 3500,
-  "Ogun": 3500,
-  "Oyo": 3500,
-  "Osun": 3500,
-  "Ondo": 3500,
-  "Ekiti": 3500,
-  "FCT (Abuja)": 3500,
-  "Edo": 3500,
-  "Delta": 3500,
-  "Rivers": 3500,
-  "Bayelsa": 3500,
-  "Cross River": 3500,
-  "Akwa Ibom": 3500,
-  "Abia": 3500,
-  "Imo": 3500,
-  "Anambra": 3500,
-  "Ebonyi": 3500,
-  "Enugu": 3500,
-  "Kwara": 3500,
-  "Kogi": 3500,
-  "Niger": 3500,
-  "Nasarawa": 3500,
-  "Plateau": 2500,
-  "Benue": 2500,
-  "Kaduna": 2800,
-  "Kano": 2800,
-  "Katsina": 2800,
-  "Kebbi": 2800,
-  "Sokoto": 2800,
-  "Zamfara": 2800,
-  "Jigawa": 2800,
-  "Bauchi": 2800,
-  "Gombe": 2800,
-  "Adamawa": 2800,
-  "Taraba": 2800,
-  "Borno": 2800,
-  "Yobe": 2800
+  "Lagos": 3500, "Ogun": 3500, "Oyo": 3500, "Osun": 3500, "Ondo": 3500,
+  "Ekiti": 3500, "FCT (Abuja)": 3500, "Edo": 3500, "Delta": 3500, "Rivers": 3500,
+  "Bayelsa": 3500, "Cross River": 3500, "Akwa Ibom": 3500, "Abia": 3500, "Imo": 3500,
+  "Anambra": 3500, "Ebonyi": 3500, "Enugu": 3500, "Kwara": 3500, "Kogi": 3500,
+  "Niger": 3500, "Nasarawa": 3500, "Plateau": 2500, "Benue": 2500, "Kaduna": 2800,
+  "Kano": 2800, "Katsina": 2800, "Kebbi": 2800, "Sokoto": 2800, "Zamfara": 2800,
+  "Jigawa": 2800, "Bauchi": 2800, "Gombe": 2800, "Adamawa": 2800, "Taraba": 2800,
+  "Borno": 2800, "Yobe": 2800
 };
 const DEFAULT_SHIPPING_FEE = 2500;
 
@@ -53,8 +24,6 @@ function getShippingFee(state) {
 }
 
 const naira = (n) => "₦" + (n || 0).toLocaleString("en-NG");
-
-const CROP_IDS = ["crop-basic-female", "croptop-thr33-female", "thr33-crop-top"];
 
 // ---------------- Helper Toast ----------------
 function showToast(msg) {
@@ -123,7 +92,7 @@ function cartSubtotal() {
   return cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 }
 
-// ---------------- Filters ----------------
+// ---------------- Filters & Categories ----------------
 let activeCategory = "all";
 
 function categoryHasStock(catId) {
@@ -152,7 +121,6 @@ function renderFilters() {
   });
 }
 
-// ---------------- Sort ----------------
 let activeSort = "featured";
 
 function sortProducts(list) {
@@ -175,7 +143,7 @@ async function fetchStock() {
   renderProducts();
 }
 
-// ---------------- Render: product grid ----------------
+// ---------------- Render: Product Grid ----------------
 function renderProducts() {
   const grid = document.getElementById("productGrid");
   if (!grid) return;
@@ -219,7 +187,7 @@ function renderProducts() {
       : `<span class="product-price">${naira(p.price)}</span>`;
 
     return `
-    <div class="product-card ${soldOut ? 'is-sold-out' : ''} ${isComingSoon ? 'coming-soon' : ''}" data-id="${p.id}" data-status="${isComingSoon ? 'coming-soon' : 'live'}">
+    <div class="product-card ${soldOut ? 'is-sold-out' : ''} ${isComingSoon ? 'coming-soon' : ''}" data-id="${p.id}">
       <div class="product-flip" data-role="open-quick-add">
         ${badgeStack}
         ${stockBadge}
@@ -241,7 +209,7 @@ function renderProducts() {
   });
 }
 
-// ---------------- Product Detail modal ----------------
+// ---------------- Product Detail Modal ----------------
 const quickAddOverlay = document.getElementById("quickAddOverlay");
 const quickAddBody = document.getElementById("quickAddBody");
 let quickAddColorIdx = 0;
@@ -272,13 +240,9 @@ function renderQuickAdd(product) {
   const isComingSoon = Boolean(product.comingSoon);
 
   const swatches = product.colors.length > 1
-    ? `<div class="color-swatches" data-role="qa-colors">
-        ${product.colors.map((c, idx) => `<button type="button" class="swatch ${idx === quickAddColorIdx ? 'selected' : ''}" data-idx="${idx}" style="background:${c.hex}" aria-label="${c.name}" title="${c.name}"></button>`).join("")}
+    ? `<div class="color-swatches">
+        ${product.colors.map((c, idx) => `<button type="button" class="swatch ${idx === quickAddColorIdx ? 'selected' : ''}" data-idx="${idx}" style="background:${c.hex}" aria-label="${c.name}"></button>`).join("")}
        </div>`
-    : "";
-
-  const sizeGuideLink = product.category !== "shorts"
-    ? `<button type="button" class="size-guide-link" id="qaSizeGuideBtn">Size Guide</button>`
     : "";
 
   const galleryTrack = images.map((src, idx) =>
@@ -286,8 +250,8 @@ function renderQuickAdd(product) {
   ).join("");
 
   const arrows = images.length > 1
-    ? `<button type="button" class="pd-arrow prev" id="qaPrev" aria-label="Previous image">&#8249;</button>
-       <button type="button" class="pd-arrow next" id="qaNext" aria-label="Next image">&#8250;</button>`
+    ? `<button type="button" class="pd-arrow prev" id="qaPrev">&#8249;</button>
+       <button type="button" class="pd-arrow next" id="qaNext">&#8250;</button>`
     : "";
 
   const dots = images.length > 1
@@ -298,9 +262,7 @@ function renderQuickAdd(product) {
 
   quickAddBody.innerHTML = `
     <div class="pd-gallery" id="qaGallery">
-      <div class="pd-gallery-track" id="qaGalleryTrack">
-        ${galleryTrack}
-      </div>
+      <div class="pd-gallery-track" id="qaGalleryTrack">${galleryTrack}</div>
       ${arrows}
     </div>
     ${dots}
@@ -313,7 +275,6 @@ function renderQuickAdd(product) {
         <div class="product-sizes" id="qaSizes">
           ${product.sizes.map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
         </div>
-        ${sizeGuideLink}
       </div>
       <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
     </div>
@@ -357,28 +318,6 @@ function renderQuickAdd(product) {
   const nextBtn = document.getElementById("qaNext");
   if (prevBtn) prevBtn.addEventListener("click", () => stepGallery(images.length, -1));
   if (nextBtn) nextBtn.addEventListener("click", () => stepGallery(images.length, 1));
-
-  const dotsEl = document.getElementById("qaDots");
-  if (dotsEl) {
-    dotsEl.querySelectorAll(".pd-dot").forEach(dot => {
-      dot.addEventListener("click", () => {
-        quickAddImageIdx = Number(dot.dataset.idx);
-        setGalleryPosition(quickAddImageIdx);
-      });
-    });
-  }
-
-  const galleryEl = document.getElementById("qaGallery");
-  if (galleryEl && images.length > 1) {
-    let touchStartX = 0;
-    galleryEl.addEventListener("touchstart", (e) => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    galleryEl.addEventListener("touchend", (e) => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 40) stepGallery(images.length, dx < 0 ? 1 : -1);
-    }, { passive: true });
-  }
 }
 
 function stepGallery(count, delta) {
@@ -398,7 +337,7 @@ function setGalleryPosition(idx) {
   }
 }
 
-// ---------------- Render: cart drawer ----------------
+// ---------------- Cart Drawer ----------------
 function renderCart() {
   const itemsEl = document.getElementById("cartItems");
   const countEl = document.getElementById("cartCount");
@@ -440,7 +379,6 @@ function renderCart() {
   });
 }
 
-// ---------------- Cart drawer open/close ----------------
 const cartDrawer = document.getElementById("cartDrawer");
 const cartOverlay = document.getElementById("cartOverlay");
 
@@ -459,7 +397,7 @@ const cartCloseBtn = document.getElementById("cartClose");
 if (cartCloseBtn) cartCloseBtn.addEventListener("click", closeCart);
 if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
 
-// ---------------- Checkout modal ----------------
+// ---------------- Checkout Modal ----------------
 const checkoutOverlay = document.getElementById("checkoutOverlay");
 const stateSelect = document.querySelector('#checkoutForm select[name="state"]');
 const checkoutEmailInput = document.querySelector('#checkoutForm input[name="email"]');
@@ -483,46 +421,6 @@ function updateCheckoutTotals() {
 }
 
 if (stateSelect) stateSelect.addEventListener("change", updateCheckoutTotals);
-
-// ---------------- THR33 TRIBE loyalty progress ----------------
-let loyaltyLookupTimer;
-if (checkoutEmailInput) {
-  checkoutEmailInput.addEventListener("input", () => {
-    clearTimeout(loyaltyLookupTimer);
-    const email = checkoutEmailInput.value.trim();
-    if (!email.includes("@")) {
-      if (loyaltyProgressEl) loyaltyProgressEl.textContent = "";
-      return;
-    }
-    loyaltyLookupTimer = setTimeout(() => fetchLoyaltyProgress(email), 500);
-  });
-}
-
-function fetchLoyaltyProgress(email) {
-  fetch("/api/loyalty-status", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email })
-  })
-    .then(res => res.json())
-    .then(data => {
-      const completedOrders = data.count || 0;
-      const thisOrderNumber = completedOrders + 1;
-      const nextMilestone = Math.ceil(thisOrderNumber / 5) * 5;
-      const positionInCycle = thisOrderNumber - (nextMilestone - 5);
-      const remaining = nextMilestone - thisOrderNumber;
-      const rewardLabel = nextMilestone % 10 === 0 ? "a TRIBE patch + a free tee" : "a TRIBE patch";
-
-      if (loyaltyProgressEl) {
-        loyaltyProgressEl.innerHTML = remaining === 0
-          ? `🏅 This order unlocks <strong>${rewardLabel}</strong> — welcome deeper into THR33 TRIBE!`
-          : `🏅 <strong>${positionInCycle}/5</strong> orders — ${remaining} more to unlock ${rewardLabel}`;
-      }
-    })
-    .catch(() => {
-      if (loyaltyProgressEl) loyaltyProgressEl.textContent = "";
-    });
-}
 
 function openCheckout() {
   if (cart.length === 0) {
@@ -548,7 +446,7 @@ if (checkoutOverlay) {
   });
 }
 
-// ---------------- Success Modal Control ----------------
+// ---------------- Success Modal ----------------
 const successOverlay = document.getElementById("successOverlay");
 const successCloseBtn = document.getElementById("successClose");
 const successDoneBtn = document.getElementById("successDoneBtn");
@@ -556,33 +454,8 @@ const successDoneBtn = document.getElementById("successDoneBtn");
 function openSuccessModal(details) {
   const refEl = document.getElementById("successRef");
   const amtEl = document.getElementById("successAmount");
-  const banner = document.getElementById("successLoyaltyBanner");
-  const msg = document.getElementById("successLoyaltyMessage");
-
   if (refEl) refEl.textContent = details.reference;
   if (amtEl) amtEl.textContent = naira(details.totalAmount);
-
-  // Fetch updated loyalty count post-purchase
-  fetch("/api/loyalty-status", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: details.email })
-  })
-    .then(res => res.json())
-    .then(data => {
-      const count = data.count || 0;
-      if (count > 0 && banner && msg) {
-        banner.style.display = "block";
-        if (count % 5 === 0) {
-          msg.innerHTML = `🏅 <strong>THR33 TRIBE Milestone Unlocked!</strong> This was order #${count}. Check your email for your reward details!`;
-        } else {
-          const nextMilestone = 5 - (count % 5);
-          msg.innerHTML = `🔥 You have completed <strong>${count} order(s)</strong> with THR33 TRIBE. Only <strong>${nextMilestone} more order(s)</strong> until your next reward!`;
-        }
-      }
-    })
-    .catch(() => {});
-
   if (successOverlay) successOverlay.classList.add("open");
 }
 
@@ -592,22 +465,12 @@ function closeSuccessModal() {
 
 if (successCloseBtn) successCloseBtn.addEventListener("click", closeSuccessModal);
 if (successDoneBtn) successDoneBtn.addEventListener("click", closeSuccessModal);
-if (successOverlay) {
-  successOverlay.addEventListener("click", (e) => {
-    if (e.target === successOverlay) closeSuccessModal();
-  });
-}
 
-// ---------------- Checkout form -> Paystack ----------------
+// ---------------- Checkout Form Submission ----------------
 const checkoutForm = document.getElementById("checkoutForm");
 if (checkoutForm) {
   checkoutForm.addEventListener("submit", function (e) {
     e.preventDefault();
-
-    if (PAYSTACK_PUBLIC_KEY.includes("REPLACE")) {
-      showToast("Add your Paystack public key in script.js to accept payment");
-      return;
-    }
 
     const form = e.target;
     const data = new FormData(form);
@@ -637,9 +500,7 @@ if (checkoutForm) {
           { display_name: "Phone", variable_name: "phone", value: data.get("phone") },
           { display_name: "Delivery Address", variable_name: "address", value: `${data.get("address")}, ${data.get("city")}, ${state}` },
           { display_name: "Notes", variable_name: "notes", value: data.get("notes") || "" },
-          { display_name: "Order Items", variable_name: "order_items", value: JSON.stringify(cart.map(i => `${i.name} (${i.size}${i.colorName ? ', ' + i.colorName : ''}) x${i.qty}`)) },
-          { display_name: "Subtotal", variable_name: "subtotal", value: naira(subtotal) },
-          { display_name: "Shipping Fee", variable_name: "shipping_fee", value: naira(shipping) }
+          { display_name: "Order Items", variable_name: "order_items", value: JSON.stringify(cart.map(i => `${i.name} (${i.size}${i.colorName ? ', ' + i.colorName : ''}) x${i.qty}`)) }
         ]
       },
       callback: function (response) {
@@ -670,20 +531,16 @@ if (checkoutForm) {
               saveCart();
               closeCheckout();
               form.reset();
-              openSuccessModal({
-                reference: response.reference,
-                totalAmount: total,
-                email: email
-              });
+              openSuccessModal({ reference: response.reference, totalAmount: total, email: email });
               fetchStock();
             } else {
-              showToast("We couldn't confirm this payment. Please contact us with your reference: " + response.reference);
+              showToast("We couldn't confirm this payment. Reference: " + response.reference);
             }
           })
           .catch(() => {
             payBtn.disabled = false;
             payBtn.textContent = "Pay with Paystack";
-            showToast("Network error verifying payment. Keep your reference: " + response.reference);
+            showToast("Network error verifying payment. Reference: " + response.reference);
           });
       },
       onClose: function () {
@@ -693,6 +550,87 @@ if (checkoutForm) {
     });
 
     handler.openIframe();
+  });
+}
+
+// ---------------- STEP 3: Order Tracking Logic ----------------
+const trackOverlay = document.getElementById("trackOrderOverlay");
+const trackCloseBtn = document.getElementById("trackOrderClose");
+const trackForm = document.getElementById("trackOrderForm");
+const trackResultEl = document.getElementById("trackOrderResult");
+
+function openTrackModal() {
+  closeCart();
+  if (trackResultEl) {
+    trackResultEl.style.display = "none";
+    trackResultEl.innerHTML = "";
+  }
+  if (trackForm) trackForm.reset();
+  if (trackOverlay) trackOverlay.classList.add("open");
+}
+
+function closeTrackModal() {
+  if (trackOverlay) trackOverlay.classList.remove("open");
+}
+
+// Bind all open triggers (header button, footer link, cart drawer link)
+document.querySelectorAll('[data-role="track-order-open"]').forEach(btn => {
+  btn.addEventListener("click", openTrackModal);
+});
+
+if (trackCloseBtn) trackCloseBtn.addEventListener("click", closeTrackModal);
+if (trackOverlay) {
+  trackOverlay.addEventListener("click", (e) => {
+    if (e.target === trackOverlay) closeTrackModal();
+  });
+}
+
+if (trackForm) {
+  trackForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById("trackOrderSubmit");
+    const refInput = trackForm.querySelector('input[name="reference"]');
+    const reference = refInput ? refInput.value.trim() : "";
+
+    if (!reference) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Checking...";
+    trackResultEl.style.display = "none";
+
+    try {
+      const res = await fetch(`/api/track-order?reference=${encodeURIComponent(reference)}`);
+      const data = await res.json();
+
+      trackResultEl.style.display = "block";
+
+      if (data.found) {
+        trackResultEl.innerHTML = `
+          <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; text-align: left; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin-bottom: 0.4rem;"><strong>Status:</strong> <span style="color: var(--accent, #3b82f6); text-transform: uppercase;">${data.status || 'Processing'}</span></p>
+            <p style="margin-bottom: 0.4rem;"><strong>Customer:</strong> ${data.fullName || 'Valued Customer'}</p>
+            <p style="margin-bottom: 0.4rem;"><strong>Date:</strong> ${data.date ? new Date(data.date).toLocaleDateString() : 'Recent'}</p>
+            <p style="margin: 0;"><strong>Delivery To:</strong> ${data.address || 'Address on file'}</p>
+          </div>
+        `;
+      } else {
+        trackResultEl.innerHTML = `
+          <p style="color: #ef4444; font-size: 0.85rem; text-align: center; margin: 0;">
+            No order found with that reference. Please check your confirmation email and try again.
+          </p>
+        `;
+      }
+    } catch (err) {
+      trackResultEl.style.display = "block";
+      trackResultEl.innerHTML = `
+        <p style="color: #ef4444; font-size: 0.85rem; text-align: center; margin: 0;">
+          Unable to check tracking right now. Please try again later or reach out on WhatsApp.
+        </p>
+      `;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Check Status";
+    }
   });
 }
 
