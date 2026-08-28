@@ -245,7 +245,7 @@ img { max-width: 100%; display: block; }
   background: transparent;
   border-radius: 999px;
   cursor: pointer;
-  color: var(--ink);
+  color: var(--gold);
   white-space: nowrap;
   transition: background 0.2s ease, color 0.2s ease;
 }
