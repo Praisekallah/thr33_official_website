@@ -1093,4 +1093,3 @@ img { max-width: 100%; display: block; }
 .product-card:not(.coming-soon):not([data-status="coming-soon"]) .product-flip img {
   filter: none !important;
 }
-
