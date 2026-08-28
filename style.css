@@ -155,7 +155,7 @@ img { max-width: 100%; display: block; }
   gap: 6px;
   background: transparent;
   border: 1px solid var(--line);
-  color: var(--ink);
+  color: var(--gold);
   padding: 9px 12px;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
@@ -374,7 +374,7 @@ img { max-width: 100%; display: block; }
 .price-was {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8rem;
-  color: rgba(23,23,15,0.45);
+  color: var(--gold);
   text-decoration: line-through;
 }
 .price-discount {
