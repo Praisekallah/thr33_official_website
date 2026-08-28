@@ -175,6 +175,28 @@
   </div>
 </div>
 
+<!-- Order Success Modal -->
+<div class="modal-overlay" id="successOverlay">
+  <div class="modal" role="dialog" aria-label="Order confirmation" style="text-align: center;">
+    <button class="modal-close" id="successClose" aria-label="Close modal">&times;</button>
+    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎉</div>
+    <h3>Order Confirmed!</h3>
+    <p class="modal-sub">Thank you for your order. We've sent a receipt to your email.</p>
+
+    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin: 1.25rem 0; text-align: left; font-size: 0.9rem;">
+      <p style="margin-bottom: 0.5rem;"><strong>Order Reference:</strong> <span id="successRef" style="user-select: all; word-break: break-all; color: var(--accent, #3b82f6);"></span></p>
+      <p style="margin: 0;"><strong>Amount Paid:</strong> <span id="successAmount"></span></p>
+    </div>
+
+    <!-- Loyalty Banner -->
+    <div id="successLoyaltyBanner" style="display:none; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 0.85rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.85rem; text-align: left;">
+      <p id="successLoyaltyMessage" style="margin:0;"></p>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-full" id="successDoneBtn">Continue Shopping</button>
+  </div>
+</div>
+
 <!-- Size Guide Modal -->
 <div class="modal-overlay" id="sizeGuideOverlay">
   <div class="modal" role="dialog" aria-label="Size guide">
