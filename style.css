@@ -290,30 +290,26 @@ img { max-width: 100%; display: block; }
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
 }
 
 .product-flip img {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transition: opacity 0.35s ease, transform 0.4s ease;
+  transition: opacity 0.35s ease, transform 0.5s ease;
 }
 
-.product-flip .img-front { opacity: 1; z-index: 2; }
-.product-flip .img-back { opacity: 0; z-index: 1; }
+.product-flip .img-front { opacity: 1; transform: scale(1); z-index: 2; }
+.product-flip .img-back { opacity: 0; transform: scale(1.04); z-index: 1; }
 
-@media (hover: hover) {
-  .product-card:hover .img-front { opacity: 0; }
-  .product-card:hover .img-back { opacity: 1; }
-  .product-card:hover img { transform: scale(1.03); }
-}
+.product-card:hover .img-front { opacity: 0; }
+.product-card:hover .img-back { opacity: 1; }
 
 .stock-badge {
   position: absolute;
@@ -422,14 +418,14 @@ img { max-width: 100%; display: block; }
   font-size: 0.85rem;
 }
 
-/* ---------- Gallery / Modal Fixes ---------- */
+/* ---------- Modal Gallery Sizing ---------- */
 .pd-gallery {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius);
-  background: #181818;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .pd-gallery-track {
