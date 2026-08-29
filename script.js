@@ -379,7 +379,7 @@ function renderCart() {
         <p class="cart-item-meta">Size ${item.size}${item.colorName ? ' · ' + item.colorName : ''} · ${naira(item.price)}</p>
         <div class="cart-item-qty">
           <button class="qty-btn" data-action="dec" data-idx="${idx}">−</button>
-          <span>${item.qty}</span>
+          <span style="min-width:16px; text-align:center; font-weight:600; color:var(--ink);">${item.qty}</span>
           <button class="qty-btn" data-action="inc" data-idx="${idx}">+</button>
         </div>
       </div>
