@@ -447,6 +447,7 @@ img { max-width: 100%; display: block; }
 .size-btn {
   border: 1px solid var(--line);
   background: transparent;
+  color: var(--cream);
   padding: 6px 10px;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
