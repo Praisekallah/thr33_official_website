@@ -440,6 +440,37 @@ function updateCheckoutTotals() {
 
 if (stateSelect) stateSelect.addEventListener("change", updateCheckoutTotals);
 
+let loyaltyLookupTimer;
+checkoutEmailInput.addEventListener("input", () => {
+  clearTimeout(loyaltyLookupTimer);
+  const email = checkoutEmailInput.value.trim();
+  if (!email.includes("@")) {
+    loyaltyProgressEl.textContent = "";
+    return;
+  }
+  loyaltyLookupTimer = setTimeout(() => fetchLoyaltyProgress(email), 500);
+});
+
+function fetchLoyaltyProgress(email) {
+  fetch("/api/loyalty-status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const completedOrders = data.count || 0;
+      const thisOrderNumber = completedOrders + 1;
+      const nextMilestone = Math.ceil(thisOrderNumber / 5) * 5;
+      const remaining = nextMilestone - thisOrderNumber;
+      const rewardLabel = nextMilestone % 10 === 0 ? "a TRIBE patch + a free tee" : "a TRIBE patch";
+      loyaltyProgressEl.innerHTML = remaining === 0
+        ? `🏅 This order unlocks <strong>${rewardLabel}</strong>!`
+        : `🏅 ${remaining} more order(s) to unlock ${rewardLabel}`;
+    })
+    .catch(() => { loyaltyProgressEl.textContent = ""; });
+}
+
 function openCheckout() {
   if (cart.length === 0) {
     showToast("Your bag is empty");
