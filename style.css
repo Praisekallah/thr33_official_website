@@ -1093,3 +1093,10 @@ img { max-width: 100%; display: block; }
 .product-card:not(.coming-soon):not([data-status="coming-soon"]) .product-flip img {
   filter: none !important;
 }
+.modal h3 { color: var(--gold) !important; }
+.modal-sub { color: var(--gold) !important; }
+.summary-line { color: var(--gold) !important; }
+.checkout-total { color: var(--cream) !important; }
+.secure-note { color: var(--gold) !important; }
+.size-note { color: var(--gold) !important; }
+.size-table th, .size-table td { color: var(--cream) !important; }
