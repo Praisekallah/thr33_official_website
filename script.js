@@ -22,7 +22,7 @@ const SHIPPING_RATES = {
   "Anambra": 3500, "Ebonyi": 3500, "Enugu": 3500, "Kwara": 3500, "Kogi": 3500,
   "Niger": 3500, "Nasarawa": 3500, "Plateau": 2500, "Benue": 2500, "Kaduna": 2800,
   "Kano": 2800, "Katsina": 2800, "Kebbi": 2800, "Sokoto": 2800, "Zamfara": 2800,
-  "Jigawa": 2800, "Bauchi": 2800, "Gombe": 2800, "Adamawa": 2800, "Taraba": 2800,
+  "Jigawa": 2800, "Bauchi": 2800, "Gombe": 0, "Adamawa": 2800, "Taraba": 2800,
   "Borno": 2800, "Yobe": 2800
 };
 const DEFAULT_SHIPPING_FEE = 2500;
