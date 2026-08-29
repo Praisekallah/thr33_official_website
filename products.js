@@ -178,7 +178,7 @@ const PRODUCTS = [
     id: "thr33-peach-graphic-tee",
     name: "Thr33 Peach Graphic Tee",
     sku: "THR-Pch-grph-top",
-    price: 50,
+    price: 25000,
     originalPrice: 35000,
     badges: ["Live"],
     category: "tee",
