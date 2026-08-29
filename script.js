@@ -144,12 +144,7 @@ let stockLevels = {};
 
 async function fetchStock() {
   try {
-    const res = await fetch("/api/track-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reference })
-   });
-     
+    const res = await fetch("/api/track-order");
     const data = await res.json();
     stockLevels = data.stock || {};
   } catch (err) {
@@ -652,7 +647,12 @@ if (trackForm) {
     trackResultEl.style.display = "none";
 
     try {
-      const res = await fetch(`/api/track-order?reference=${encodeURIComponent(reference)}`);
+      const res = await fetch("/api/track-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference })
+      });
+       
       const data = await res.json();
 
       trackResultEl.style.display = "block";
