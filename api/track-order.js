@@ -50,7 +50,8 @@ module.exports = async (req, res) => {
       amount: naira(order.amount),
       date: order.paid_at || order.created_at,
       items: itemsVal,
-      address: get("address")
+      address: get("address"),
+      fullName: get("full_name")
     });
   } catch (err) {
     return res.status(500).json({ found: false, error: "Lookup failed" });
