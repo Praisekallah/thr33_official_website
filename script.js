@@ -25,7 +25,7 @@ const SHIPPING_RATES = {
   "Jigawa": 2800, "Bauchi": 2800, "Gombe": 0, "Adamawa": 2800, "Taraba": 2800,
   "Borno": 2800, "Yobe": 2800
 };
-const DEFAULT_SHIPPING_FEE = 0;
+const DEFAULT_SHIPPING_FEE = 2500;
 
 function getShippingFee(state) {
   return SHIPPING_RATES[state] || DEFAULT_SHIPPING_FEE;
