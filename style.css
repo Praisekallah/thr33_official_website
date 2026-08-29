@@ -455,11 +455,11 @@ img { max-width: 100%; display: block; }
   border-radius: var(--radius);
 }
 .size-btn.selected {
-  background: var(--ink);
-  color: var(--cream);
-  border-color: var(--ink);
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  font-weight: 700;
 }
-
 /* ---------- About ---------- */
 /*
 .about { padding: 96px 0; background: var(--green-deep); color: var(--cream); }
