@@ -153,6 +153,7 @@ function buildOrderEmailHtml(order) {
       <h2 style="margin-bottom:4px;">New order — ${naira(order.amount)}</h2>
       <p style="color:#666;margin-top:0;">Reference: ${order.reference}</p>
       <p style="color:#666;">Customer email: ${order.customer && order.customer.email}</p>
+      ${order.loyaltyMilestone ? `<p style="background:#3f4f34;color:#f2ead3;padding:10px;border-radius:4px;font-weight:700;">${order.loyaltyMilestone}</p>` : ""}
       <table style="border-collapse:collapse;width:100%;margin-top:16px;">
         ${rows}
       </table>
@@ -286,7 +287,6 @@ module.exports = async (req, res) => {
       const isFirstTime = await markProcessedOnce(order.reference);
 
       await decrementStock(items);
-      await sendOrderEmail(order);
 
       if (isFirstTime) {
         await sendCustomerEmail(order);
@@ -296,8 +296,13 @@ module.exports = async (req, res) => {
           const isTeeMilestone = count % 10 === 0;
           const teeCode = isTeeMilestone ? await issueRewardCode(email, count) : null;
           await sendRewardEmail(email, count, teeCode);
+          order.loyaltyMilestone = isTeeMilestone
+            ? "🎁 10th order — free tee unlocked"
+            : "🏅 5th order — TRIBE patch unlocked";
         }
       }
+
+      await sendOrderEmail(order);
 
       return res.status(200).json({
         verified: true,
