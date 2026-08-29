@@ -149,8 +149,7 @@ async function fetchStock() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reference })
    });
-const data = await res.json();
-
+     
     const data = await res.json();
     stockLevels = data.stock || {};
   } catch (err) {
