@@ -284,7 +284,7 @@ function renderQuickAdd(product) {
       <p class="qa-desc">${product.description || ''}</p>
       ${swatches}
       ${isComingSoon ? '' : (remaining !== undefined
-        ? (remaining <= 0
+        ? (soldOut
             ? `<p class="qa-stock qa-stock-out">Sold out</p>`
             : `<p class="qa-stock">${remaining} in stock</p>`)
         : '')}
