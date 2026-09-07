@@ -1,13 +1,10 @@
 // Vercel Serverless Function.
 // Returns current stock levels for every active product, reading from
-// Upstash Redis. If a product has never been touched before, it gets
-// initialized to INITIAL_STOCK the first time it's read.
-
-const PRODUCT_IDS = [
-  "jorts-black",
-  "rose-female-ls",
-  "rose-unisex"
-];
+// Upstash Redis. Product IDs are now pulled directly from products.js,
+// so adding a new product there automatically shows up here too —
+// no manual list to maintain.
+const { PRODUCTS } = require("../products.js");
+const PRODUCT_IDS = PRODUCTS.map(p => p.id);
 
 const INITIAL_STOCK = 20; // change this number to adjust the starting stock for every product
 
@@ -27,7 +24,6 @@ module.exports = async (req, res) => {
     PRODUCT_IDS.forEach(id => (fallback[id] = INITIAL_STOCK));
     return res.status(200).json({ stock: fallback });
   }
-
   try {
     const stock = {};
     await Promise.all(
