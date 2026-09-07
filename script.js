@@ -144,7 +144,7 @@ let stockLevels = {};
 
 async function fetchStock() {
   try {
-    const res = await fetch("/api/track-order");
+    const res = await fetch("/api/get-stock");
     const data = await res.json();
     stockLevels = data.stock || {};
   } catch (err) {
@@ -283,6 +283,11 @@ function renderQuickAdd(product) {
       <p class="qa-price">${naira(product.price)}</p>
       <p class="qa-desc">${product.description || ''}</p>
       ${swatches}
+      ${isComingSoon ? '' : (remaining !== undefined
+        ? (remaining <= 0
+            ? `<p class="qa-stock qa-stock-out">Sold out</p>`
+            : `<p class="qa-stock">${remaining} in stock</p>`)
+        : '')}
       <div class="product-sizes-row">
         <div class="product-sizes" id="qaSizes">
           ${(product.sizes || []).map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
