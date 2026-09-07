@@ -180,6 +180,7 @@ const PRODUCTS = [
     sku: "THR-Pch-grph-top",
     price: 25000,
     originalPrice: 35000,
+    outOfStock: true,
     badges: ["Live"],
     category: "tee",
     sizes: ["S", "M", "L", "XL"],
