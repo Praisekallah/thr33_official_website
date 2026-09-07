@@ -820,6 +820,16 @@ img { max-width: 100%; display: block; }
   margin: 8px 0 0;
 }
 
+.qa-stock {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  color: var(--gold);
+  margin: 10px 0 0;
+}
+.qa-stock-out {
+  color: #ef4444;
+}
+
 .pd-sticky-add {
   background: var(--cream);
   border-top: 1px solid var(--line);
