@@ -198,3 +198,9 @@ const PRODUCTS = [
     description: "Boxy Thr33 Peach-colored graphic Tee."
   }
 ];
+// Allow this file to be shared with server-side code (Vercel functions)
+// without breaking browser usage. Browsers ignore this block since
+// `module` doesn't exist there — only Node (your API functions) sees it.
+if (typeof module !== "undefined") {
+  module.exports = { PRODUCTS, CATEGORIES };
+}
