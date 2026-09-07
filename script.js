@@ -175,7 +175,7 @@ function renderProducts() {
     const backImg = images[1] || frontImg;
 
     const remaining = stockLevels[p.id];
-    const soldOut = remaining !== undefined && remaining <= 0;
+    const soldOut = Boolean(p.outOfStock) || (remaining !== undefined && remaining <= 0);
     const lowStock = remaining !== undefined && remaining > 0 && remaining <= 5;
     const isComingSoon = Boolean(p.comingSoon);
 
@@ -248,7 +248,7 @@ function renderQuickAdd(product) {
   const color = (product.colors && product.colors[quickAddColorIdx]) || (product.colors && product.colors[0]) || {};
   const images = (color.images && color.images.length > 0) ? color.images : [FALLBACK_IMAGE];
   const remaining = stockLevels[product.id];
-  const soldOut = (remaining !== undefined && remaining <= 0);
+  const soldOut = Boolean(product.outOfStock) || (remaining !== undefined && remaining <= 0);
   const isComingSoon = Boolean(product.comingSoon);
 
   const swatches = (product.colors && product.colors.length > 1)
