@@ -148,11 +148,21 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 10px;
 }
-.currency-toggle {
-  display: flex;
+.currency-select {
+  background: transparent;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  overflow: hidden;
+  color: var(--gold);
+  padding: 9px 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.currency-select option {
+  background: var(--ink);
+  color: var(--cream);
 }
 .currency-btn {
   background: transparent;
