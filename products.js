@@ -122,8 +122,8 @@ const PRODUCTS = [
         name: "White",
         hex: "#f5f3ec",
         images: [
-          "assets/thr33 wise Monkeys - front.png",
-          "assets/thr33 wise Monkeys - back.png"
+          "assets/Thr33-wise-Monkeys-front.png",
+          "assets/Thr33-wise-Monkeys-back.png"
         ]
       }
     ],
