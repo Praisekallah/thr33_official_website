@@ -35,11 +35,11 @@
     </nav>
 
     <div class="header-actions">
-      <div class="currency-toggle" id="currencyToggle" role="group" aria-label="Currency">
-        <button type="button" class="currency-btn" data-currency="NGN">₦</button>
-        <button type="button" class="currency-btn" data-currency="USD">$</button>
-        <button type="button" class="currency-btn" data-currency="EUR">€</button>
-      </div>
+      <select id="currencySelect" class="currency-select" aria-label="Currency">
+        <option value="NGN">₦ NGN</option>
+        <option value="USD">$ USD</option>
+        <option value="EUR">€ EUR</option>
+      </select>
       <button type="button" class="track-order-btn" data-role="track-order-open" aria-label="Track your order">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <circle cx="12" cy="12" r="9" />
