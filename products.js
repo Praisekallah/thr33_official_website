@@ -107,6 +107,28 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   },
+    {
+    id: "3-wise-monkeys",
+    name: "3 Wise Monkeys T",
+    sku: "T3-3WM",
+    price: 15000,
+    originalPrice: 20000,
+    badges: ["Coming Soon"],
+    comingSoon: true,
+    category: "tee",
+    sizes: ["M", "L", "XL"],
+    colors: [
+      {
+        name: "White",
+        hex: "#f5f3ec",
+        images: [
+          "assets/thr33 wise Monkeys - front.png",
+          "assets/thr33 wise Monkeys - back.png"
+        ]
+      }
+    ],
+    description: "3-Wise Monkeys Tee with black round neck and description on the back."
+  },
   {
     id: "t3-basic-tee",
     name: "T3 Basic Tee",
@@ -172,7 +194,7 @@ const PRODUCTS = [
         ]
       }
     ],
-    description: "Comfy girls' crop top."
+    description: "loose girls' crop top."
   },
   {
     id: "thr33-peach-graphic-tee",
