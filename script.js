@@ -293,7 +293,6 @@ function renderQuickAdd(product) {
           ${(product.sizes || []).map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
         </div>
       </div>
-      <p class="delivery-note">🚚 Lagos &amp; Abuja: 2–4 days &nbsp;·&nbsp; Other states: 4–7 days</p>
     </div>
   `;
 
