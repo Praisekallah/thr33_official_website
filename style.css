@@ -148,7 +148,32 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 10px;
 }
-
+.currency-toggle {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.currency-btn {
+  background: transparent;
+  border: none;
+  color: var(--gold);
+  padding: 9px 11px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+.currency-btn.active {
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 700;
+}
+.currency-note {
+  font-size: 0.72rem;
+  color: rgba(23,23,15,0.55);
+  text-align: center;
+  margin: -4px 0 0;
+}
 .track-order-btn {
   display: flex;
   align-items: center;
