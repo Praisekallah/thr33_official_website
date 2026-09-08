@@ -60,13 +60,9 @@ function formatMoney(nairaAmount) {
 function setCurrency(code) {
   currentCurrency = code;
   localStorage.setItem("three_currency", code);
-  document.querySelectorAll(".currency-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.currency === code);
-  });
   renderProducts();
   renderCart();
 }
-
 document.querySelectorAll(".currency-btn").forEach(btn => {
   btn.classList.toggle("active", btn.dataset.currency === currentCurrency);
   btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
@@ -665,10 +661,11 @@ function closeTrackModal() {
   if (trackOverlay) trackOverlay.classList.remove("open");
 }
 
-document.querySelectorAll('[data-role="track-order-open"]').forEach(btn => {
-  btn.addEventListener("click", openTrackModal);
-});
-
+const currencySelect = document.getElementById("currencySelect");
+if (currencySelect) {
+  currencySelect.value = currentCurrency;
+  currencySelect.addEventListener("change", () => setCurrency(currencySelect.value));
+};
 if (trackCloseBtn) trackCloseBtn.addEventListener("click", closeTrackModal);
 if (trackOverlay) {
   trackOverlay.addEventListener("click", (e) => {
