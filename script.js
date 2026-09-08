@@ -32,6 +32,45 @@ function getShippingFee(state) {
 }
 
 const naira = (n) => "₦" + (n || 0).toLocaleString("en-NG");
+// ---------------- Currency toggle (display only — checkout always charges NGN) ----------------
+let currentCurrency = localStorage.getItem("three_currency") || "NGN";
+let exchangeRates = { NGN: 1, USD: 0.00067, EUR: 0.00062 }; // rough fallback if the live rate fetch fails
+
+async function fetchExchangeRates() {
+  try {
+    const res = await fetch("https://api.exchangerate-api.com/v4/latest/NGN");
+    const data = await res.json();
+    if (data && data.rates && data.rates.USD && data.rates.EUR) {
+      exchangeRates = { NGN: 1, USD: data.rates.USD, EUR: data.rates.EUR };
+    }
+  } catch (err) {
+    // keep fallback rates above if the live fetch fails
+  }
+}
+
+const CURRENCY_SYMBOLS = { NGN: "₦", USD: "$", EUR: "€" };
+
+function formatMoney(nairaAmount) {
+  const amount = nairaAmount || 0;
+  if (currentCurrency === "NGN") return naira(amount);
+  const converted = amount * exchangeRates[currentCurrency];
+  return CURRENCY_SYMBOLS[currentCurrency] + converted.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function setCurrency(code) {
+  currentCurrency = code;
+  localStorage.setItem("three_currency", code);
+  document.querySelectorAll(".currency-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.currency === code);
+  });
+  renderProducts();
+  renderCart();
+}
+
+document.querySelectorAll(".currency-btn").forEach(btn => {
+  btn.classList.toggle("active", btn.dataset.currency === currentCurrency);
+  btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
+});
 
 // ---------------- Helper Toast ----------------
 function showToast(msg) {
@@ -192,11 +231,11 @@ function renderProducts() {
     const discountPct = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
     const discountRow = p.originalPrice
       ? `<div class="price-discount-row">
-          <span class="product-price">${naira(p.price)}</span>
-          <span class="price-was">${naira(p.originalPrice)}</span>
+          <span class="product-price">${formatMoney(p.price)}</span>
+          <span class="price-was">${formatMoney(p.originalPrice)}</span>
           <span class="price-discount">-${discountPct}%</span>
         </div>`
-      : `<span class="product-price">${naira(p.price)}</span>`;
+      : `<span class="product-price">${formatMoney(p.price)}</span>`;
 
     return `
     <div class="product-card ${soldOut ? 'is-sold-out' : ''} ${isComingSoon ? 'coming-soon' : ''}" data-id="${p.id}">
@@ -280,7 +319,7 @@ function renderQuickAdd(product) {
     ${dots}
     <div class="pd-details">
       <p class="qa-name">${product.name}</p>
-      <p class="qa-price">${naira(product.price)}</p>
+      <p class="qa-price">${formatMoney(product.price)}</p>
       <p class="qa-desc">${product.description || ''}</p>
       ${swatches}
       ${isComingSoon ? '' : (remaining !== undefined
@@ -366,7 +405,7 @@ function renderCart() {
   const subtotalEl = document.getElementById("cartSubtotal");
 
   if (countEl) countEl.textContent = cart.reduce((n, i) => n + i.qty, 0);
-  if (subtotalEl) subtotalEl.textContent = naira(cartSubtotal());
+  if (subtotalEl) subtotalEl.textContent = formatMoney(cartSubtotal());
 
   if (!itemsEl) return;
 
@@ -380,7 +419,7 @@ function renderCart() {
       <img src="${item.image}" alt="${item.name}" onerror="handleImgError(this)" />
       <div>
         <p class="cart-item-name">${item.name}</p>
-        <p class="cart-item-meta">Size ${item.size}${item.colorName ? ' · ' + item.colorName : ''} · ${naira(item.price)}</p>
+        <p class="cart-item-meta">Size ${item.size}${item.colorName ? ' · ' + item.colorName : ''} · ${formatMoney(item.price)}</p>
         <div class="cart-item-qty">
           <button class="qty-btn" data-action="dec" data-idx="${idx}">−</button>
           <span style="min-width:16px; text-align:center; font-weight:600; color:var(--ink);">${item.qty}</span>
@@ -692,6 +731,7 @@ if (trackForm) {
 }
 
 // Initial renders
+fetchExchangeRates();
 renderFilters();
 fetchStock();
 renderCart();
