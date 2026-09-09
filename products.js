@@ -144,8 +144,8 @@ const PRODUCTS = [
         name: "Black",
         hex: "#17170f",
         images: [
-          "assets/Thr33-white-round-kneck-front.png",
-          "assets/Thr33-white-round-kneck-back.png"
+          "assets/Thr33-white-round-neck-front.png",
+          "assets/Thr33-white-round-neck-back.png"
         ]
       }
     ],
