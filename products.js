@@ -107,7 +107,7 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   },
-    {
+  {
     id: "3-wise-monkeys",
     name: "3 Wise Monkeys T",
     sku: "T3-3WM",
@@ -128,6 +128,28 @@ const PRODUCTS = [
       }
     ],
     description: "3-Wise Monkeys Tee with black round neck and description on the back."
+  },
+  {
+    id: "Thr33-black-ringer-tee",
+    name: "Thr33 black ringer tee",
+    sku: "T3-RT",
+    price: 15000,
+    originalPrice: 20000,
+    badges: ["Coming Soon"],
+    comingSoon: true,
+    category: "tee",
+    sizes: ["M", "L", "XL"],
+    colors: [
+      {
+        name: "Black",
+        hex: "#17170f",
+        images: [
+          "assets/Thr33-white-round-kneck-front.png",
+          "assets/Thr33-white-round-kneck-back.png"
+        ]
+      }
+    ],
+    description: "Thr33 black ringer tee."
   },
   {
     id: "t3-basic-tee",
