@@ -129,7 +129,7 @@ const PRODUCTS = [
     ],
     description: "3-Wise Monkeys Tee with black round neck and description on the back."
   },
-  {
+/*  {
     id: "Thr33-black-ringer-tee",
     name: "Thr33 black ringer tee",
     sku: "T3-RT",
@@ -150,7 +150,7 @@ const PRODUCTS = [
       }
     ],
     description: "Thr33 black ringer tee."
-  },
+  }, */
   {
     id: "t3-basic-tee",
     name: "T3 Basic Tee",
