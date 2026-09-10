@@ -123,6 +123,14 @@ function openSubscribeModal() { if (subscribeOverlay) subscribeOverlay.classList
 function closeSubscribeModal() { if (subscribeOverlay) subscribeOverlay.classList.remove("open"); }
 
 if (joinTribeBtn) joinTribeBtn.addEventListener("click", openSubscribeModal);
+// Auto-show the subscribe popup once per visit (not every page load,
+// so people aren't nagged repeatedly in the same session)
+if (subscribeOverlay && !sessionStorage.getItem("three_subscribe_shown")) {
+  setTimeout(() => {
+    openSubscribeModal();
+    sessionStorage.setItem("three_subscribe_shown", "1");
+  }, 800); // small delay so it doesn't feel jarring on page load
+}
 const subscribeCloseBtn = document.getElementById("subscribeClose");
 if (subscribeCloseBtn) subscribeCloseBtn.addEventListener("click", closeSubscribeModal);
 if (subscribeOverlay) {
