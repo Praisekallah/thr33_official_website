@@ -27,6 +27,17 @@ const SHIPPING_RATES = {
 };
 const DEFAULT_SHIPPING_FEE = 2500;
 
+// ---- Drop Mode config ----
+const DROP_MODE = false; // flip to true when you're ready to lock the shop for a drop
+const DROP_DATE = "2026-12-25T18:00:00Z"; // update this before every drop (UTC time)
+
+// ---- Discount codes (influencer / subscriber codes) ----
+const DISCOUNT_CODES = {
+  "SOPHIA20": 20,
+  "TRIBE10": 10
+};
+let appliedDiscountPct = 0;
+
 function getShippingFee(state) {
   return SHIPPING_RATES[state] || DEFAULT_SHIPPING_FEE;
 }
@@ -75,6 +86,56 @@ function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 3500);
+}
+// ---------------- Subscribe (Brevo) ----------------
+async function submitSubscribe(email, resultEl, submitBtn) {
+  if (!email || !email.includes("@")) {
+    resultEl.textContent = "Enter a valid email address.";
+    return;
+  }
+  const originalLabel = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Joining...";
+  try {
+    const res = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    resultEl.textContent = data.success
+      ? "You're on the list. Keep an eye on your inbox."
+      : "Something went wrong — try again in a moment.";
+  } catch (err) {
+    resultEl.textContent = "Network error — try again in a moment.";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalLabel;
+  }
+}
+
+const subscribeOverlay = document.getElementById("subscribeOverlay");
+const subscribeForm = document.getElementById("subscribeForm");
+const subscribeResult = document.getElementById("subscribeResult");
+const joinTribeBtn = document.getElementById("joinTribeBtn");
+
+function openSubscribeModal() { if (subscribeOverlay) subscribeOverlay.classList.add("open"); }
+function closeSubscribeModal() { if (subscribeOverlay) subscribeOverlay.classList.remove("open"); }
+
+if (joinTribeBtn) joinTribeBtn.addEventListener("click", openSubscribeModal);
+const subscribeCloseBtn = document.getElementById("subscribeClose");
+if (subscribeCloseBtn) subscribeCloseBtn.addEventListener("click", closeSubscribeModal);
+if (subscribeOverlay) {
+  subscribeOverlay.addEventListener("click", (e) => {
+    if (e.target === subscribeOverlay) closeSubscribeModal();
+  });
+}
+if (subscribeForm) {
+  subscribeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = new FormData(subscribeForm).get("email");
+    submitSubscribe(email, subscribeResult, document.getElementById("subscribeSubmit"));
+  });
 }
 
 // Set dynamic copyright year
@@ -461,16 +522,22 @@ const checkoutEmailInput = document.querySelector('#checkoutForm input[name="ema
 const loyaltyProgressEl = document.getElementById("loyaltyProgress");
 
 function updateCheckoutTotals() {
-  const subtotal = cartSubtotal();
+  const rawSubtotal = cartSubtotal();
+  const discountAmount = Math.round(rawSubtotal * (appliedDiscountPct / 100));
+  const subtotal = rawSubtotal - discountAmount;
   const state = stateSelect ? stateSelect.value : "";
   const shipping = state ? getShippingFee(state) : 0;
   const total = subtotal + shipping;
 
   const subEl = document.getElementById("checkoutSubtotal");
+  const discRowEl = document.getElementById("checkoutDiscountRow");
+  const discEl = document.getElementById("checkoutDiscount");
   const shipEl = document.getElementById("checkoutShipping");
   const totEl = document.getElementById("checkoutTotal");
 
-  if (subEl) subEl.textContent = naira(subtotal);
+  if (subEl) subEl.textContent = naira(rawSubtotal);
+  if (discRowEl) discRowEl.style.display = discountAmount > 0 ? "flex" : "none";
+  if (discEl) discEl.textContent = "-" + naira(discountAmount);
   if (shipEl) shipEl.textContent = state ? naira(shipping) : "Select a state";
   if (totEl) totEl.textContent = naira(total);
 
@@ -617,6 +684,7 @@ if (checkoutForm) {
             if (result.verified) {
               cart = [];
               saveCart();
+              appliedDiscountPct = 0;
               closeCheckout();
               form.reset();
               openSuccessModal({ reference: response.reference, totalAmount: total, email: email });
@@ -723,6 +791,75 @@ if (trackForm) {
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = "Check Status";
+    }
+  });
+}
+
+// ---------------- Drop Mode lock screen ----------------
+const dropLock = document.getElementById("dropLock");
+
+function unlockDrop() {
+  if (dropLock) dropLock.classList.add("hidden");
+  sessionStorage.setItem("three_drop_unlocked", "1");
+}
+
+if (dropLock) {
+  const alreadyUnlocked = sessionStorage.getItem("three_drop_unlocked") === "1";
+  const dropHasArrived = new Date() >= new Date(DROP_DATE);
+
+  if (!DROP_MODE || alreadyUnlocked || dropHasArrived) {
+    dropLock.classList.add("hidden");
+  } else {
+    function updateCountdown() {
+      const diff = new Date(DROP_DATE) - new Date();
+      if (diff <= 0) { unlockDrop(); return; }
+      const pad = n => String(n).padStart(2, "0");
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff / 3600000) % 24);
+      const mins = Math.floor((diff / 60000) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = pad(val); };
+      set("cdDays", days); set("cdHours", hours); set("cdMins", mins); set("cdSecs", secs);
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+}
+
+const dropSubscribeForm = document.getElementById("dropSubscribeForm");
+const dropSubscribeResult = document.getElementById("dropSubscribeResult");
+if (dropSubscribeForm) {
+  dropSubscribeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = new FormData(dropSubscribeForm).get("email");
+    submitSubscribe(email, dropSubscribeResult, dropSubscribeForm.querySelector("button"));
+  });
+}
+
+const dropPasswordForm = document.getElementById("dropPasswordForm");
+const dropPasswordResult = document.getElementById("dropPasswordResult");
+if (dropPasswordForm) {
+  dropPasswordForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const entered = new FormData(dropPasswordForm).get("password");
+    const btn = dropPasswordForm.querySelector("button");
+    btn.disabled = true;
+    try {
+      const res = await fetch("/api/check-drop-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: entered })
+      });
+      const data = await res.json();
+      if (data.correct) {
+        unlockDrop();
+      } else {
+        dropPasswordResult.textContent = "That password isn't right — check your email.";
+      }
+    } catch (err) {
+      dropPasswordResult.textContent = "Network error — try again.";
+    } finally {
+      btn.disabled = false;
     }
   });
 }
