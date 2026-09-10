@@ -815,9 +815,8 @@ if (dropLock) {
   const alreadyUnlocked = sessionStorage.getItem("three_drop_unlocked") === "1";
   const dropHasArrived = new Date() >= new Date(DROP_DATE);
 
-  if (!DROP_MODE || alreadyUnlocked || dropHasArrived) {
-    dropLock.classList.add("hidden");
-  } else {
+  if (DROP_MODE && !alreadyUnlocked && !dropHasArrived) {
+    dropLock.classList.remove("hidden");
     function updateCountdown() {
       const diff = new Date(DROP_DATE) - new Date();
       if (diff <= 0) { unlockDrop(); return; }
