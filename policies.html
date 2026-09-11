@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/logo-monogram.png">
+<title>THR33 — Privacy & Refund Policy</title>
+<meta name="description" content="THR33 privacy policy and refund policy." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand-mark" aria-label="THREE home">
+      <img src="assets/logo-monogram.png" alt="" class="brand-mono" />
+    </a>
+    <nav class="main-nav">
+      <a href="shop.html#shop">Shop</a>
+      <a href="shop.html#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="policy-page">
+  <div class="wrap">
+    <div class="policy-tabs" role="tablist" aria-label="Policy sections">
+      <button type="button" class="policy-tab active" id="tabRefund" role="tab" aria-selected="true">Refund Policy</button>
+      <button type="button" class="policy-tab" id="tabPrivacy" role="tab" aria-selected="false">Privacy Policy</button>
+    </div>
+
+    <div class="policy-panel active" id="panelRefund" role="tabpanel">
+      <h2>Refund &amp; Returns Policy</h2>
+      <p class="policy-updated">Last updated: <span id="refundDate"></span></p>
+
+      <h3>Return Window</h3>
+      <p>If there's a sizing or quality issue with your order, reach out to us within <strong>48 hours of delivery</strong> and we'll sort a swap or refund.</p>
+
+      <h3>Non-Refundable Items</h3>
+      <p>The following are final sale and cannot be returned, exchanged, or refunded:</p>
+      <ul>
+        <li>Presale items</li>
+        <li>Custom-size orders</li>
+      </ul>
+
+      <h3>Return Shipping</h3>
+      <p>If a return is approved, the customer is responsible for covering the cost of return shipping.</p>
+
+      <h3>Refund Method</h3>
+      <p>Approved refunds are issued back to your original payment method — the same card or channel you used to pay.</p>
+
+      <h3>How to Start a Return</h3>
+      <p>Message us on <a href="https://wa.me/2347063467013" target="_blank" rel="noopener">WhatsApp</a> or email <a href="mailto:thr33enterprise@gmail.com">thr33enterprise@gmail.com</a> with your order reference and the issue — we'll take it from there.</p>
+    </div>
+
+    <div class="policy-panel" id="panelPrivacy" role="tabpanel">
+      <h2>Privacy Policy</h2>
+      <p class="policy-updated">Last updated: <span id="privacyDate"></span></p>
+
+      <h3>What We Collect</h3>
+      <p>When you place an order, we collect your name, email, phone number, and delivery address. This information is used <strong>solely to process and deliver your order</strong> — nothing more.</p>
+
+      <h3>Payment Information</h3>
+      <p>Payments are processed securely by <strong>Paystack</strong> (and Stripe, for international orders). THR33 never sees or stores your card details at any point — that information goes directly to our payment processors.</p>
+
+      <h3>Email &amp; Newsletter</h3>
+      <p>If you subscribe to THR33 TRIBE for early access and drop updates, your email is managed through <strong>Brevo</strong>, our email service provider. You can unsubscribe at any time via the link in any email we send.</p>
+
+      <h3>Cookies</h3>
+      <p>THR33 does not use tracking cookies.</p>
+
+      <h3>Questions</h3>
+      <p>If you have any questions about how your information is handled, reach out at <a href="mailto:thr33enterprise@gmail.com">thr33enterprise@gmail.com</a>.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <img src="assets/logo-monogram.png" alt="THREE" class="footer-mono" />
+    <p>&copy; <span id="year"></span> THR33. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="shop.html">Back to Shop</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  const todayStr = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  document.getElementById("refundDate").textContent = todayStr;
+  document.getElementById("privacyDate").textContent = todayStr;
+
+  const tabRefund = document.getElementById("tabRefund");
+  const tabPrivacy = document.getElementById("tabPrivacy");
+  const panelRefund = document.getElementById("panelRefund");
+  const panelPrivacy = document.getElementById("panelPrivacy");
+
+  function showTab(tab) {
+    const showRefund = tab === "refund";
+    tabRefund.classList.toggle("active", showRefund);
+    tabPrivacy.classList.toggle("active", !showRefund);
+    tabRefund.setAttribute("aria-selected", showRefund);
+    tabPrivacy.setAttribute("aria-selected", !showRefund);
+    panelRefund.classList.toggle("active", showRefund);
+    panelPrivacy.classList.toggle("active", !showRefund);
+  }
+
+  tabRefund.addEventListener("click", () => showTab("refund"));
+  tabPrivacy.addEventListener("click", () => showTab("privacy"));
+</script>
+
+</body>
+</html>
