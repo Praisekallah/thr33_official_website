@@ -737,6 +737,10 @@ function closeTrackModal() {
   if (trackOverlay) trackOverlay.classList.remove("open");
 }
 
+document.querySelectorAll('[data-role="track-order-open"]').forEach(btn => {
+  btn.addEventListener("click", openTrackModal);
+});
+
 const currencySelect = document.getElementById("currencySelect");
 if (currencySelect) {
   currencySelect.value = currentCurrency;
