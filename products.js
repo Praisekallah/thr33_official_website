@@ -47,7 +47,7 @@ const PRODUCTS = [
     id: "jorts-black",
     name: "Thr33 Denim Jorts",
     sku: "TH-JORTS-BLK",
-    price: 35000,
+    price: 25000,
     originalPrice: 35000,
     badges: ["Coming Soon"],
     comingSoon: true,
@@ -69,7 +69,7 @@ const PRODUCTS = [
     id: "rose-female-ls",
     name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
     sku: "TH-ROSE-LS-BLK",
-    price: 45000,
+    price: 25000,
     badges: ["Coming Soon"],
     comingSoon: true,
     category: "long-sleeve",
@@ -90,7 +90,7 @@ const PRODUCTS = [
     id: "rose-unisex",
     name: "Rose From the Concrete Boxy Tee — Unisex",
     sku: "TH-ROSE-UNI-BLK",
-    price: 45000,
+    price: 25000,
     badges: ["Coming Soon"],
     comingSoon: true,
     category: "tee",
@@ -107,7 +107,7 @@ const PRODUCTS = [
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   },
-  {
+  /*{
     id: "3-wise-monkeys",
     name: "3 Wise Monkeys T",
     sku: "T3-3WM",
@@ -128,7 +128,7 @@ const PRODUCTS = [
       }
     ],
     description: "3-Wise Monkeys Tee with black round neck and description on the back."
-  },
+  },*/
 /*  {
     id: "Thr33-black-ringer-tee",
     name: "Thr33 black ringer tee",
@@ -187,7 +187,7 @@ const PRODUCTS = [
   },
   {
     id: "thr33-crop-top",
-    name: "Thr33 girls Crop Top",
+    name: "Thr33 baggy girls Crop Top",
     sku: "TH-crop-top",
     price: 25000,
     originalPrice: 35000,
