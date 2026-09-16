@@ -457,7 +457,6 @@ quickAddBody.querySelectorAll(".swatch").forEach(btn => {
   }
 
   const addBtn = document.getElementById("qaAddBtn");
-  const addBtn = document.getElementById("qaAddBtn");
   if (addBtn && !addBtn.disabled) {
     addBtn.addEventListener("click", () => {
       const selectedSize = quickAddBody.querySelector(".size-btn.selected");
