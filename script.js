@@ -340,6 +340,24 @@ function openQuickAdd(product) {
 function closeQuickAdd() {
   if (quickAddOverlay) quickAddOverlay.classList.remove("open");
 }
+// ---------------- Size Guide modal ----------------
+const sizeGuideOverlay = document.getElementById("sizeGuideOverlay");
+const sizeGuideCropNote = document.getElementById("sizeGuideCropNote");
+
+function openSizeGuide(isCrop) {
+  if (sizeGuideCropNote) sizeGuideCropNote.style.display = isCrop ? "block" : "none";
+  if (sizeGuideOverlay) sizeGuideOverlay.classList.add("open");
+}
+function closeSizeGuide() {
+  if (sizeGuideOverlay) sizeGuideOverlay.classList.remove("open");
+}
+const sizeGuideCloseBtn = document.getElementById("sizeGuideClose");
+if (sizeGuideCloseBtn) sizeGuideCloseBtn.addEventListener("click", closeSizeGuide);
+if (sizeGuideOverlay) {
+  sizeGuideOverlay.addEventListener("click", (e) => {
+    if (e.target === sizeGuideOverlay) closeSizeGuide();
+  });
+}
 const qaCloseBtn = document.getElementById("quickAddClose");
 if (qaCloseBtn) qaCloseBtn.addEventListener("click", closeQuickAdd);
 if (quickAddOverlay) {
@@ -396,6 +414,7 @@ function renderQuickAdd(product) {
         <div class="product-sizes" id="qaSizes">
           ${(product.sizes || []).map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
         </div>
+        ${product.category !== "shorts" ? `<button type="button" class="size-guide-link" id="qaSizeGuideBtn">Size Guide</button>` : ""}
       </div>
     </div>
   `;
@@ -431,7 +450,13 @@ quickAddBody.querySelectorAll(".swatch").forEach(btn => {
       btn.classList.add("selected");
     });
   });
+  
+  const sizeGuideBtn = document.getElementById("qaSizeGuideBtn");
+  if (sizeGuideBtn) {
+    sizeGuideBtn.addEventListener("click", () => openSizeGuide(false));
+  }
 
+  const addBtn = document.getElementById("qaAddBtn");
   const addBtn = document.getElementById("qaAddBtn");
   if (addBtn && !addBtn.disabled) {
     addBtn.addEventListener("click", () => {
