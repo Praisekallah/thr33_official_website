@@ -28,7 +28,7 @@ const SHIPPING_RATES = {
 const DEFAULT_SHIPPING_FEE = 2500;
 
 // ---- Drop Mode config ----
-const DROP_MODE = false; // flip to true when you're ready to lock the shop for a drop
+const DROP_MODE = true; // flip to true when you're ready to lock the shop for a drop
 const DROP_DATE = "2026-12-25T18:00:00Z"; // update this before every drop (UTC time)
 
 // ---- Discount codes (influencer / subscriber codes) ----
