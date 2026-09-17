@@ -469,10 +469,12 @@ img { max-width: 100%; display: block; }
   font-size: 11px;
   letter-spacing: 0.03em;
   text-decoration: underline;
-  color: rgba(23,23,15,0.55);
+  color: var(--gold);
   cursor: pointer;
   white-space: nowrap;
 }
+.size-guide-link:hover { color: var(--cream); }
+
 .size-guide-link:hover { color: var(--ink); }
 .delivery-note {
   font-size: 0.75rem;
