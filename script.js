@@ -29,7 +29,7 @@ const DEFAULT_SHIPPING_FEE = 2500;
 
 // ---- Drop Mode config ----
 // ---- Drop Mode config ----
-const DROP_MODE = true; // flip to true when you're ready to lock the shop for a drop
+const DROP_MODE = false; // flip to true when you're ready to lock the shop for a drop
 const DROP_START = "2026-09-17T18:00:00Z"; // lock engages at this exact time (UTC)
 const DROP_DATE = "2026-09-25T18:00:00Z"; // countdown end / reveal time (UTC)
 
