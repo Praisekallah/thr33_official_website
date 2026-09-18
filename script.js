@@ -28,8 +28,10 @@ const SHIPPING_RATES = {
 const DEFAULT_SHIPPING_FEE = 2500;
 
 // ---- Drop Mode config ----
+// ---- Drop Mode config ----
 const DROP_MODE = true; // flip to true when you're ready to lock the shop for a drop
-const DROP_DATE = "2026-09-18T18:00:00Z"; // update this before every drop (UTC time)
+const DROP_START = "2026-09-17T18:00:00Z"; // lock engages at this exact time (UTC)
+const DROP_DATE = "2026-09-25T18:00:00Z"; // countdown end / reveal time (UTC)
 
 // ---- Discount codes (influencer / subscriber codes) ----
 const DISCOUNT_CODES = {
@@ -842,8 +844,9 @@ function unlockDrop() {
 if (dropLock) {
   const alreadyUnlocked = sessionStorage.getItem("three_drop_unlocked") === "1";
   const dropHasArrived = new Date() >= new Date(DROP_DATE);
+  const lockHasStarted = new Date() >= new Date(DROP_START);
 
-  if (DROP_MODE && !alreadyUnlocked && !dropHasArrived) {
+  if (DROP_MODE && lockHasStarted && !alreadyUnlocked && !dropHasArrived) {
     dropLock.classList.remove("hidden");
     function updateCountdown() {
       const diff = new Date(DROP_DATE) - new Date();
