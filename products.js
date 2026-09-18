@@ -49,8 +49,7 @@ const PRODUCTS = [
     sku: "TH-JORTS-BLK",
     price: 25000,
     originalPrice: 35000,
-    badges: ["Coming Soon"],
-    comingSoon: true,
+    badges: ["Preorder"],
     category: "shorts",
     sizes: ["28", "30", "32", "34", "36"],
     colors: [
@@ -70,8 +69,7 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
     sku: "TH-ROSE-LS-BLK",
     price: 25000,
-    badges: ["Coming Soon"],
-    comingSoon: true,
+    badges: ["Preorder"],
     category: "long-sleeve",
     sizes: ["S", "M", "L"],
     colors: [
@@ -91,8 +89,7 @@ const PRODUCTS = [
     name: "Rose From the Concrete Boxy Tee — Unisex",
     sku: "TH-ROSE-UNI-BLK",
     price: 25000,
-    badges: ["Coming Soon"],
-    comingSoon: true,
+    badges: ["Preorder"],
     category: "tee",
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: [
@@ -129,14 +126,13 @@ const PRODUCTS = [
     ],
     description: "3-Wise Monkeys Tee with black round neck and description on the back."
   },*/
-/*  {
+  {
     id: "Thr33-black-ringer-tee",
     name: "Thr33 black ringer tee",
     sku: "T3-RT",
     price: 15000,
     originalPrice: 20000,
-    badges: ["Coming Soon"],
-    comingSoon: true,
+    badges: ["Preorder"],
     category: "tee",
     sizes: ["M", "L", "XL"],
     colors: [
@@ -150,7 +146,7 @@ const PRODUCTS = [
       }
     ],
     description: "Thr33 black ringer tee."
-  }, */
+  }, 
   {
     id: "t3-basic-tee",
     name: "T3 Basic Tee",
