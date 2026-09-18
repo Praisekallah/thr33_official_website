@@ -407,11 +407,14 @@ function renderQuickAdd(product) {
       <p class="qa-price">${formatMoney(product.price)}</p>
       <p class="qa-desc">${product.description || ''}</p>
       ${swatches}
-      ${isComingSoon ? '' : (remaining !== undefined
+      ${remaining !== undefined
         ? (soldOut
             ? `<p class="qa-stock qa-stock-out">Sold out</p>`
             : `<p class="qa-stock">${remaining} in stock</p>`)
-        : '')}
+        : ''}
+      ${(product.badges && product.badges.includes("Preorder"))
+        ? `<p class="qa-stock">📦 Preorder — ships once production is complete. Final sale, no refunds (see our <a href="policies.html" style="color:var(--gold);text-decoration:underline;" target="_blank">Refund Policy</a>).</p>`
+        : ''}
       <div class="product-sizes-row">
         <div class="product-sizes" id="qaSizes">
           ${(product.sizes || []).map((s, idx) => `<button type="button" class="size-btn ${idx === 0 ? 'selected' : ''}" data-size="${s}">${s}</button>`).join("")}
