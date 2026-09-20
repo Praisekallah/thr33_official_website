@@ -1267,3 +1267,55 @@ img { max-width: 100%; display: block; }
 .policy-panel ul { padding-left: 20px; margin: 8px 0; }
 .policy-panel a { color: var(--gold); text-decoration: underline; }
 
+/* ---------- Presale Countdown Bar ---------- */
+.presale-bar {
+  background: var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+}
+.presale-bar.hidden { display: none; }
+.presale-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.presale-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+.presale-countdown {
+  display: flex;
+  gap: 14px;
+}
+.presale-countdown div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 46px;
+}
+.presale-countdown span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.presale-countdown label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(176,141,87,0.6);
+  margin-top: 2px;
+}
+@media (max-width: 560px) {
+  .presale-label { font-size: 12px; }
+  .presale-countdown span { font-size: 1.3rem; }
+  .presale-bar-inner { gap: 12px; }
+}
+
