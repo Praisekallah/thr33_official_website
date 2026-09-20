@@ -140,8 +140,8 @@ const PRODUCTS = [
         name: "Black",
         hex: "#17170f",
         images: [
-          "assets/R4C_basic_tee_front.png",
-          "assets/R4C_basic_tee_back.png"
+          "assets/R4C_basic_tee_front.PNG",
+          "assets/R4C_basic_tee_back.PNG"
         ]
       }
     ],
