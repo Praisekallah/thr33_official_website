@@ -28,10 +28,14 @@ const SHIPPING_RATES = {
 const DEFAULT_SHIPPING_FEE = 2500;
 
 // ---- Drop Mode config ----
-// ---- Drop Mode config ----
 const DROP_MODE = true; // flip to true when you're ready to lock the shop for a drop
 const DROP_START = "2026-09-17T18:00:00Z"; // lock engages at this exact time (UTC)
 const DROP_DATE = "2026-09-25T18:00:00Z"; // countdown end / reveal time (UTC)
+
+// ---- Presale Countdown Bar config ----
+const PRESALE_COUNTDOWN = true; // flip to true to show the bar
+const PRESALE_START = "2026-09-25T18:00:00Z"; // matches DROP_DATE — presale begins the moment the shop unlocks // set to whenever you want the 30 days to begin (UTC)
+const PRESALE_DURATION_DAYS = 30;
 
 // ---- Discount codes (influencer / subscriber codes) ----
 const DISCOUNT_CODES = {
@@ -905,6 +909,28 @@ if (dropPasswordForm) {
   });
 }
 
+// ---------------- Presale Countdown Bar ----------------
+const presaleBar = document.getElementById("presaleBar");
+if (presaleBar && PRESALE_COUNTDOWN) {
+  const presaleEnd = new Date(PRESALE_START).getTime() + PRESALE_DURATION_DAYS * 86400000;
+  presaleBar.classList.remove("hidden");
+  function updatePresaleCountdown() {
+    const diff = presaleEnd - Date.now();
+    if (diff <= 0) {
+      presaleBar.classList.add("hidden");
+      return;
+    }
+    const pad = n => String(n).padStart(2, "0");
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff / 3600000) % 24);
+    const mins = Math.floor((diff / 60000) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = pad(val); };
+    set("psDays", days); set("psHours", hours); set("psMins", mins); set("psSecs", secs);
+  }
+  updatePresaleCountdown();
+  setInterval(updatePresaleCountdown, 1000);
+}
 // Initial renders
 fetchExchangeRates();
 renderFilters();
