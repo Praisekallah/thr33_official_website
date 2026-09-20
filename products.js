@@ -45,13 +45,13 @@ const CATEGORIES = [
 const PRODUCTS = [
   {
     id: "jorts-black",
-    name: "Thr33 Denim Jorts",
+    name: "Thr33 R4C Denim Jorts",
     sku: "TH-JORTS-BLK",
     price: 25000,
     originalPrice: 35000,
     badges: ["Preorder"],
     category: "shorts",
-    sizes: ["28", "30", "32", "34", "36"],
+    sizes: ["M", "L", "XL", "XXL"],
     colors: [
       {
         name: "Black",
@@ -66,7 +66,7 @@ const PRODUCTS = [
   },
   {
     id: "rose-female-ls",
-    name: "Rose From the Concrete Boxy Tee — Long Sleeve (Female)",
+    name: "R4C Boxy Tee — Long Sleeve (Female)",
     sku: "TH-ROSE-LS-BLK",
     price: 25000,
     badges: ["Preorder"],
@@ -86,12 +86,12 @@ const PRODUCTS = [
   },
   {
     id: "rose-unisex",
-    name: "Rose From the Concrete Boxy Tee — Unisex",
+    name: "R4C Boxy Tee — Unisex",
     sku: "TH-ROSE-UNI-BLK",
     price: 25000,
     badges: ["Preorder"],
     category: "tee",
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["M", "L", "XL", "XXL"],
     colors: [
       {
         name: "Black",
@@ -127,9 +127,9 @@ const PRODUCTS = [
     description: "3-Wise Monkeys Tee with black round neck and description on the back."
   },*/
   {
-    id: "Thr33-black-ringer-tee",
-    name: "Thr33 black ringer tee",
-    sku: "T3-RT",
+    id: "R4C_Tee",
+    name: "Thr33 black R4C tee",
+    sku: "T3-R4C_BT",
     price: 15000,
     originalPrice: 20000,
     badges: ["Preorder"],
@@ -140,12 +140,12 @@ const PRODUCTS = [
         name: "Black",
         hex: "#17170f",
         images: [
-          "assets/Thr33-white-round-neck-front.png",
-          "assets/Thr33-white-round-neck-back.png"
+          "assets/R4C_basic_tee_front.png",
+          "assets/R4C_basic_tee_back.png"
         ]
       }
     ],
-    description: "Thr33 black ringer tee."
+    description: "Thr33 black R4C basic tee."
   }, 
   {
     id: "t3-basic-tee",
