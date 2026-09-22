@@ -77,8 +77,8 @@ const PRODUCTS = [
         name: "Black",
         hex: "#17170f",
         images: [
-          "assets/rose-female-ls-front.png",
-          "assets/rose-female-ls-back.png"
+          "assets/rose-female-ls-front.PNG",
+          "assets/rose-female-ls-back.PNG"
         ]
       }
     ],
@@ -97,8 +97,8 @@ const PRODUCTS = [
         name: "Black",
         hex: "#17170f",
         images: [
-          "assets/rose-unisex-front.png",
-          "assets/rose-unisex-back.png"
+          "assets/rose-unisex-front.PNG",
+          "assets/rose-unisex-back.PNG"
         ]
       }
     ],
