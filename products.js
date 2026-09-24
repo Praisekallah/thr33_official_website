@@ -66,7 +66,7 @@ const PRODUCTS = [
   },
   {
     id: "rose-female-ls",
-    name: "R4C Boxy Tee — Long Sleeve (Female)",
+    name: "R4C GIRLS CROP TOP (LONGSLEEVE)",
     sku: "TH-ROSE-LS-BLK",
     price: 25000,
     badges: ["Preorder"],
