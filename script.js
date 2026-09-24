@@ -35,7 +35,7 @@ const DROP_DATE = "2026-09-25T18:00:00Z"; // countdown end / reveal time (UTC)
 // ---- Presale Countdown Bar config ----
 const PRESALE_COUNTDOWN = true; // flip to true to show the bar
 const PRESALE_START = "2026-09-25T18:00:00Z"; // matches DROP_DATE — presale begins the moment the shop unlocks // set to whenever you want the 30 days to begin (UTC)
-const PRESALE_DURATION_DAYS = 30;
+const PRESALE_DURATION_DAYS = 14;
 
 // ---- Discount codes (influencer / subscriber codes) ----
 const DISCOUNT_CODES = {
