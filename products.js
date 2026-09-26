@@ -1,37 +1,10 @@
 /*
-  PRODUCTS
-  --------
-  This is the only file you need to touch to update what's for sale.
-
-  - colors: each product has a list of color variants (name, hex, images).
-    One color = no swatch row shown. 2+ colors = swatches appear
-    automatically.
-  - images: an ARRAY of photo paths for that color, in the order you want
-    them to appear in the product gallery. Order convention:
-      [0] = front           (used as the main grid photo)
-      [1] = back             (used for the hover-flip on the grid card)
-      [2+] = anything else — on-model shots, detail close-ups, etc.
-    You need at least 1 image. 2+ unlocks the hover-flip on the grid.
-    3+ gives customers a swipeable gallery inside the product popup.
-  - price: in Naira, as a plain number (no commas).
-  - sizes: shown as buttons on the product card.
-  - sku: shows on the receipt/checkout, purely cosmetic.
-  - category: one of the CATEGORIES ids below (controls the nav filter).
-  - badges: optional. Add an array of short strings (e.g. ["New", "Presale"])
-    to show one or more small badges stacked in the top-left of that
-    product's card. Leave it off entirely for products that shouldn't
-    have any.
-
   STOCK: each product starts with 20 units (set in api/get-stock.js and
   api/verify-payment.js — INITIAL_STOCK). Stock lives on the server, not
   here, so it survives across visits and decreases automatically after
   every real paid order. To change the starting stock number, update
   INITIAL_STOCK in both of those two API files.
 
-  PAUSED PRODUCTS: everything below the active three is commented out,
-  not deleted — find the comment-start line above that block and the
-  comment-end line after it (near the bottom of this file) and delete
-  just those two lines to bring the product straight back.
 */
 
 const CATEGORIES = [
@@ -58,7 +31,10 @@ const PRODUCTS = [
         hex: "#17170f",
         images: [
           "assets/jorts-front.png",
-          "assets/jorts-back.png"
+          "assets/jorts-back.png",
+          "assets/R4C-grid/grid-07.JPG",
+          "assets/R4C-grid/grid-13.JPG",
+          "assets/R4C-grid/grid-10.JPG"
         ]
       }
     ],
@@ -78,7 +54,10 @@ const PRODUCTS = [
         hex: "#17170f",
         images: [
           "assets/rose-female-ls-front.PNG",
-          "assets/rose-female-ls-back.PNG"
+          "assets/rose-female-ls-back.PNG",
+          "assets/R4C-grid/grid-11.JPG",
+          "assets/R4C-grid/grid-05.JPG",
+          "assets/R4C-grid/grid-09.JPG"
         ]
       }
     ],
@@ -98,34 +77,17 @@ const PRODUCTS = [
         hex: "#17170f",
         images: [
           "assets/rose-unisex-front.PNG",
-          "assets/rose-unisex-back.PNG"
+          "assets/rose-unisex-back.PNG",
+          "assets/R4C-grid/grid-14.JPG",
+          "assets/R4C-grid/grid-01.JPG",
+          "assets/R4C-grid/grid-04.JPG",
+          "assets/R4C-grid/grid-10.JPG"
         ]
       }
     ],
     description: "Relaxed boxy tee with a white contrast collar, rose emblem front, Thr33 print on the back."
   },
-  /*{
-    id: "3-wise-monkeys",
-    name: "3 Wise Monkeys T",
-    sku: "T3-3WM",
-    price: 15000,
-    originalPrice: 20000,
-    badges: ["Coming Soon"],
-    comingSoon: true,
-    category: "tee",
-    sizes: ["M", "L", "XL"],
-    colors: [
-      {
-        name: "White",
-        hex: "#f5f3ec",
-        images: [
-          "assets/Thr33-wise-Monkeys-front.png",
-          "assets/Thr33-wise-Monkeys-back.png"
-        ]
-      }
-    ],
-    description: "3-Wise Monkeys Tee with black round neck and description on the back."
-  },*/
+
   {
     id: "R4C_Tee",
     name: "Thr33 black R4C tee",
@@ -141,7 +103,9 @@ const PRODUCTS = [
         hex: "#17170f",
         images: [
           "assets/R4C_basic_tee_front.PNG",
-          "assets/R4C_basic_tee_back.PNG"
+          "assets/R4C_basic_tee_back.PNG",
+          "assets/R4C-grid/grid-13.JPG",
+          "assets/R4C-grid/grid-08.JPG"
         ]
       }
     ],
